@@ -10,7 +10,6 @@
 # in GHAP using meta-data
 # (GHAP_metadata) that Andrew created
 # using GHAPStudyMetadata.R
-#
 #-----------------------------------
 
 #-----------------------------------
@@ -54,12 +53,18 @@ cgrey <- "#777777"
 # load the meta-data table from Andrew (GHAP_metadata)
 #-----------------------------------
 md <- readRDS('U:/Data/Stunting/GHAP_metadata_stunting.rds')
-load('U:/Data/Stunting/stunting_studies.RData')
 
-# subset md to stunting studies
-ss_list=ss$short_id[ss$every3mo==1]
+# # appending mlex data
+# add <- read.csv(file='U:/Data/Stunting/MLED_PRVD_metadata_stunting.csv')
+# add[,1]=NULL
+# 
+# md <- rbind(md,add)
 
-md=md[md$short_id %in% ss_list,]
+
+# subset studies to those that meet stunting inclusion criteria
+load("U:/Data/Stunting/stunting_studies.RData")
+elig=as.character(ss$short_id)
+md <- md %>% filter(md$short_id %in% elig)
 
 # convert stunting prevalence and numsubj to numeric
 md$stuntprev <- as.numeric(md$stuntprev)
@@ -74,103 +79,10 @@ for(i in 1:24){
 # calculate the total number of measurements
 md$nmeas <- rowSums(md[,paste('n',1:24,sep='')],na.rm=TRUE)
 
-
-#-----------------------------------
-# STUDY SELECTION / FILTERING
-#-----------------------------------
 dd <- md
 
 #-----------------------------------
-# 1 restrict to data that is QCd
-#-----------------------------------
-dim(dd)
-table(dd$status=='QC completed')
-dd<- filter(dd,status=='QC completed')
-dim(dd)
-
-#-----------------------------------
-# 2 restrict to longitudinal studies
-#-----------------------------------
-dim(dd)
-table(dd$study_type=='Longitudinal')
-dd<- filter(dd,study_type=='Longitudinal')
-dim(dd)
-
-#-----------------------------------
-# 3 drop higher income countries USA, NLD, Singapore
-#-----------------------------------
-length(grep('USA',dd$country))
-length(grep('NLD',dd$country))
-dd <- filter(dd,country!='USA'& country!='NLD' & country!='SGP')
-dim(dd)
-
-#-----------------------------------
-# 4 have anthro measurements 0-24 months
-#-----------------------------------
-# table(dd$anthropometric_data=='None'|dd$anthropometric_data=='TBD')
-# dd <- filter(dd,anthropometric_data!='None' & anthropometric_data!='TBD')
-# dim(dd)
-
-table(dd$hasHAZ)
-dd_nomeas <- filter(dd,hasHAZ==F)
-select(dd_nomeas,study_id,short_description)
-
-dd <- filter(dd,hasHAZ==T)
-dim(dd)
-
-#-----------------------------------
-# 5 drop studies with either wrong
-# study designs (GEMS) or not sufficiently
-# high resolution measurements (WASH B)
-# N=9
-# bigcs_ultrasound (birth + 12 mos)
-# iLiNS DOSE and iLiNS DYAD (every 6 mos)
-# Amanhi (only birth outcomes)
-# Peru Zinc (every 2 months)
-# ZnMort Bhandari et al 2007 (http://jn.nutrition.org/content/137/1/112.full) 
-#-----------------------------------
-#wrong_design <- c('WASH-Bangladesh','WASH-Kenya','BIGCS Ultrasound','iLiNS-DOSE','iLiNS-DYAD-M','IMNCI','AMANHI','Peru Zn','ZnMort')
-wrong_design <- c('BIGCS Ultrasound','AMANHI', 'IMNCI')
-
-dd <- dd[!(dd$study_id %in% wrong_design),]
-dim(dd)
-
-
-#-----------------------------------
-# 6 drop studies with non-representative
-# study populations
-#
-# N=5
-# PeruPersistentDiarrhea: Children in Lima, Peru with persistent diarrhea
-# Ecuador Zinc: Children with HAZ < -1.3
-# DIVIDS: Low birth weight term newborns born in a large government hospital serving a low income population in Delhi, India
-# ZincInf:  Infants with acute diarrhea living in India, Pakistan and Ethiopia
-# GRIP: Children aged < 5 y in Ali Akber Shah goth, Karachi, with lower respiratory tract infection
-#-----------------------------------
-nonrepres <- c('Peru PersistDiarrhea','Ecuador Zn','DIVIDS','ZincInf','Grip')
-dd_nonrep <-dd[(dd$study_id %in% nonrepres),]
-dd <- dd[ !(dd$study_id %in% nonrepres),]
-dim(dd)
-
-#-----------------------------------
-# drop studies that are too small
-# N=3
-#-----------------------------------
-toosmall <- c('Ecuador Egg','Bangladesh Diarrhea', "Peru Zn")
-dd_small <- filter(dd,study_id=='Ecuador Egg'|study_id=='Bangladesh Diarrhea'|study_id=='Peru Zn')
-dd <- filter(dd,study_id!='Ecuador Egg' & study_id!='Bangladesh Diarrhea' & study_id!='Peru Zn')
-dim(dd)
-
-#-----------------------------------
-# Dropped studies flagged for 
-# questionable anthropometry measurements
-#-----------------------------------
-dd <- dd[-which(dd$short_id=='mled' & dd$countrycohort=='PAKISTAN'),]
-dim(dd)
-
-
-#-----------------------------------
-# seperate cohorts into monthly, quarterly, or yearly
+# separate cohorts into monthly, quarterly, or yearly
 # and drop any non-intervention cohorts with only yearly 
 # measurements
 #-----------------------------------
@@ -394,6 +306,7 @@ hm <- ggplot(dp,aes(x=age,y=studycountry)) +
     plot.background=element_blank(),
     #remove plot border
     panel.border=element_blank()
+    
     #remove plot margins
     # plot.margin=margin(grid::unit(1,"cm"))
   )
@@ -444,7 +357,30 @@ sidebar <- ggplot(data = dd, aes(x = studycountry)) +
 
 
 #-----------------------------------
-# WASTING PREVALENCE HEAT MAP
+# measurement heat map
+#-----------------------------------
+
+nhm <- hm +
+  aes(fill=ncat) +
+  labs(x="Age in months",y="",title="N children measured by month of age") +
+  scale_fill_brewer(palette = "Greens",na.value="grey90",
+                    guide=guide_legend(title="Number of Measurements",title.vjust = 1,
+                                       label.position="bottom",label.hjust=0.5,nrow=1))
+
+nbar <- sidebar +
+  aes(y=nmeas/1000,fill=stpcat) +
+  labs(x = "",y="Child-Months (x1000)",title="Sample size") +
+  scale_y_continuous(expand=c(0,0),limits=c(0,130),
+                     breaks=seq(0,120,by=20),labels=seq(0,120,by=20)) +
+  geom_hline(yintercept = seq(0,120,by=20),color='white',size=0.3) 
+
+
+ngrid <- grid.arrange(nhm, nbar, nrow = 1, ncol = 2, widths=c(100,20))
+ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-n2.pdf",plot = ngrid,device='pdf',width=10,height=9)
+
+
+#-----------------------------------
+# STUNTING PREVALENCE HEAT MAP
 #-----------------------------------
 
 # heat map
@@ -459,9 +395,9 @@ stphm <- hm +
 stpbar <- sidebar +
   aes(y=stuntprev,fill=stpcat) +
   labs(x = "",y="Overall Prevalence (%)",title="Stunting (%)") +
-  scale_y_continuous(expand=c(0,0),limits=c(0,22.5),
-                     breaks=seq(0,20,by=5),labels=seq(0,20,by=5)) +
-  geom_hline(yintercept = seq(0,20,by=5),color='white',size=0.3)
+  scale_y_continuous(expand=c(0,0),limits=c(0,70),
+                     breaks=seq(0,70,by=10),labels=seq(0,70,by=10)) +
+  geom_hline(yintercept = seq(0,70,by=10),color='white',size=0.3)
   
   
 # combined plot
@@ -470,28 +406,6 @@ ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-prev.pdf",plot = st
 
 
 
-#-----------------------------------
-# measurement heat map
-#-----------------------------------
-
-nhm <- hm +
-  aes(fill=ncat) +
-  labs(x="Age in months",y="",title="N children measured by month of age") +
-  scale_fill_brewer(palette = "Greens",na.value="grey90",
-                    guide=guide_legend(title="Number of Measurements",title.vjust = 1,
-                                       label.position="bottom",label.hjust=0.5,nrow=1))
-
-nbar <- sidebar +
-  aes(y=nmeas/1000,fill=stpcat) +
-  labs(x = "",y="Child-Months (x1000)",title="Sample size") +
-  scale_y_continuous(expand=c(0,0),limits=c(0,125),
-                     breaks=seq(0,120,by=20),labels=seq(0,120,by=20)) +
-  geom_hline(yintercept = seq(0,120,by=20),color='white',size=0.3) 
-
-
-ngrid <- grid.arrange(nhm, nbar, nrow = 1, ncol = 2, widths=c(100,20))
-ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-n2.pdf",plot = ngrid,device='pdf',width=10,height=9)
-
 
 #-----------------------------------
 # measurement heat map with stunting
@@ -499,6 +413,7 @@ ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-n2.pdf",plot = ngri
 #-----------------------------------
 ngridbig <- grid.arrange(nhm,nbar,stpbar,nrow=1,ncol=3,widths=c(100,20,20))
 ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-nbig2.pdf",plot = ngridbig,device='pdf',width=12,height=9)
+ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-nbig2.png",plot = ngridbig,device='png',width=12,height=9)
 
 
 #-----------------------------------
