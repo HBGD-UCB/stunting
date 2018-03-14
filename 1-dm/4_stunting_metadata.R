@@ -1,21 +1,27 @@
+#################################
+# HBGD Stunting analysis
 
+# process metadata for heatmap
 
-
-
+# by Jade Benjamin-Chung (jadebc@berkeley.edu)
+#################################
 
 rm(list=ls())
 library(ghap)
 library(dplyr)
 library(stringr)
 
-set_git_base_path("U:/git")
+set_git_base_path("U:/Scripts")
 get_git_base_path()
 setwd("U:/data/")
 
-#astudies <- as.data.frame(get_study_list_anthro())
+# import GHAP metadata
 astudies <- as.data.frame(get_study_list())
 
-
+# subset studies to those that meet stunting inclusion criteria
+load("U:/Data/Stunting/stunting_studies.RData")
+elig=as.character(ss$short_id)
+astudies <- astudies %>% filter(astudies$short_id %in% elig)
 
 # drop 1 duplicate record for PROVIDE
 astudies <- astudies[!duplicated(astudies$fstudy_id),]
@@ -25,7 +31,6 @@ astudies$num_countries <- str_count(astudies$country, ",") + 1
 astudies$num_countries[is.na(astudies$num_countries)] <- 1
 num_cohorts <- sum(astudies$num_countries)
 table(astudies$num_countries)
-
 
 
 #Duplicate rows of data table to have row per country in a cohort
@@ -39,8 +44,6 @@ astudies <- rbind(astudies %>% mutate(cohortnum=1),
                   astudies %>% filter(num_countries>6) %>% mutate(cohortnum=7), 
                   astudies %>% filter(num_countries>7) %>% mutate(cohortnum=8)) %>%
   arrange(index)
-
-
 
 #replace mlex with mled
 astudies$short_id[astudies$short_id=="mlex" & !is.na(astudies$short_id)] <- "mled"
@@ -69,8 +72,7 @@ df<- cbind(astudies, data.frame(numcountry=v, countrycohort=v, hasHAZ=v, stuntpr
 
 for(i in 1:nrow(df)){
   print(i)
-#  for(i in 48){
-    
+
   res<-NULL
   numcountry<- countrycohort <- stuntprev<- numsubj<- numobs<- minages<- maxages<- mortality<-sd_obs<-median_length_between_measures<- birthweek<- RCT<-diar<-variables<-NA
   HAZsd <- WAZsd <- HAZsd <- HAZsd_no_outliers <- WAZsd_no_outliers <- HAZsd_no_outliers <- perc_length_decrease <- NA
@@ -84,7 +86,7 @@ for(i in 1:nrow(df)){
   
   
   d<-NULL
-  try(d <- readRDS(paste0(df$short_id[i],".rds")))
+  try(d <- readRDS(paste0("U:/Data/GHAP_data/",df$short_id[i],".rds")))
   
   if(!is.null(d)){
     if("HAZ" %in% colnames(d)){
@@ -181,12 +183,13 @@ for(i in 1:nrow(df)){
   try(df[i,46:ncol(df)] <- res)
 }
 
+#errors: 25:32
 
 df[48,]
 
 
-saveRDS(df, "U:/results/GHAP_metadata_stunting.RDS")
-getwd()
+saveRDS(df, "U:/data/stunting/GHAP_metadata_stunting_jbc.RDS")
+
 
 
 
