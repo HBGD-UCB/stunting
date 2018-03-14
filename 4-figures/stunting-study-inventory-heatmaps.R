@@ -431,11 +431,6 @@ hmwho <- grid.arrange(nhma,nbar,stphma,stpbar,nrow=1,ncol=4,widths=c(100,20,100,
 ggsave(filename="U:/Figures/stunting-study-inventory-heatmap-WHOanonymous2.pdf",plot = hmwho,device='pdf',width=18,height=9)
 
 
-
-
-
-
-
 #-----------------------------------
 # presentation plot- prevalence only among monthly cohorts
 #-----------------------------------
@@ -495,4 +490,28 @@ hm_month <- ggplot(d_month,aes(x=age,y=studycountry)) +
                                        label.position="bottom",label.hjust=0.5,nrow=1))
  
 hm_month
+
+
+#-----------------------------------
+# print # measurements in each group
+#-----------------------------------
+# number of children per group 
+dd %>% 
+  group_by(measure_freq) %>%
+  summarise(sum(numsubj)) 
+
+# number of child-months per group 
+dd %>% 
+  group_by(measure_freq) %>%
+  mutate(numobs=as.numeric(numobs)) %>%
+  summarise(children=sum(numsubj),months=sum(numobs)) %>%
+  mutate(months=months*c(1,3,12)) %>%
+  mutate(child_mo=children*months) 
+
+# number of measurements per group
+dd %>% 
+  group_by(measure_freq) %>%
+  summarise(sum(nmeas))
+
+
 
