@@ -1,4 +1,6 @@
 ########################################
+# HBGD Stunting analysis
+
 # Subset HBGD studies for stunting analysis
 # Objective 1: descriptive statistics
 
@@ -8,6 +10,8 @@
 # Input: meta data from GHAP platform
 # Output: data frame of studies with 
 # indicators for inclusion criteria 
+
+# by Jade Benjamin-Chung (jadebc@berkeley.edu)
 ########################################
 
 rm(list=ls())
@@ -164,6 +168,9 @@ d7$every12mo[d7$anthropometric_data=="WT, LEN, HCIR and MUAC every 6 months"]=1
 d7$every12mo[d7$anthropometric_data=="Len, Wt, Hcir at enrollment, 15 months and 27 months after enrollment"]=1
 
 d7$short_id=droplevels(d7$short_id)
+
+# manually drop imnc
+d7=d7[d7$short_id!="imnc",]
 
 # list all ids
 table(as.character(d7$short_id))
