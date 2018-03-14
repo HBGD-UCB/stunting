@@ -1,3 +1,15 @@
+#################################
+# HBGD Stunting analysis
+
+# import datasets from GHAP and 
+# save them as RDS files
+
+# make sure to import studies
+# that were eligible in 
+# 2_stunting_studies.R
+
+# by Jade Benjamin-Chung (jadebc@berkeley.edu)
+#################################
 rm(list=ls())
 library(ghap)
 library(dplyr)
@@ -8,12 +20,6 @@ get_git_base_path()
 
 
 setwd("U:/data/GHAP_data")
-
-
-
-
-
-
 
 
 d<-use_study("agakhanuniv")
@@ -84,6 +90,10 @@ d<-use_study("mal_ed")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="mled.rds") 
 
+d<-use_study("mal_ed_ext")         
+colnames(d)<- toupper(colnames(d))
+saveRDS(d, file="mlex.rds") 
+
 d<-use_study("nih_birth")      
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="nbrt.rds") 
@@ -129,7 +139,6 @@ colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="lnsz.rds")
 
 
-
 d<-use_study("wash_bangladesh") 
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="wsb.rds")
@@ -172,14 +181,21 @@ d<-use_study("Bangladesh Diarrhea")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="bngd.rds")
 
+d<-use_study("ncry") 
+colnames(d)<- toupper(colnames(d))
+saveRDS(d, file="ncry.rds")
 
+d<-use_study("vb12") 
+colnames(d)<- toupper(colnames(d))
+saveRDS(d, file="vb12.rds")
+
+d<-use_study("vita") 
+colnames(d)<- toupper(colnames(d))
+saveRDS(d, file="vita.rds")
 
 
 
 #Add studies neeeded to be added to metadata
-d<-use_study("ncry") 
-colnames(d)<- toupper(colnames(d))
-saveRDS(d, file="ncry.rds")
 
 # start here
 
