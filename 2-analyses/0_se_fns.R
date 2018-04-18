@@ -1,6 +1,5 @@
 #----------------------------------------------
 # Mean and 95% CI function 
-# IS THIS THE RIGHT FUNCTION?
 #----------------------------------------------
 mean95CI <- function(Y, id=rep(1:length(Y)), 
                      persontime=NULL, proportion=F, percent=F, count=F){
