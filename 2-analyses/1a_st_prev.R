@@ -42,36 +42,60 @@ all.data %>%
 # calculate stunting prevalence by age group
 sprev.data = all.data %>%
   filter(!is.na(agecat)) %>%
+  arrange(studyid,subjid,agedays) %>%
   group_by(agecat) %>%
-  summarise(nprev=sum(!is.na(stunted)),
+  summarise(nmeas=sum(!is.na(haz)),
+            nstudy=length(unique(studyid)),
             prev=mean(stunted),
             lb=mean95CI(stunted,proportion=T)[["Lower 95%CI"]],
             ub=mean95CI(stunted,proportion=T)[["Upper 95%CI"]],
-            measure="Stunting") 
+            measure="Stunting") %>%
+  mutate(nmeas.f=paste0("N=",format(nmeas,big.mark=",",scientific=FALSE),
+                         " measurements"),
+         nstudy.f=paste0("N=",nstudy," studies"))
 
-# calculate severe stunting prevalence by age group
-ssprev.data = all.data %>%
-  filter(!is.na(agecat)) %>%
-  group_by(agecat) %>%
-  summarise(nprev=sum(!is.na(sstunted)),
-            prev=mean(sstunted),
-            lb=mean95CI(sstunted,proportion=T)[["Lower 95%CI"]],
-            ub=mean95CI(sstunted,proportion=T)[["Upper 95%CI"]],
-            measure="Severe stunting") 
-
-prev.data=rbind(sprev.data,ssprev.data)
-prev.data$measure=factor(prev.data$measure,levels=c("Stunting","Severe stunting"))
+# # calculate severe stunting prevalence by age group
+# ssprev.data = all.data %>%
+#   filter(!is.na(agecat)) %>%
+#   group_by(agecat) %>%
+#   summarise(nmeas=sum(!is.na(sstunted)),
+#             nstudy=length(unique(studyid)),
+#             prev=mean(sstunted),
+#             lb=mean95CI(sstunted,proportion=T)[["Lower 95%CI"]],
+#             ub=mean95CI(sstunted,proportion=T)[["Upper 95%CI"]],
+#             measure="Severe stunting") %>%
+#   mutate(nmeas.f=paste0("N=",format(nmeas,big.mark=",",scientific=FALSE),
+#                         " msmts"),
+#          nstudy.f=paste0("N=",nstudy," studies"))
+# 
+# prev.data=rbind(sprev.data,ssprev.data)
+# prev.data$measure=factor(prev.data$measure,levels=c("Stunting","Severe stunting"))
 
 #hbgdki pallet
 tableau10 <- c("#1F77B4","#FF7F0E","#2CA02C","#D62728",
                "#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF")
 
 # plot prevalence
-pdf("U:/Figures/stunting-ptprev-pool.pdf",width=7,height=3,onefile=TRUE)
-ggplot(prev.data,aes(y=prev,x=agecat,group=measure))+
-  geom_point(aes(col=measure))+
-  geom_errorbar(aes(ymin=lb,ymax=ub,col=measure),width=0.2) +
-  facet_wrap(~measure)+
+# pdf("U:/Figures/stunting-ptprev-pool.pdf",width=7,height=3,onefile=TRUE)
+# ggplot(prev.data,aes(y=prev,x=agecat,group=measure))+
+#   geom_point(aes(col=measure))+
+#   geom_errorbar(aes(ymin=lb,ymax=ub,col=measure),width=0.2) +
+#   facet_wrap(~measure)+
+#   scale_color_manual(values=tableau10)+xlab("Age category")+
+#   ylab("Point prevalence (95% CI)")+
+#   scale_y_continuous(limits=c(-0.1,0.5))+
+#   annotate("text",x=prev.data$agecat,y=0,label=prev.data$nmeas.f,size=3)+
+#   annotate("text",x=prev.data$agecat,y=-0.05,label=prev.data$nstudy.f,size=3)
+# dev.off()
+
+pdf("U:/Figures/stunting-ptprev-pool.pdf",width=8,height=4,onefile=TRUE)
+ggplot(sprev.data,aes(y=prev,x=agecat))+
+  geom_point()+
+  geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
-  ylab("Point prevalence (95% CI)")
+  ylab("Point prevalence (95% CI)")+
+  scale_y_continuous(limits=c(-0.1,0.5))+
+  annotate("text",x=sprev.data$agecat,y=0,label=sprev.data$nmeas.f,size=3)+
+  annotate("text",x=sprev.data$agecat,y=-0.05,label=sprev.data$nstudy.f,size=3)
 dev.off()
+
