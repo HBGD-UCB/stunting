@@ -42,13 +42,21 @@ all.data %>%
             max=max(agedays/30.4167))
 
 # identify ever stunted children
-evs = all.data %>%
-  filter(!is.na(agecat)) %>%
-  group_by(studyid,subjid,agecat) %>%
-  arrange(studyid,subjid,agecat) %>%
-  summarise(minhaz=min(haz)) %>%
-  mutate(evst=ifelse(minhaz< -2,1,0)) 
+  evs = all.data %>%
+    filter(!is.na(agecat)) %>%
+    group_by(studyid,subjid) %>%
+    arrange(studyid,subjid) %>%
+    #create variable with minhaz by age category, cumulatively
+    mutate(minhaz=ifelse(agecat=="6 months",min(haz[agecat=="6 months"]),
+        ifelse(agecat=="12 months",min(haz[agecat=="6 months"|agecat=="12 months"]),
+          min(haz)))) %>%
+    # create indicator for whether the child was ever stunted
+    # by age category
+    group_by(studyid,subjid,agecat) %>%
+    mutate(evst=ifelse(minhaz< -2,1,0)) 
 
+# calculate cumulative incidence
+# NEED TO ASSESS WHICH NEED CLUSTER ADJ
 cuminc.data= evs%>%
   group_by(agecat) %>%
   summarise(
@@ -61,6 +69,7 @@ cuminc.data= evs%>%
                          " children"),
          nstudy.f=paste0("N=",nstudy," studies"))
 
+cuminc.data
 
 #hbgdki pallet
 tableau10 <- c("#1F77B4","#FF7F0E","#2CA02C","#D62728",
@@ -71,7 +80,7 @@ pdf("U:/Figures/stunting-cuminc-pool.pdf",width=7,height=3,onefile=TRUE)
 ggplot(cuminc.data,aes(y=cuminc,x=agecat))+
   geom_point()+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0.15,0.5))+
+  scale_y_continuous(limits=c(0.15,0.6))+
   xlab("Age category")+
   ylab("Cumulative incidence (95% CI)")+
   annotate("text",x=cuminc.data$agecat,y=0.2,label=cuminc.data$nchild.f,size=3)+
