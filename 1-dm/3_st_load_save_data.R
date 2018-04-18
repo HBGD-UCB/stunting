@@ -16,7 +16,7 @@ library(ghap)
 set_git_base_path("U:/scripts")
 get_git_base_path()
 
-source("U:/Scripts/Stunting/1-dm/impute_static_vars.R")
+source("U:/Scripts/Stunting/1-dm/0_impute_static_vars.R")
 setwd("U:/data/GHAP_data/")
 
 # -------------------------------------
@@ -64,6 +64,7 @@ d<-impute_static_vars(d)
 saveRDS(d, file="cntt.rds") 
 rm(d)
 
+# PROBLEM IMPORTING
 d<-use_study("divids")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="dvds_raw.rds")
