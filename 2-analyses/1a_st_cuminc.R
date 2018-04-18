@@ -22,7 +22,7 @@ library(binom)
 theme_set(theme_bw())
 
 # load standard error function
-source("U:/Scripts/Stunting/2-analyses/0_se_fns.R")
+source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -54,37 +54,38 @@ all.data %>%
     # by age category
     group_by(studyid,subjid,agecat) %>%
     mutate(evst=ifelse(minhaz< -2,1,0)) 
+  
+  # count incident cases per study by age
+  # exclude time points if number of measurements per age
+  # in a study is <50  cuminc.data= evs%>%
+    group_by(studyid,agecat) %>%
+    summarise(
+      nchild=length(unique(subjid)),
+      nstudy=length(unique(studyid)),
+      ncases=sum(evst),
+      N=sum(length(evst))) %>%
+    filter(N>=50)
+  
+  cuminc.data
+  
+# estimate random effects, format results
+ci.res=lapply(list("6 months","12 months","24 months"),function(x)
+    fit.rma(data=cuminc.data,ni="N", xi="ncases",age=x))
+ci.res=as.data.frame(do.call(rbind, ci.res))
+ci.res[,4]=as.numeric(ci.res[,4])
+ci.res$agecat=factor(ci.res$agecat,levels=c("6 months","12 months","24 months"))
 
-# calculate cumulative incidence
-# NEED TO ASSESS WHICH NEED CLUSTER ADJ
-cuminc.data= evs%>%
-  group_by(agecat) %>%
-  summarise(
-  nchild=length(unique(subjid)),
-  nstudy=length(unique(studyid)),
-  cuminc=mean(evst),
-  lb=mean95CI(evst,proportion=T)[["Lower 95%CI"]],
-  ub=mean95CI(evst,proportion=T)[["Upper 95%CI"]]) %>%
-  mutate(nchild.f=paste0("N=",format(nchild,big.mark=",",scientific=FALSE),
-                         " children"),
-         nstudy.f=paste0("N=",nstudy," studies"))
-
-cuminc.data
-
-#hbgdki pallet
-tableau10 <- c("#1F77B4","#FF7F0E","#2CA02C","#D62728",
-               "#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF")
 
 # plot pooled cumulative incidence
 pdf("U:/Figures/stunting-cuminc-pool.pdf",width=7,height=3,onefile=TRUE)
-ggplot(cuminc.data,aes(y=cuminc,x=agecat))+
+ggplot(ci.res,aes(y=est,x=agecat))+
   geom_point()+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0.15,0.6))+
+  scale_y_continuous(limits=c(0.13,0.7))+
   xlab("Age category")+
   ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=cuminc.data$agecat,y=0.2,label=cuminc.data$nchild.f,size=3)+
-  annotate("text",x=cuminc.data$agecat,y=0.17,label=cuminc.data$nstudy.f,size=3)
+  annotate("text",x=ci.res$agecat,y=0.18,label=ci.res$nmeas.f,size=3)+
+  annotate("text",x=ci.res$agecat,y=0.15,label=ci.res$nstudy.f,size=3)
 dev.off()
 
 
