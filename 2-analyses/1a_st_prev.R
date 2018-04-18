@@ -15,46 +15,10 @@ library(tidyr)
 library(binom)
 theme_set(theme_bw())
 
-
-setwd("U:/data/GHAP_data/")
-
 # load standard error function
 source("U:/Scripts/Stunting/2-analyses/0_se_fns.R")
 
-# NO MLEX CHECK WITH ANDREW
-
-study.list=c("akup","bfzn","cmc","cmin","cort","cntt",
-             "dvds","ee","eu","gmsn","gbsc","irc","jvt3",
-             "jvt4","knba","lcn5","mled","nrbt",
-             "ncry","prbt","rspk","cmpf","fspp","tzc2",
-             "vb12","vita","wsb","wsk","zvit","zmrt",
-             "lnsz","ilnd","ildm")
-
-# subset to control arm, but not all studies have arm
-
-# import and prep data function
-data.prep=function(dataname){
-  # import data
-  data<-readRDS(paste0(dataname,".rds"))
-
-  # check if intervention arm column present
-  # keep relevant variables
-  if("ARM" %in% colnames(data)){
-    data=select(data,c("SUBJID","STUDYID","ARM","SEX","AGEDAYS","HAZ"))
-  }
-  
-  data=select(data,c("SUBJID","STUDYID","SEX","AGEDAYS","HAZ"))
-  colnames(data)=tolower(colnames(data))
-  
-  print(paste(dataname)) 
-  return(data)
-}
-
-data.set=lapply(study.list,data.prep)
-all.data=do.call(rbind,data.set)
-nrow(all.data)
-
-
+load("U:/Data/Stunting/stunting_data.RData")
 
 # define age windows
 all.data = all.data %>% 
@@ -75,7 +39,7 @@ all.data %>%
             max=max(agedays/30.4167))
   
 
-# calculate prevalence by age group
+# calculate stunting prevalence by age group
 sprev.data = all.data %>%
   filter(!is.na(agecat)) %>%
   group_by(agecat) %>%
@@ -85,7 +49,7 @@ sprev.data = all.data %>%
             ub=mean95CI(stunted,proportion=T)[["Upper 95%CI"]],
             measure="Stunting") 
 
-# calculate prevalence by age group
+# calculate severe stunting prevalence by age group
 ssprev.data = all.data %>%
   filter(!is.na(agecat)) %>%
   group_by(agecat) %>%
