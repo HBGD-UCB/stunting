@@ -17,8 +17,7 @@ study.list=c("akup","bfzn","cmc","cmin","cort","cntt",
              "ncry","prbt","rspk","cmpf","fspp","tzc2",
              "vb12","vita","wsb","wsk","zvit","zmrt",
              "lnsz","ilnd","ildm")
-
-# subset to control arm, but not all studies have arm
+length(study.list)
 
 # import and prep data function
 data.prep=function(dataname){
@@ -28,13 +27,14 @@ data.prep=function(dataname){
   # check if intervention arm column present
   # keep relevant variables
   if("ARM" %in% colnames(data)){
-    data=select(data,c("SUBJID","STUDYID","ARM","SEX","AGEDAYS","HAZ"))
+    data=select(data,c("SUBJID","STUDYID","COUNTRY","ARM","SEX","AGEDAYS","HAZ"))
   }
   
-  data=select(data,c("SUBJID","STUDYID","SEX","AGEDAYS","HAZ"))
+  data=select(data,c("SUBJID","STUDYID","COUNTRY","SEX","AGEDAYS","HAZ"))
   colnames(data)=tolower(colnames(data))
   
   print(paste(dataname)) 
+  print(data$studyid[1])
   return(data)
 }
 
