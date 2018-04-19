@@ -21,7 +21,7 @@ library(tidyr)
 library(binom)
 theme_set(theme_bw())
 
-# load standard error function
+# load random effects function
 source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
@@ -55,9 +55,10 @@ all.data %>%
     group_by(studyid,subjid,agecat) %>%
     mutate(evst=ifelse(minhaz< -2,1,0)) 
   
-  # count incident cases per study by age
-  # exclude time points if number of measurements per age
-  # in a study is <50  cuminc.data= evs%>%
+# count incident cases per study by age
+# exclude time points if number of measurements per age
+# in a study is <50  
+cuminc.data= evs%>%
     group_by(studyid,agecat) %>%
     summarise(
       nchild=length(unique(subjid)),
@@ -66,7 +67,7 @@ all.data %>%
       N=sum(length(evst))) %>%
     filter(N>=50)
   
-  cuminc.data
+cuminc.data
   
 # estimate random effects, format results
 ci.res=lapply(list("6 months","12 months","24 months"),function(x)
@@ -75,6 +76,7 @@ ci.res=as.data.frame(do.call(rbind, ci.res))
 ci.res[,4]=as.numeric(ci.res[,4])
 ci.res$agecat=factor(ci.res$agecat,levels=c("6 months","12 months","24 months"))
 
+ci.res
 
 # plot pooled cumulative incidence
 pdf("U:/Figures/stunting-cuminc-pool.pdf",width=7,height=3,onefile=TRUE)
