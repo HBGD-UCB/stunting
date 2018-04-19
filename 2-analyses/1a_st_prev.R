@@ -53,11 +53,11 @@ prev.data = all.data %>%
   
 
 # estimate random effects, format results
-prev.res=lapply(list("6 months","12 months","24 months"),function(x) 
+prev.res=lapply(list("Birth","6 months","12 months","24 months"),function(x) 
   fit.rma(prev.data,ni="nmeas", xi="nxprev",age=x))
 prev.res=as.data.frame(do.call(rbind, prev.res))
 prev.res[,4]=as.numeric(prev.res[,4])
-prev.res$agecat=factor(prev.res$agecat,levels=c("6 months","12 months","24 months"))
+prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","6 months","12 months","24 months"))
 
 # plot prevalence
 pdf("U:/Figures/stunting-ptprev-pool.pdf",width=8,height=4,onefile=TRUE)
