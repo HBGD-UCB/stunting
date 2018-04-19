@@ -6,7 +6,7 @@
 
 # by Jade Benjamin-Chung (jadebc@berkeley.edu)
 #################################
-
+# git clone <grant_url> <directory>
 rm(list=ls())
 library(dplyr)
 library(tidyr)
@@ -93,28 +93,36 @@ d<-impute_static_vars(d)
 saveRDS(d, file="gmsn.rds")
 rm(d)
 
-d<-use_study("guatemala_bsc")
+# manual entry due to git problem
+# d<-use_study("guatemala_bsc")
+d<-read.csv("U:/Scripts/hbgd/ki1112895/PMID17299460/adam/ANTHA.csv")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="gbsc_raw.rds")
 d<-impute_static_vars(d)
-saveRDS(d, file="gbsc.rds") 
+saveRDS(d, file="gbsc.rds")
 rm(d)
 
-d<-use_study("irc")
+# manual entry due to git problem
+# d<-use_study("irc")
+d<-read.csv("U:/Scripts/hbgd/ki1000108/PMC3894229/adam/KI1000108_PMC3894229.csv")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="irc_raw.rds")
 d<-impute_static_vars(d)
 saveRDS(d, file="irc.rds")  
 rm(d)
 
-d<-use_study("jivita_3")
+# manual entry due to git problem
+# d<-use_study("jivita_3")
+d<-read.csv("U:/Scripts/hbgd/kiGH5241/JiVitA-3/adam/ads_full_KIGH5241_JIVITA.csv")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="jvt3_raw.rds")
 d<-impute_static_vars(d)
 saveRDS(d, file="jvt3.rds")
 rm(d)
 
-d<-use_study("jivita_4")
+# manual entry due to git problem
+# d<-use_study("jivita_4")
+d<-read.csv("U:/Scripts/hbgd/kiGH5241/JiVitA-4/adam/ads_full_KIGH5241_JIVITA.csv")
 colnames(d)<- toupper(colnames(d))
 saveRDS(d, file="jvt4_raw.rds")
 d<-impute_static_vars(d)
