@@ -22,7 +22,7 @@ source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
 load("U:/Data/Stunting/stunting_data.RData")
 
 # define age windows
-all.data = all.data %>% 
+d = d %>% 
   arrange(studyid,subjid,agedays) %>%
   mutate(agecat=ifelse(agedays==1,"Birth",
       ifelse(agedays>5*30.4167 & agedays<7*30.4167,"6 months",
@@ -33,7 +33,7 @@ all.data = all.data %>%
     mutate(stunted=ifelse(haz< -2, 1,0),sstunted=ifelse(haz< -3, 1,0))
 
 # check age categories
-all.data %>%
+d %>%
   group_by(agecat) %>%
   summarise(n=sum(!is.na(agedays)),
             min=min(agedays/30.4167),
@@ -43,7 +43,7 @@ all.data %>%
 # count measurements per study by age
 # exclude time points if number of measurements per age
 # in a study is <50
-prev.data = all.data %>%
+prev.data = d %>%
   filter(!is.na(agecat)) %>%
   group_by(studyid,agecat) %>%
   summarise(nmeas=sum(!is.na(haz)),

@@ -23,7 +23,7 @@ load("U:/Data/Stunting/stunting_data.RData")
 
 
 # define age windows
-all.data = all.data %>% 
+d = d %>% 
   mutate(agecat=ifelse(agedays==1,"Birth",
     ifelse(agedays<=6*30.4167,"6 months",
                        ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
@@ -31,7 +31,7 @@ all.data = all.data %>%
   mutate(agecat=factor(agecat,levels=c("Birth","6 months","12 months","24 months")))
 
 # check age categories
-all.data %>%
+d %>%
   group_by(agecat) %>%
   summarise(n=sum(!is.na(agedays)),
             min=min(agedays/30.4167),
@@ -41,7 +41,7 @@ all.data %>%
 # ---------------------------------------
 # flag incident cases and define risk set
 # ---------------------------------------
-inc.prep = all.data %>%
+inc.prep = d %>%
   filter(!is.na(agecat)) %>%
   group_by(studyid,subjid) %>%
   arrange(studyid,subjid,agedays) %>%
@@ -121,6 +121,8 @@ ir.res[,4]=as.numeric(ir.res[,4])
 ir.res$agecat=factor(ir.res$agecat,levels=c("Birth","6 months","12 months","24 months"))
 
 ir.res
+ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
+                  " person-days")
 
 pdf("U:/Figures/stunting-inc-pool.pdf",width=8,height=4,onefile=TRUE)
 ggplot(ir.res,aes(y=est*1000,x=agecat))+
@@ -128,9 +130,9 @@ ggplot(ir.res,aes(y=est*1000,x=agecat))+
   geom_errorbar(aes(ymin=lb*1000,ymax=ub*1000),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Incidence rate per 1,000 child-days (95% CI)")+
-  scale_y_continuous(limits=c(0,18))+
-  annotate("text",x=ir.res$agecat,y=0.02,label=ir.res$nmeas.f,size=3)+
-  annotate("text",x=ir.res$agecat,y=0.005,label=ir.res$nstudy.f,size=3)
+  scale_y_continuous(limits=c(-15,210))+
+  annotate("text",x=ir.res$agecat,y=-5,label=ir.res$pt.f,size=3)+
+  annotate("text",x=ir.res$agecat,y=-14,label=ir.res$nstudy.f,size=3)
 dev.off()
 
 

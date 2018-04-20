@@ -27,14 +27,14 @@ source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
 load("U:/Data/Stunting/stunting_data.RData")
 
 # define age windows
-all.data = all.data %>% 
+d = d %>% 
   mutate(agecat=ifelse(agedays<=6*30.4167,"6 months",
          ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
            ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months","")))) %>%
   mutate(agecat=factor(agecat,levels=c("6 months","12 months","24 months")))
 
 # check age categories
-all.data %>%
+d %>%
   group_by(agecat) %>%
   summarise(n=sum(!is.na(agedays)),
             min=min(agedays/30.4167),
@@ -42,7 +42,7 @@ all.data %>%
             max=max(agedays/30.4167))
 
 # identify ever stunted children
-  evs = all.data %>%
+  evs = d %>%
     filter(!is.na(agecat)) %>%
     group_by(studyid,subjid) %>%
     arrange(studyid,subjid) %>%
