@@ -5,56 +5,41 @@
 #-----------------------------------
 rm(list=ls())
 library(dplyr)
+library(data.table)
 
 setwd("U:/data/GHAP_data/")
+d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
 
 
-# NO MLEX CHECK WITH ANDREW
-study.list=c("akup","bfzn","cmc","cmin","cort","cntt",
-             "dvds","ee","eu","gmsn","gbsc","irc","jvt3",
-             "jvt4","knba","lcn5","mled","nrbt",
-             "ncry","prbt","rspk","cmpf","fspp","tzc2",
-             "vb12","vita","wsb","wsk","zvit","zmrt",
-             "lnsz","ilnd","ildm")
-length(study.list)
+#--------------------------------------------
+# Subset to relevant variables
+#--------------------------------------------
+colnames(d)=tolower(colnames(d))
+d <- d %>% select(studyid, subjid, country, tr, sex, agedays, haz)
 
-# import and prep data function
-data.prep=function(dataname){
-  # import data
-  data<-readRDS(paste0(dataname,".rds"))
-  
-  # check if intervention arm column present
-  # keep relevant variables
-  if("ARM" %in% colnames(data)){
-    data=select(data,c("SUBJID","STUDYID","COUNTRY","ARM","SEX","AGEDAYS","HAZ"))
-  }
-  
-  data=select(data,c("SUBJID","STUDYID","COUNTRY","SEX","AGEDAYS","HAZ"))
-  colnames(data)=tolower(colnames(data))
-  
-  print(paste(dataname)) 
-  print(data$studyid[1])
-  return(data)
-}
+nrow(d)
 
-data.set=lapply(study.list,data.prep)
-all.data=do.call(rbind,data.set)
-nrow(all.data)
-
+#--------------------------------------------
 # drop unrealistic HAZ
-nrow(all.data)
-all.data = filter(all.data,haz >= -6 & haz <=6)
-nrow(all.data)
+#--------------------------------------------
+nrow(d)
+d = filter(d,haz >= -6 & haz <=6)
+nrow(d)
 
-all.data <- all.data %>% 
+#--------------------------------------------
+# order data, create measurement id
+#--------------------------------------------
+d <- d %>% 
   arrange(studyid,subjid,agedays) %>%
   group_by(studyid,subjid) %>%
   arrange(studyid,subjid,agedays) %>%
   # create id for measurement within person
   mutate(measid=seq_along(subjid)) 
 
+#--------------------------------------------
 # calculate average months between measurements
-all.data <- all.data %>%
+#--------------------------------------------
+d <- d %>%
   arrange(studyid,subjid,agedays) %>%
   group_by(studyid,subjid) %>%
   arrange(studyid,subjid,agedays) %>%
@@ -64,7 +49,7 @@ all.data <- all.data %>%
   mutate(agedayslag=ifelse(is.na(agedayslag),0,agedayslag),
          deltam=ifelse(is.na(deltam)|measid==1,0,deltam))
 
-avgmths <- all.data %>%
+avgmths <- d %>%
   group_by(studyid) %>%
   summarise(meantime=mean(deltam)) %>%
   arrange(meantime)
@@ -72,17 +57,34 @@ avgmths <- all.data %>%
 # subset to studies with data collection at least every 3 months
 drops=c("ki1148112-iLiNS-DYAD-M","ki1148112-iLiNS-DOSE",
         "ki1000111-WASH-Kenya","ki1000110-WASH-Bangladesh")
-  
-all.data<- all.data %>%
+
+d<- d %>%
   filter(!studyid %in% drops) 
+rm(drops)
 
-drops2=which(all.data$studyid=="ki1135781-COHORTS" & (
-  all.data$country=="BRAZIL"|all.data$country=="INDIA"|
-    all.data$country=="SOUTH AFRICA"))
+drops=which(d$studyid=="ki1135781-COHORTS" & (
+  d$country=="BRAZIL"|d$country=="INDIA"|
+    d$country=="SOUTH AFRICA"))
 
-all.data=all.data[-drops2,]
+d=d[-drops,]
+rm(drops)
 
-# count 
+#--------------------------------------------
+# drop trial arms with intervention impact on HAZ
+# potentially subset cmin and cohorts to control too,
+# but currently there is no tr variable for them
+#--------------------------------------------
+d=d[-which(d$studyid=="ki1000304-EU" & d$tr=="Zinc"),]
+d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1000304-VITAMIN-A" & d$tr!="Control"),]
 
-save(all.data,file="U:/Data/Stunting/stunting_data.RData")
+# count number of studies
+length(names(table(d$studyid)))
+
+# table of studies
+table(d$studyid)
+
+save(d,file="U:/Data/Stunting/stunting_data.RData")
 
