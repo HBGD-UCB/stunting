@@ -2,11 +2,9 @@
 # Stunting analysis
 # Objective 1a
 # Calculate incidence at
-# 6 mo and 12, and 24 mo of age
+# 6, 12, 18, and 24 mo of age
 
-# Prevalence and cumulative incidence 95% CI 
-# calculated with exact binomial test - Pearson 
-# and Klopper method
+# Incidence rate pooled using random effects
 #-----------------------------------
 rm(list=ls())
 library(dplyr)

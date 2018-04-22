@@ -2,18 +2,10 @@
 # Stunting analysis
 # Objective 1a
 # Calculate cumulative incidence (ever stunted) at
-# 6 mo and 12, and 24 mo of age
+# 6, 12, 18, and 24 mo of age
 
-# Prevalence and cumulative incidence 95% CI 
-# calculated with exact binomial test - Pearson 
-# and Klopper method
+# Cumulative incidence pooled using random effects
 #-----------------------------------
-# Cumulative incidence (incidence proportion) of stunting will 
-# be defined as the occurrence of any incident stunting event 
-# over a defined risk period. For example, we will examine the 
-# incidence of any stunting in the first six months of life among 
-# children who were not born stunted. 
-
 rm(list=ls())
 library(dplyr)
 library(ggplot2)
