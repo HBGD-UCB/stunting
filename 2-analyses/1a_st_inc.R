@@ -12,8 +12,6 @@ rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-library(binom)
-library(epitools)
 theme_set(theme_bw())
 
 # load random effects function
@@ -27,8 +25,9 @@ d = d %>%
   mutate(agecat=ifelse(agedays==1,"Birth",
     ifelse(agedays<=6*30.4167,"6 months",
                        ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
-                              ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months",""))))) %>%
-  mutate(agecat=factor(agecat,levels=c("Birth","6 months","12 months","24 months")))
+                              ifelse(agedays>12*30.4167& agedays<=18*30.4167,"18 months",
+                                ifelse(agedays>18*30.4167& agedays<=24*30.4167,"24 months","")))))) %>%
+  mutate(agecat=factor(agecat,levels=c("Birth","6 months","12 months","18 months","24 months")))
 
 # check age categories
 d %>%
@@ -42,7 +41,7 @@ d %>%
 # flag incident cases and define risk set
 # ---------------------------------------
 inc.prep = d %>%
-  filter(!is.na(agecat)) %>%
+  filter(!is.na(agecat) & agecat!="Birth") %>%
   group_by(studyid,subjid) %>%
   arrange(studyid,subjid,agedays) %>%
   
@@ -65,60 +64,52 @@ inc.prep = d %>%
   mutate(atrisk=ifelse(cnewcaselag>=1,0,1)) %>%
   # create inc case variable
   mutate(inccase=ifelse(cnewcaselag>=1,0,newcase)) %>%
+  
+  # create person days
+  mutate(pdays=atrisk*deltat) %>%
     
   # clean up
   select(-c(hazlag,newcase,newcaselag, cnewcaselag,agedayslag))
 
 
-inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002"& inc.prep$agecat=="Birth",
-    c("subjid","measid","agedays","haz","deltat")][1:20,]
+inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
+    c("subjid","measid","agedays","deltat","haz","inccase","atrisk","pdays")][1:20,]
 
 
 
-inc.prep[inc.prep$studyid=="ki1000110-WASH-Bangladesh"& inc.prep$agecat=="6 months",
-         c("subjid","measid","agedays","haz","deltat")][1:20,]
+inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
+         c("subjid","measid","agedays","agecat","haz","deltat","inccase","atrisk","pdays")][1:20,]
 
 
-inc.prep[inc.prep$studyid=="ki1000110-WASH-Bangladesh" & inc.prep$subjid==1610800,
-         c("subjid","agedays","agedayslag","haz","deltat")]
+inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
+         c("subjid","measid","agedays","haz","deltat","inccase","atrisk","pdays")][20:39,]
+
+
+# manually calculate incident cases, person-time at risk at each time point
+inc.prep %>%
+  group_by(agecat) %>%
+  summarise(inc.case=sum(inccase),ptar=sum(pdays)) %>%
+  mutate(cruderate=inc.case/ptar)
 
 
 # count incident cases and sum person time at risk per study by age
 # exclude time points if number of children per age
 # in a study is <50  
-
-# at birth
-inc.data.0 = inc.prep %>%
-  filter(agecat=="Birth") %>%
-  group_by(studyid) %>%
-  summarise(ptar=sum(atrisk),
-            ncase=sum(inccase),
-            nchild=length(unique(subjid)),
-            nstudy=length(unique(studyid))) %>%
-  filter(nchild>=50) %>%
-  mutate(agecat="Birth") %>%
-  select(studyid,agecat,everything())
-
-# not at birth
-inc.data.1 = inc.prep %>%
-  filter(agecat!="Birth") %>%
+inc.data = inc.prep %>%
   group_by(studyid,agecat) %>%
-  summarise(ptar=sum(deltat*atrisk),
+  summarise(ptar=sum(pdays),
             ncase=sum(inccase),
             nchild=length(unique(subjid)),
             nstudy=length(unique(studyid))) %>%
   filter(nchild>=50)
-
-inc.data=bind_rows(inc.data.0,inc.data.1) %>%
-  mutate(agecat=factor(agecat,levels=c("Birth","6 months","12 months","24 months"))) %>%
-  arrange(studyid,agecat)
-          
+    
 # estimate random effects, format results
-ir.res=lapply(list("Birth","6 months","12 months","24 months"),function(x)
+ir.res=lapply(list("6 months","12 months","18 months","24 months"),function(x)
   fit.rma(data=inc.data,ni="ptar", xi="ncase",age=x))
 ir.res=as.data.frame(do.call(rbind, ir.res))
 ir.res[,4]=as.numeric(ir.res[,4])
-ir.res$agecat=factor(ir.res$agecat,levels=c("Birth","6 months","12 months","24 months"))
+ir.res$agecat=factor(ir.res$agecat,levels=
+        c("6 months","12 months","18 months","24 months"))
 
 ir.res
 ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
@@ -126,13 +117,13 @@ ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
 
 pdf("U:/Figures/stunting-inc-pool.pdf",width=8,height=4,onefile=TRUE)
 ggplot(ir.res,aes(y=est*1000,x=agecat))+
-  geom_point()+
+  geom_point(size=3)+
   geom_errorbar(aes(ymin=lb*1000,ymax=ub*1000),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Incidence rate per 1,000 child-days (95% CI)")+
-  scale_y_continuous(limits=c(-15,210))+
-  annotate("text",x=ir.res$agecat,y=-5,label=ir.res$pt.f,size=3)+
-  annotate("text",x=ir.res$agecat,y=-14,label=ir.res$nstudy.f,size=3)
+  scale_y_continuous(limits=c(0.4,4.25))+
+  annotate("text",x=ir.res$agecat,y=0.6,label=ir.res$pt.f,size=3)+
+  annotate("text",x=ir.res$agecat,y=0.4,label=ir.res$nstudy.f,size=3)
 dev.off()
 
 

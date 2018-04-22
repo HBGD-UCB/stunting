@@ -18,7 +18,6 @@ rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-library(binom)
 theme_set(theme_bw())
 
 # load random effects function
@@ -30,8 +29,9 @@ load("U:/Data/Stunting/stunting_data.RData")
 d = d %>% 
   mutate(agecat=ifelse(agedays<=6*30.4167,"6 months",
          ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
-           ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months","")))) %>%
-  mutate(agecat=factor(agecat,levels=c("6 months","12 months","24 months")))
+                ifelse(agedays>12*30.4167 & agedays<=18*30.4167,"18 months",
+                       ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months",""))))) %>%
+  mutate(agecat=factor(agecat,levels=c("6 months","12 months","18 months","24 months")))
 
 # check age categories
 d %>%
@@ -49,7 +49,8 @@ d %>%
     #create variable with minhaz by age category, cumulatively
     mutate(minhaz=ifelse(agecat=="6 months",min(haz[agecat=="6 months"]),
         ifelse(agecat=="12 months",min(haz[agecat=="6 months"|agecat=="12 months"]),
-          min(haz)))) %>%
+               ifelse(agecat=="18 months",min(haz[agecat=="6 months"|agecat=="12 months"|agecat=="18 months"]),
+          min(haz))))) %>%
     # create indicator for whether the child was ever stunted
     # by age category
     group_by(studyid,subjid,agecat) %>%
@@ -70,18 +71,18 @@ cuminc.data= evs%>%
 cuminc.data
   
 # estimate random effects, format results
-ci.res=lapply(list("6 months","12 months","24 months"),function(x)
+ci.res=lapply(list("6 months","12 months","18 months","24 months"),function(x)
     fit.rma(data=cuminc.data,ni="N", xi="ncases",age=x))
 ci.res=as.data.frame(do.call(rbind, ci.res))
 ci.res[,4]=as.numeric(ci.res[,4])
-ci.res$agecat=factor(ci.res$agecat,levels=c("6 months","12 months","24 months"))
+ci.res$agecat=factor(ci.res$agecat,levels=c("6 months","12 months","18 months","24 months"))
 
 ci.res
 
 # plot pooled cumulative incidence
-pdf("U:/Figures/stunting-cuminc-pool.pdf",width=7,height=3,onefile=TRUE)
+pdf("U:/Figures/stunting-cuminc-pool.pdf",width=8,height=3,onefile=TRUE)
 ggplot(ci.res,aes(y=est,x=agecat))+
-  geom_point()+
+  geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
   scale_y_continuous(limits=c(0.13,0.7))+
   xlab("Age category")+
