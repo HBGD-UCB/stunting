@@ -10,6 +10,7 @@ rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(metafor)
 theme_set(theme_bw())
 
 # load random effects function
@@ -68,6 +69,7 @@ ci.res=lapply(list("6 months","12 months","18 months","24 months"),function(x)
 ci.res=as.data.frame(do.call(rbind, ci.res))
 ci.res[,4]=as.numeric(ci.res[,4])
 ci.res$agecat=factor(ci.res$agecat,levels=c("6 months","12 months","18 months","24 months"))
+ci.res$ptest.f=sprintf("%0.02f",ci.res$est)
 
 ci.res
 
@@ -80,7 +82,9 @@ ggplot(ci.res,aes(y=est,x=agecat))+
   xlab("Age category")+
   ylab("Cumulative incidence (95% CI)")+
   annotate("text",x=ci.res$agecat,y=0.18,label=ci.res$nmeas.f,size=3)+
-  annotate("text",x=ci.res$agecat,y=0.15,label=ci.res$nstudy.f,size=3)
+  annotate("text",x=ci.res$agecat,y=0.15,label=ci.res$nstudy.f,size=3)+
+  annotate("text",label=ci.res$ptest.f,x=ci.res$agecat,
+           y=ci.res$est,hjust=-0.3,size=3)
 dev.off()
 
 
