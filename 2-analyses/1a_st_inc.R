@@ -10,6 +10,7 @@ rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(metafor)
 theme_set(theme_bw())
 
 # load random effects function
@@ -63,17 +64,26 @@ inc.prep = d %>%
   # create inc case variable
   mutate(inccase=ifelse(cnewcaselag>=1,0,newcase)) %>%
   
+  # create delta t with half interval for row
+  # with incident case assuming it occurred halfway through
+  # the follow-up period
+  mutate(deltat_half=deltat/2) %>%
+  mutate(deltat2=ifelse(inccase==0,deltat,deltat_half)) %>%
+
   # create person days
-  mutate(pdays=atrisk*deltat) %>%
+  mutate(pdays=atrisk*deltat2) %>%
     
   # clean up
-  select(-c(hazlag,newcase,newcaselag, cnewcaselag,agedayslag))
-
+  select(-c(hazlag,newcase,newcaselag, cnewcaselag,agedayslag,
+            deltat,deltat_half))
 
 inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
-    c("subjid","measid","agedays","deltat","haz","inccase","atrisk","pdays")][1:20,]
+         c("subjid","agedays","agecat","haz","deltat2","inccase",
+           "atrisk","pdays")][48:65,]
 
-
+inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
+        c("subjid","agedays","haz","deltat","deltat_half","deltat2","inccase",
+          "atrisk","pdays")][48:60,]
 
 inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
          c("subjid","measid","agedays","agecat","haz","deltat","inccase","atrisk","pdays")][1:20,]
@@ -94,7 +104,7 @@ inc.prep %>%
 # exclude time points if number of children per age
 # in a study is <50  
 inc.data = inc.prep %>%
-  group_by(studyid,agecat) %>%
+  group_by(studyid,country,agecat) %>%
   summarise(ptar=sum(pdays),
             ncase=sum(inccase),
             nchild=length(unique(subjid)),
@@ -112,6 +122,7 @@ ir.res$agecat=factor(ir.res$agecat,levels=
 ir.res
 ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
                   " person-days")
+ir.res$ptest.f=sprintf("%0.02f",ir.res$est*1000)
 
 pdf("U:/Figures/stunting-inc-pool.pdf",width=8,height=4,onefile=TRUE)
 ggplot(ir.res,aes(y=est*1000,x=agecat))+
@@ -121,7 +132,9 @@ ggplot(ir.res,aes(y=est*1000,x=agecat))+
   ylab("Incidence rate per 1,000 child-days (95% CI)")+
   scale_y_continuous(limits=c(0.4,4.25))+
   annotate("text",x=ir.res$agecat,y=0.6,label=ir.res$pt.f,size=3)+
-  annotate("text",x=ir.res$agecat,y=0.4,label=ir.res$nstudy.f,size=3)
+  annotate("text",x=ir.res$agecat,y=0.4,label=ir.res$nstudy.f,size=3)+
+  annotate("text",label=ir.res$ptest.f,x=ir.res$agecat,
+           y=ir.res$est*1000,hjust=-0.3,size=3)
 dev.off()
 
 
