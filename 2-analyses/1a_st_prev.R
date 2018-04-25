@@ -57,6 +57,7 @@ prev.res=lapply(list("Birth","6 months","12 months","18 months","24 months"),fun
 prev.res=as.data.frame(do.call(rbind, prev.res))
 prev.res[,4]=as.numeric(prev.res[,4])
 prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","6 months","12 months","18 months","24 months"))
+prev.res$ptest.f=sprintf("%0.02f",prev.res$est)
 
 # plot prevalence
 pdf("U:/Figures/stunting-ptprev-pool.pdf",width=9,height=4,onefile=TRUE)
@@ -67,6 +68,8 @@ ggplot(prev.res,aes(y=est,x=agecat))+
   ylab("Point prevalence (95% CI)")+
   scale_y_continuous(limits=c(-0.04,0.6))+
   annotate("text",x=prev.res$agecat,y=0,label=prev.res$nmeas.f,size=3)+
-  annotate("text",x=prev.res$agecat,y=-0.03,label=prev.res$nstudy.f,size=3)
+  annotate("text",x=prev.res$agecat,y=-0.03,label=prev.res$nstudy.f,size=3)+
+  annotate("text",label=prev.res$ptest.f,x=prev.res$agecat,
+           y=prev.res$est,hjust=-0.3,size=3)
 dev.off()
 
