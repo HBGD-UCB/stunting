@@ -37,7 +37,7 @@ library('ggplot2')
 library('gridExtra')
 
 
-setwd("C:/Users/andre/Dropbox/")
+# setwd("C:/Users/andre/Dropbox/")
 
 # bright color blind palette:  https://personal.sron.nl/~pault/ 
 cblack <- "#000004FF"
@@ -55,7 +55,8 @@ cgrey <- "#777777"
 # load the meta-data table from Andrew (GHAP_metadata)
 #-----------------------------------
 
-md <- readRDS('HBGDki documentation/GHAP_metadata_stunting.rds')
+# md <- readRDS('HBGDki documentation/GHAP_metadata_stunting.rds')
+md <- readRDS('U:/Data/Stunting/GHAP_metadata_stunting.rds')
 
 # convert stunting prevalence and numsubj to numeric
 md$stuntprev <- as.numeric(md$stuntprev)
@@ -187,10 +188,10 @@ dd$monthly[dd$median_length_between_measures<=35] <- 1
 
 
 #Mark less-than-quarterly studies
-yearly <- c('jivita_3','wash_bangladesh','wash_kenya','ilins_dose','ilins_dyad_m','znmort')
+yearly <- c('wash_bangladesh','wash_kenya','ilins_dose','ilins_dyad_m','znmort')
 dd$yearly<-0
 dd$yearly[dd$median_length_between_measures>95] <- 1 
-dd$yearly[dd$study_id=="JiVitA-3"] <- 1 # Set Jivita-3 as yearly as it measures infrequently after the first 6 months
+# dd$yearly[dd$study_id=="JiVitA-3"] <- 1 # Set Jivita-3 as yearly as it measures infrequently after the first 6 months
 
 
 dd$measure_freq<-"Quarterly Measurements"
@@ -387,7 +388,7 @@ hm <- ggplot(dp,aes(x=age,y=studycountry)) +
     #remove plot background
     plot.background=element_blank(),
     #remove plot border
-    panel.border=element_blank(),
+    panel.border=element_blank()
     #remove plot margins
     # plot.margin=margin(grid::unit(1,"cm"))
   )
@@ -439,7 +440,8 @@ sidebar <- ggplot(data = dd, aes(x = studycountry)) +
 #-----------------------------------
 # set plot working directory
 #-----------------------------------
-setwd("C:/Users/andre/Dropbox/HBGDki figures/Stunting")
+# setwd("C:/Users/andre/Dropbox/HBGDki figures/Stunting")
+setwd("U:/Figures/")
 
 
 #-----------------------------------
