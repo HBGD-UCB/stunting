@@ -74,7 +74,7 @@ ci.res$ptest.f=sprintf("%0.02f",ci.res$est)
 ci.res
 
 # plot pooled cumulative incidence
-pdf("U:/Figures/stunting-cuminc-pool.pdf",width=8,height=3,onefile=TRUE)
+pdf("U:/Figures/stunting-cuminc-pool.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
@@ -141,7 +141,7 @@ ci.res.nobirth
 
 
 # plot pooled cumulative incidence
-pdf("U:/Figures/stunting-cuminc-pool-bc-birth.pdf",width=8,height=3,onefile=TRUE)
+pdf("U:/Figures/stunting-cuminc-pool-bc-birth.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res.nobirth,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
@@ -197,7 +197,7 @@ ci.res.birth$ptest.f=sprintf("%0.02f",ci.res.birth$est)
 ci.res.birth
 
 # plot pooled cumulative incidence
-pdf("U:/Figures/stunting-cuminc-pool-bc-nobirth.pdf",width=8,height=3,onefile=TRUE)
+pdf("U:/Figures/stunting-cuminc-pool-bc-nobirth.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res.birth,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
