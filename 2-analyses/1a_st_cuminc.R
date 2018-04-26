@@ -84,7 +84,8 @@ ggplot(ci.res,aes(y=est,x=agecat))+
   annotate("text",x=ci.res$agecat,y=0.18,label=ci.res$nmeas.f,size=3)+
   annotate("text",x=ci.res$agecat,y=0.15,label=ci.res$nstudy.f,size=3)+
   annotate("text",label=ci.res$ptest.f,x=ci.res$agecat,
-           y=ci.res$est,hjust=-0.3,size=3)
+           y=ci.res$est,hjust=-0.3,size=3)+
+  ggtitle("Pooled cumulative incidence of stunting")
 dev.off()
 
 #--------------------------------------
