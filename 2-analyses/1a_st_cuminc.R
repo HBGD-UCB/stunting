@@ -78,11 +78,11 @@ pdf("U:/Figures/stunting-cuminc-pool.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0.13,0.7))+
+  scale_y_continuous(limits=c(0,0.7))+
   xlab("Age category")+
   ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=ci.res$agecat,y=0.18,label=ci.res$nmeas.f,size=3)+
-  annotate("text",x=ci.res$agecat,y=0.15,label=ci.res$nstudy.f,size=3)+
+  annotate("text",x=ci.res$agecat,y=0.05,label=ci.res$nmeas.f,size=3)+
+  annotate("text",x=ci.res$agecat,y=0.01,label=ci.res$nstudy.f,size=3)+
   annotate("text",label=ci.res$ptest.f,x=ci.res$agecat,
            y=ci.res$est,hjust=-0.3,size=3)+
   ggtitle("Pooled cumulative incidence of stunting")
@@ -141,18 +141,18 @@ ci.res.nobirth
 
 
 # plot pooled cumulative incidence
-pdf("U:/Figures/stunting-cuminc-pool-bc-birth.pdf",width=8,height=3.5,onefile=TRUE)
+pdf("U:/Figures/stunting-cuminc-pool-bc-nobirth.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res.nobirth,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0.13,0.8))+
+  scale_y_continuous(limits=c(0,0.8))+
   xlab("Age category")+
   ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=ci.res.nobirth$agecat,y=0.18,label=ci.res.nobirth$nmeas.f,size=3)+
-  annotate("text",x=ci.res.nobirth$agecat,y=0.15,label=ci.res.nobirth$nstudy.f,size=3)+
+  annotate("text",x=ci.res.nobirth$agecat,y=0.05,label=ci.res.nobirth$nmeas.f,size=3)+
+  annotate("text",x=ci.res.nobirth$agecat,y=0.01,label=ci.res.nobirth$nstudy.f,size=3)+
   annotate("text",label=ci.res.nobirth$ptest.f,x=ci.res.nobirth$agecat,
            y=ci.res.nobirth$est,hjust=-0.3,size=3)+
-  ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI includes birth")
+  ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI excludes birth")
 dev.off()
 
 
@@ -197,16 +197,16 @@ ci.res.birth$ptest.f=sprintf("%0.02f",ci.res.birth$est)
 ci.res.birth
 
 # plot pooled cumulative incidence
-pdf("U:/Figures/stunting-cuminc-pool-bc-nobirth.pdf",width=8,height=3.5,onefile=TRUE)
+pdf("U:/Figures/stunting-cuminc-pool-bc-birth.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res.birth,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0.13,0.8))+
+  scale_y_continuous(limits=c(0,0.8))+
   xlab("Age category")+
   ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=ci.res.birth$agecat,y=0.18,label=ci.res.birth$nmeas.f,size=3)+
-  annotate("text",x=ci.res.birth$agecat,y=0.15,label=ci.res.birth$nstudy.f,size=3)+
+  annotate("text",x=ci.res.birth$agecat,y=0.05,label=ci.res.birth$nmeas.f,size=3)+
+  annotate("text",x=ci.res.birth$agecat,y=0.01,label=ci.res.birth$nstudy.f,size=3)+
   annotate("text",label=ci.res.birth$ptest.f,x=ci.res.birth$agecat,
            y=ci.res.birth$est,hjust=-0.3,size=3)+
-  ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI excludes birth")
+  ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI includes birth")
 dev.off()
