@@ -77,22 +77,6 @@ inc.prep = d %>%
   select(-c(hazlag,newcase,newcaselag, cnewcaselag,agedayslag,
             deltat,deltat_half))
 
-inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
-         c("subjid","agedays","agecat","haz","deltat2","inccase",
-           "atrisk","pdays")][48:65,]
-
-inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
-        c("subjid","agedays","haz","deltat","deltat_half","deltat2","inccase",
-          "atrisk","pdays")][48:60,]
-
-inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
-         c("subjid","measid","agedays","agecat","haz","deltat","inccase","atrisk","pdays")][1:20,]
-
-
-inc.prep[inc.prep$studyid=="ki1000108-CMC-V-BCS-2002",
-         c("subjid","measid","agedays","haz","deltat","inccase","atrisk","pdays")][20:39,]
-
-
 # manually calculate incident cases, person-time at risk at each time point
 inc.prep %>%
   group_by(agecat) %>%
@@ -134,7 +118,8 @@ ggplot(ir.res,aes(y=est*1000,x=agecat))+
   annotate("text",x=ir.res$agecat,y=0.6,label=ir.res$pt.f,size=3)+
   annotate("text",x=ir.res$agecat,y=0.4,label=ir.res$nstudy.f,size=3)+
   annotate("text",label=ir.res$ptest.f,x=ir.res$agecat,
-           y=ir.res$est*1000,hjust=-0.3,size=3)
+           y=ir.res$est*1000,hjust=-0.3,size=3)+
+  ggtitle("Pooled stunting incidence rate")
 dev.off()
 
 
