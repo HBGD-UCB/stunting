@@ -114,9 +114,9 @@ ggplot(ir.res,aes(y=est*1000,x=agecat))+
   geom_errorbar(aes(ymin=lb*1000,ymax=ub*1000),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Incidence rate per 1,000 child-days (95% CI)")+
-  scale_y_continuous(limits=c(0.4,4.25))+
-  annotate("text",x=ir.res$agecat,y=0.6,label=ir.res$pt.f,size=3)+
-  annotate("text",x=ir.res$agecat,y=0.4,label=ir.res$nstudy.f,size=3)+
+  scale_y_continuous(limits=c(0,4.25))+
+  annotate("text",x=ir.res$agecat,y=0.05,label=ir.res$pt.f,size=3)+
+  annotate("text",x=ir.res$agecat,y=0.01,label=ir.res$nstudy.f,size=3)+
   annotate("text",label=ir.res$ptest.f,x=ir.res$agecat,
            y=ir.res$est*1000,hjust=-0.3,size=3)+
   ggtitle("Pooled stunting incidence rate")
