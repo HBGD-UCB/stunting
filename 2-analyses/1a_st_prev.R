@@ -70,6 +70,7 @@ ggplot(prev.res,aes(y=est,x=agecat))+
   annotate("text",x=prev.res$agecat,y=0,label=prev.res$nmeas.f,size=3)+
   annotate("text",x=prev.res$agecat,y=-0.03,label=prev.res$nstudy.f,size=3)+
   annotate("text",label=prev.res$ptest.f,x=prev.res$agecat,
-           y=prev.res$est,hjust=-0.3,size=3)
+           y=prev.res$est,hjust=-0.3,size=3)+
+  ggtitle("Pooled point prevalence of stunting")
 dev.off()
 
