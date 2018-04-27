@@ -18,6 +18,8 @@ rm(list=ls())
 library(dplyr)
 
 d=read.csv("U:/GHAP_metadata.csv")
+d <- readRDS('U:/Data/Stunting/GHAP_metadata_stunting.rds')
+
 nrow(d)
 
 #---------------------------------------
@@ -38,7 +40,7 @@ nrow(d1)
 # acute diarrhea) and did not restrict by LAZ
 #---------------------------------------
 # per email from Andrew:
-acute=c("grip","ppd","zinf","zsga","zlbw")
+acute=c("grip","ppd","zinf","zsga","zlbw", "dvds")
 laz=c("eczn","pzn")
 
 d1$ic2=ifelse(d1$short_id %in% acute | d1$short_id %in% laz,0,1)
@@ -57,7 +59,9 @@ nrow(d3)
 #---------------------------------------
 # Criterion 4: Enrolled at least 200 children
 #---------------------------------------
-d3$ic4=ifelse(d3$numsubj>=200,1,0)
+#d3$ic4=ifelse(d3$numsubj>=200,1,0)
+d3$ic4=ifelse(d3$subject_count>=200,1,0)
+
 d3$ic4[d3$numsubj=="NA"]=9
 
 # manual correction for studies with missing data
@@ -115,12 +119,17 @@ nrow(d6)
 # Criterion 7: Measured length between birth and age 24 months
 #---------------------------------------
 # studies based on Andrew and Esther's CONSORT that are out of age range
-wrong.age=c("npre", "bts", "hemy", "ib21", "ig21", "igu", "gual")
+wrong.age=c("npre", "bts", "hemy", "ib21", "ig21", "igu", "gual", "nvta", "wfrst", "stjn")
 d6$ic7=1
 d6$ic7[d6$short_id %in% wrong.age]=0
 
 d7 <- d6 %>% filter(d6$ic7==1)
 nrow(d7)
+
+#---------------------------------------
+# Criterion 7: Exclude suspect measurements (Mal-ED Pakistan)
+#---------------------------------------
+d7 <- d7[!(d7$short_id=="mled" & d7$countrycohort=="PAKISTAN"),]
 
 #---------------------------------------
 # Collected anthropometry measurements at 
