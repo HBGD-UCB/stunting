@@ -68,8 +68,10 @@ ci.res=lapply(list("6 months","12 months","18 months","24 months"),function(x)
     fit.rma(data=cuminc.data,ni="N", xi="ncases",age=x))
 ci.res=as.data.frame(do.call(rbind, ci.res))
 ci.res[,4]=as.numeric(ci.res[,4])
+ci.res = ci.res %>%
+  mutate(est=est*100, lb=lb*100, ub=ub*100)
 ci.res$agecat=factor(ci.res$agecat,levels=c("6 months","12 months","18 months","24 months"))
-ci.res$ptest.f=sprintf("%0.02f",ci.res$est)
+ci.res$ptest.f=sprintf("%0.0f",ci.res$est)
 
 ci.res
 
@@ -78,13 +80,13 @@ pdf("U:/Figures/stunting-cuminc-pool.pdf",width=8,height=3.5,onefile=TRUE)
 ggplot(ci.res,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0,0.7))+
+  scale_y_continuous(limits=c(0,80))+
   xlab("Age category")+
-  ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=ci.res$agecat,y=0.05,label=ci.res$nmeas.f,size=3)+
-  annotate("text",x=ci.res$agecat,y=0.01,label=ci.res$nstudy.f,size=3)+
+  ylab("Cumulative incidence per 100 children (95% CI)")+
+  annotate("text",x=ci.res$agecat,y=5,label=ci.res$nmeas.f,size=3)+
+  annotate("text",x=ci.res$agecat,y=1,label=ci.res$nstudy.f,size=3)+
   annotate("text",label=ci.res$ptest.f,x=ci.res$agecat,
-           y=ci.res$est,hjust=-0.3,size=3)+
+           y=ci.res$est,hjust=-0.75,size=3)+
   ggtitle("Pooled cumulative incidence of stunting")
 dev.off()
 
@@ -134,8 +136,10 @@ ci.res.nobirth=lapply(list("6 months","12 months","18 months","24 months"),funct
   fit.rma(data=cuminc.data.nobirth,ni="N", xi="ncases",age=x))
 ci.res.nobirth=as.data.frame(do.call(rbind, ci.res.nobirth))
 ci.res.nobirth[,4]=as.numeric(ci.res.nobirth[,4])
+ci.res.nobirth = ci.res.nobirth %>%
+  mutate(est=est*100, lb=lb*100, ub=ub*100)
 ci.res.nobirth$agecat=factor(ci.res.nobirth$agecat,levels=c("6 months","12 months","18 months","24 months"))
-ci.res.nobirth$ptest.f=sprintf("%0.02f",ci.res.nobirth$est)
+ci.res.nobirth$ptest.f=sprintf("%0.0f",ci.res.nobirth$est)
 
 ci.res.nobirth
 
@@ -145,13 +149,13 @@ pdf("U:/Figures/stunting-cuminc-pool-bc-nobirth.pdf",width=8,height=3.5,onefile=
 ggplot(ci.res.nobirth,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0,0.8))+
+  scale_y_continuous(limits=c(0,80))+
   xlab("Age category")+
-  ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=ci.res.nobirth$agecat,y=0.05,label=ci.res.nobirth$nmeas.f,size=3)+
-  annotate("text",x=ci.res.nobirth$agecat,y=0.01,label=ci.res.nobirth$nstudy.f,size=3)+
+  ylab("Cumulative incidence per 100 children (95% CI)")+
+  annotate("text",x=ci.res.nobirth$agecat,y=5,label=ci.res.nobirth$nmeas.f,size=3)+
+  annotate("text",x=ci.res.nobirth$agecat,y=1,label=ci.res.nobirth$nstudy.f,size=3)+
   annotate("text",label=ci.res.nobirth$ptest.f,x=ci.res.nobirth$agecat,
-           y=ci.res.nobirth$est,hjust=-0.3,size=3)+
+           y=ci.res.nobirth$est,hjust=-0.75,size=3)+
   ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI excludes birth")
 dev.off()
 
@@ -191,8 +195,10 @@ ci.res.birth=lapply(list("6 months","12 months","18 months","24 months"),functio
   fit.rma(data=cuminc.data.birth,ni="N", xi="ncases",age=x))
 ci.res.birth=as.data.frame(do.call(rbind, ci.res.birth))
 ci.res.birth[,4]=as.numeric(ci.res.birth[,4])
+ci.res.birth = ci.res.birth %>%
+  mutate(est=est*100, lb=lb*100, ub=ub*100)
 ci.res.birth$agecat=factor(ci.res.birth$agecat,levels=c("6 months","12 months","18 months","24 months"))
-ci.res.birth$ptest.f=sprintf("%0.02f",ci.res.birth$est)
+ci.res.birth$ptest.f=sprintf("%0.0f",ci.res.birth$est)
 
 ci.res.birth
 
@@ -201,12 +207,12 @@ pdf("U:/Figures/stunting-cuminc-pool-bc-birth.pdf",width=8,height=3.5,onefile=TR
 ggplot(ci.res.birth,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
-  scale_y_continuous(limits=c(0,0.8))+
+  scale_y_continuous(limits=c(0,80))+
   xlab("Age category")+
-  ylab("Cumulative incidence (95% CI)")+
-  annotate("text",x=ci.res.birth$agecat,y=0.05,label=ci.res.birth$nmeas.f,size=3)+
-  annotate("text",x=ci.res.birth$agecat,y=0.01,label=ci.res.birth$nstudy.f,size=3)+
+  ylab("Cumulative incidence per 100 children (95% CI)")+
+  annotate("text",x=ci.res.birth$agecat,y=5,label=ci.res.birth$nmeas.f,size=3)+
+  annotate("text",x=ci.res.birth$agecat,y=1,label=ci.res.birth$nstudy.f,size=3)+
   annotate("text",label=ci.res.birth$ptest.f,x=ci.res.birth$agecat,
-           y=ci.res.birth$est,hjust=-0.3,size=3)+
+           y=ci.res.birth$est,hjust=-0.75,size=3)+
   ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI includes birth")
 dev.off()
