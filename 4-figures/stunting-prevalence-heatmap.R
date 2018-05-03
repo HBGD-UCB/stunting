@@ -55,8 +55,18 @@ cgrey <- "#777777"
 # load the meta-data table from Andrew (GHAP_metadata)
 #-----------------------------------
 
-# md <- readRDS('HBGDki documentation/GHAP_metadata_stunting.rds')
-md <- readRDS('U:/Data/Stunting/GHAP_metadata_stunting.rds')
+setwd("C:/Users/andre/Dropbox/")
+md <- readRDS('HBGDki documentation/GHAP_metadata_stunting.rds')
+
+
+# subset studies to those that meet stunting inclusion criteria
+load("HBGDki documentation/stunting_studies.RData")
+elig=as.character(ss$short_id)
+md <- md %>% filter(md$short_id %in% elig)
+
+#Drop mal-ed pakistan
+md <- md %>% filter(!(short_id=="mled" & countrycohort=="PAKISTAN"))
+
 
 # convert stunting prevalence and numsubj to numeric
 md$stuntprev <- as.numeric(md$stuntprev)
@@ -72,100 +82,100 @@ for(i in 1:24){
 md$nmeas <- rowSums(md[,paste('n',1:24,sep='')],na.rm=TRUE)
 
 
-#-----------------------------------
-# STUDY SELECTION / FILTERING
-#-----------------------------------
 dd <- md
-
-#-----------------------------------
-# 1 restrict to data that is QCd
-#-----------------------------------
-dim(dd)
-table(dd$status=='QC completed')
-dd<- filter(dd,status=='QC completed')
-dim(dd)
-
-#-----------------------------------
-# 2 restrict to longitudinal studies
-#-----------------------------------
-dim(dd)
-table(dd$study_type=='Longitudinal')
-dd<- filter(dd,study_type=='Longitudinal')
-dim(dd)
-
-#-----------------------------------
-# 3 drop higher income countries USA, NLD, Singapore
-#-----------------------------------
-length(grep('USA',dd$country))
-length(grep('NLD',dd$country))
-dd <- filter(dd,country!='USA'& country!='NLD' & country!='SGP')
-dim(dd)
-
-#-----------------------------------
-# 4 have anthro measurements 0-24 months
-#-----------------------------------
-# table(dd$anthropometric_data=='None'|dd$anthropometric_data=='TBD')
-# dd <- filter(dd,anthropometric_data!='None' & anthropometric_data!='TBD')
+# 
+# #-----------------------------------
+# # 1 restrict to data that is QCd
+# #-----------------------------------
+# dim(dd)
+# table(dd$status=='QC completed')
+# dd<- filter(dd,status=='QC completed')
+# dim(dd)
+# 
+# #-----------------------------------
+# # 2 restrict to longitudinal studies
+# #-----------------------------------
+# dim(dd)
+# table(dd$study_type=='Longitudinal')
+# dd<- filter(dd,study_type=='Longitudinal')
+# dim(dd)
+# 
+# #-----------------------------------
+# # 3 drop higher income countries USA, NLD, Singapore
+# #-----------------------------------
+# length(grep('USA',dd$country))
+# length(grep('NLD',dd$country))
+# dd <- filter(dd,country!='USA'& country!='NLD' & country!='SGP')
+# dim(dd)
+# 
+# #-----------------------------------
+# # 4 have anthro measurements 0-24 months
+# #-----------------------------------
+# # table(dd$anthropometric_data=='None'|dd$anthropometric_data=='TBD')
+# # dd <- filter(dd,anthropometric_data!='None' & anthropometric_data!='TBD')
+# # dim(dd)
+# 
+# table(dd$nmeas<=0 | is.na(dd$nmeas))
+# dd_nomeas <- filter(dd,nmeas<=0 | is.na(dd$nmeas))
+# select(dd_nomeas,study_id,short_description)
+# 
+# dd <- filter(dd,nmeas>0 & !is.na(dd$nmeas))
+# dim(dd)
+# 
+# #-----------------------------------
+# # 5 drop studies with either wrong
+# # study designs (GEMS) or not sufficiently
+# # high resolution measurements (WASH B)
+# # N=9
+# # bigcs_ultrasound (birth + 12 mos)
+# # iLiNS DOSE and iLiNS DYAD (every 6 mos)
+# # Amanhi (only birth outcomes)
+# # Peru Zinc (every 2 months)
+# # ZnMort Bhandari et al 2007 (http://jn.nutrition.org/content/137/1/112.full) 
+# #-----------------------------------
+# #wrong_design <- c('WASH-Bangladesh','WASH-Kenya','BIGCS Ultrasound','iLiNS-DOSE','iLiNS-DYAD-M','IMNCI','AMANHI','Peru Zn','ZnMort')
+# wrong_design <- c('BIGCS Ultrasound','AMANHI', 'IMNCI')
+# 
+# dd <- dd[!(dd$study_id %in% wrong_design),]
+# dim(dd)
+# 
+# 
+# #-----------------------------------
+# # 6 drop studies with non-representative
+# # study populations
+# #
+# # N=5
+# # PeruPersistentDiarrhea: Children in Lima, Peru with persistent diarrhea
+# # Ecuador Zinc: Children with HAZ < -1.3
+# # DIVIDS: Low birth weight term newborns born in a large government hospital serving a low income population in Delhi, India
+# # ZincInf:  Infants with acute diarrhea living in India, Pakistan and Ethiopia
+# # GRIP: Children aged < 5 y in Ali Akber Shah goth, Karachi, with lower respiratory tract infection
+# # LBW: Low birth weight
+# # Small for gestational age
+# #-----------------------------------
+# nonrepres <- c('Peru PersistDiarrhea','Ecuador Zn','DIVIDS','ZincInf','Grip', "LBW", "ZincSGA" )
+# dd_nonrep <-dd[(dd$study_id %in% nonrepres),]
+# dd <- dd[ !(dd$study_id %in% nonrepres),]
+# dim(dd)
+# 
+# #-----------------------------------
+# # drop studies that are too small
+# # N=3
+# #-----------------------------------
+# toosmall <- c('Ecuador Egg','Bangladesh Diarrhea', "Peru Zn", "TDC")
+# dd_small <- filter(dd,study_id=='Ecuador Egg'|study_id=='Bangladesh Diarrhea'|study_id=='Peru Zn'|study_id=='TDC')
+# dd <- filter(dd,study_id!='Ecuador Egg' & study_id!='Bangladesh Diarrhea' & study_id!='Peru Zn')
+# dim(dd)
+# 
+# #-----------------------------------
+# # Dropped studies flagged for 
+# # questionable anthropometry measurements
+# #-----------------------------------
+# dd <- dd[-which(dd$study_id=='MAL-ED' & dd$countrycohort=='PAKISTAN'),]
 # dim(dd)
 
-table(dd$nmeas<=0 | is.na(dd$nmeas))
-dd_nomeas <- filter(dd,nmeas<=0 | is.na(dd$nmeas))
-select(dd_nomeas,study_id,short_description)
-
-dd <- filter(dd,nmeas>0 & !is.na(dd$nmeas))
-dim(dd)
-
-#-----------------------------------
-# 5 drop studies with either wrong
-# study designs (GEMS) or not sufficiently
-# high resolution measurements (WASH B)
-# N=9
-# bigcs_ultrasound (birth + 12 mos)
-# iLiNS DOSE and iLiNS DYAD (every 6 mos)
-# Amanhi (only birth outcomes)
-# Peru Zinc (every 2 months)
-# ZnMort Bhandari et al 2007 (http://jn.nutrition.org/content/137/1/112.full) 
-#-----------------------------------
-#wrong_design <- c('WASH-Bangladesh','WASH-Kenya','BIGCS Ultrasound','iLiNS-DOSE','iLiNS-DYAD-M','IMNCI','AMANHI','Peru Zn','ZnMort')
-wrong_design <- c('BIGCS Ultrasound','AMANHI', 'IMNCI')
-
-dd <- dd[!(dd$study_id %in% wrong_design),]
-dim(dd)
 
 
-#-----------------------------------
-# 6 drop studies with non-representative
-# study populations
-#
-# N=5
-# PeruPersistentDiarrhea: Children in Lima, Peru with persistent diarrhea
-# Ecuador Zinc: Children with HAZ < -1.3
-# DIVIDS: Low birth weight term newborns born in a large government hospital serving a low income population in Delhi, India
-# ZincInf:  Infants with acute diarrhea living in India, Pakistan and Ethiopia
-# GRIP: Children aged < 5 y in Ali Akber Shah goth, Karachi, with lower respiratory tract infection
-# LBW: Low birth weight
-# Small for gestational age
-#-----------------------------------
-nonrepres <- c('Peru PersistDiarrhea','Ecuador Zn','DIVIDS','ZincInf','Grip', "LBW", "ZincSGA" )
-dd_nonrep <-dd[(dd$study_id %in% nonrepres),]
-dd <- dd[ !(dd$study_id %in% nonrepres),]
-dim(dd)
-
-#-----------------------------------
-# drop studies that are too small
-# N=3
-#-----------------------------------
-toosmall <- c('Ecuador Egg','Bangladesh Diarrhea', "Peru Zn", "TDC")
-dd_small <- filter(dd,study_id=='Ecuador Egg'|study_id=='Bangladesh Diarrhea'|study_id=='Peru Zn'|study_id=='TDC')
-dd <- filter(dd,study_id!='Ecuador Egg' & study_id!='Bangladesh Diarrhea' & study_id!='Peru Zn')
-dim(dd)
-
-#-----------------------------------
-# Dropped studies flagged for 
-# questionable anthropometry measurements
-#-----------------------------------
-dd <- dd[-which(dd$study_id=='MAL-ED' & dd$countrycohort=='PAKISTAN'),]
-dim(dd)
 
 
 #-----------------------------------
@@ -440,8 +450,8 @@ sidebar <- ggplot(data = dd, aes(x = studycountry)) +
 #-----------------------------------
 # set plot working directory
 #-----------------------------------
-# setwd("C:/Users/andre/Dropbox/HBGDki figures/Stunting")
-setwd("U:/Figures/")
+ setwd("C:/Users/andre/Dropbox/HBGDki figures/Stunting")
+#setwd("U:/Figures/")
 
 
 #-----------------------------------

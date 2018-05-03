@@ -56,8 +56,10 @@ prev.res=lapply(list("Birth","6 months","12 months","18 months","24 months"),fun
   fit.rma(prev.data,ni="nmeas", xi="nxprev",age=x))
 prev.res=as.data.frame(do.call(rbind, prev.res))
 prev.res[,4]=as.numeric(prev.res[,4])
+                prev.res = prev.res %>%
+  mutate(est=est*100,lb=lb*100,ub=ub*100)
 prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","6 months","12 months","18 months","24 months"))
-prev.res$ptest.f=sprintf("%0.02f",prev.res$est)
+prev.res$ptest.f=sprintf("%0.0f",prev.res$est)
 
 # plot prevalence
 pdf("U:/Figures/stunting-ptprev-pool.pdf",width=9,height=4,onefile=TRUE)
@@ -66,11 +68,11 @@ ggplot(prev.res,aes(y=est,x=agecat))+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Point prevalence (95% CI)")+
-  scale_y_continuous(limits=c(-0.04,0.6))+
+  scale_y_continuous(limits=c(-4,60))+
   annotate("text",x=prev.res$agecat,y=0,label=prev.res$nmeas.f,size=3)+
-  annotate("text",x=prev.res$agecat,y=-0.03,label=prev.res$nstudy.f,size=3)+
+  annotate("text",x=prev.res$agecat,y=-3,label=prev.res$nstudy.f,size=3)+
   annotate("text",label=prev.res$ptest.f,x=prev.res$agecat,
-           y=prev.res$est,hjust=-0.3,size=3)+
+           y=prev.res$est,hjust=-0.75,size=3)+
   ggtitle("Pooled point prevalence of stunting")
 dev.off()
 
