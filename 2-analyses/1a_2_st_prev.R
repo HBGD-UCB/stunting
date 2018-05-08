@@ -23,11 +23,12 @@ load("U:/Data/Stunting/stunting_data.RData")
 d = d %>% 
   arrange(studyid,subjid,agedays) %>%
   mutate(agecat=ifelse(agedays==1,"Birth",
+     ifelse(agedays>2*30.4167 & agedays<4*30.4167,"3 months",
       ifelse(agedays>5*30.4167 & agedays<7*30.4167,"6 months",
        ifelse(agedays>11*30.4167 & agedays<13*30.4167,"12 months",
               ifelse(agedays>17*30.4167 & agedays<19*30.4167,"18 months",
-                     ifelse(agedays>23*30.4167& agedays<25*30.4167,"24 months","")))))) %>%
-    mutate(agecat=factor(agecat,levels=c("Birth","6 months",
+                     ifelse(agedays>23*30.4167& agedays<25*30.4167,"24 months",""))))))) %>%
+    mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months",
                                          "12 months","18 months","24 months"))) %>%
     mutate(stunted=ifelse(haz< -2, 1,0),sstunted=ifelse(haz< -3, 1,0))
 
@@ -52,13 +53,13 @@ prev.data = d %>%
   
 
 # estimate random effects, format results
-prev.res=lapply(list("Birth","6 months","12 months","18 months","24 months"),function(x) 
+prev.res=lapply(list("Birth","3 months","6 months","12 months","18 months","24 months"),function(x) 
   fit.rma(prev.data,ni="nmeas", xi="nxprev",age=x))
 prev.res=as.data.frame(do.call(rbind, prev.res))
 prev.res[,4]=as.numeric(prev.res[,4])
                 prev.res = prev.res %>%
   mutate(est=est*100,lb=lb*100,ub=ub*100)
-prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","6 months","12 months","18 months","24 months"))
+prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","3 months","6 months","12 months","18 months","24 months"))
 prev.res$ptest.f=sprintf("%0.0f",prev.res$est)
 
 # plot prevalence
