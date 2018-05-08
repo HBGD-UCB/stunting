@@ -76,3 +76,13 @@ ggplot(prev.res,aes(y=est,x=agecat))+
   ggtitle("Pooled point prevalence of stunting")
 dev.off()
 
+
+# export
+prev = d %>% filter(!is.na(agecat)) %>%
+  select(studyid,subjid,country,tr,agedays,haz,agecat,
+         stunted, sstunted)
+
+save(prev,file="U:/Data/Stunting/st_prev.RData")
+save(prev,file="U:/UCB-Superlearner/Stunting rallies/st_prev.RData")
+
+

@@ -46,20 +46,21 @@ d %>%
           min(haz))))) %>%
     # create indicator for whether the child was ever stunted
     # by age category
-    group_by(studyid,subjid,agecat) %>%
-    mutate(evst=ifelse(minhaz< -2,1,0)) 
-  
+    group_by(studyid,agecat,subjid) %>%
+    summarise(minhaz=min(minhaz)) %>%
+    mutate(ever_stunted=ifelse(minhaz< -2,1,0))
+    
 # count incident cases per study by age
 # exclude time points if number of measurements per age
 # in a study is <50  
 cuminc.data= evs%>%
-    group_by(studyid,agecat) %>%
-    summarise(
-      nchild=length(unique(subjid)),
-      nstudy=length(unique(studyid)),
-      ncases=sum(evst),
-      N=sum(length(evst))) %>%
-    filter(N>=50)
+  group_by(studyid,agecat) %>%
+  summarise(
+    nchild=length(unique(subjid)),
+    nstudy=length(unique(studyid)),
+    ncases=sum(ever_stunted),
+    N=sum(length(ever_stunted))) %>%
+  filter(N>=50)
   
 cuminc.data
   
@@ -114,8 +115,9 @@ evs.sens.nobirth = left_join(d, bc, by=c("studyid","country")) %>%
                                      min(haz))))) %>%
   # create indicator for whether the child was ever stunted
   # by age category
-  group_by(studyid,subjid,agecat) %>%
-  mutate(evst=ifelse(minhaz< -2,1,0)) 
+  group_by(studyid,agecat,subjid) %>%
+  summarise(minhaz=min(minhaz)) %>%
+  mutate(ever_stunted=ifelse(minhaz< -2,1,0))
 
 # count incident cases per study by age
 # exclude time points if number of measurements per age
@@ -125,8 +127,8 @@ cuminc.data.nobirth= evs.sens.nobirth%>%
   summarise(
     nchild=length(unique(subjid)),
     nstudy=length(unique(studyid)),
-    ncases=sum(evst),
-    N=sum(length(evst))) %>%
+    ncases=sum(ever_stunted),
+    N=sum(length(ever_stunted))) %>%
   filter(N>=50)
 
 cuminc.data.nobirth
@@ -173,8 +175,9 @@ evs.sens.birth = left_join(d, bc, by=c("studyid","country")) %>%
                                      min(haz))))) %>%
   # create indicator for whether the child was ever stunted
   # by age category
-  group_by(studyid,subjid,agecat) %>%
-  mutate(evst=ifelse(minhaz< -2,1,0)) 
+  group_by(studyid,agecat,subjid) %>%
+  summarise(minhaz=min(minhaz)) %>%
+  mutate(ever_stunted=ifelse(minhaz< -2,1,0))
 
 # count incident cases per study by age
 # exclude time points if number of measurements per age
@@ -184,8 +187,8 @@ cuminc.data.birth= evs.sens.birth%>%
   summarise(
     nchild=length(unique(subjid)),
     nstudy=length(unique(studyid)),
-    ncases=sum(evst),
-    N=sum(length(evst))) %>%
+    ncases=sum(ever_stunted),
+    N=sum(length(ever_stunted))) %>%
   filter(N>=50)
 
 cuminc.data.birth
@@ -216,3 +219,11 @@ ggplot(ci.res.birth,aes(y=est,x=agecat))+
            y=ci.res.birth$est,hjust=-0.75,size=3)+
   ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI includes birth")
 dev.off()
+
+# export data 
+cuminc=evs %>% select(studyid,subjid,agecat,ever_stunted) 
+
+save(cuminc,file="U:/Data/Stunting/st_cuminc.RData")
+save(cuminc,file="U:/UCB-Superlearner/Stunting rallies/st_cuminc.RData")
+
+

@@ -123,4 +123,11 @@ ggplot(ir.res,aes(y=est*1000,x=agecat))+
 dev.off()
 
 
+# export data
+inc = inc.prep %>%
+  select(studyid,subjid,country,tr,agedays,haz,agecat,
+         atrisk,inccase,pdays)
+
+save(inc,file="U:/Data/Stunting/st_inc.RData")
+save(inc,file="U:/UCB-Superlearner/Stunting rallies/st_inc.RData")
 
