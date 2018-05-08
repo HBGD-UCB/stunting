@@ -21,12 +21,12 @@ load("U:/Data/Stunting/stunting_data.RData")
 
 # define age windows
 d = d %>% 
-  mutate(agecat=ifelse(agedays==1,"Birth",
-    ifelse(agedays<=6*30.4167,"6 months",
-                       ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
-                              ifelse(agedays>12*30.4167& agedays<=18*30.4167,"18 months",
-                                ifelse(agedays>18*30.4167& agedays<=24*30.4167,"24 months","")))))) %>%
-  mutate(agecat=factor(agecat,levels=c("Birth","6 months","12 months","18 months","24 months")))
+  mutate(agecat=ifelse(agedays<=3*30.4167,"3 months",
+                       ifelse(agedays>3*30.4167 & agedays<=6*30.4167,"6 months",
+                              ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
+                                     ifelse(agedays>12*30.4167 & agedays<=18*30.4167,"18 months",
+                                            ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months","")))))) %>%
+  mutate(agecat=factor(agecat,levels=c("3 months","6 months","12 months","18 months","24 months")))
 
 # check age categories
 d %>%
@@ -40,7 +40,7 @@ d %>%
 # flag incident cases and define risk set
 # ---------------------------------------
 inc.prep = d %>%
-  filter(!is.na(agecat) & agecat!="Birth") %>%
+  filter(!is.na(agecat) & agedays>1) %>%
   group_by(studyid,subjid) %>%
   arrange(studyid,subjid,agedays) %>%
   
@@ -96,12 +96,17 @@ inc.data = inc.prep %>%
   filter(nchild>=50)
     
 # estimate random effects, format results
-ir.res=lapply(list("6 months","12 months","18 months","24 months"),function(x)
+ir.res=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
   fit.rma(data=inc.data,ni="ptar", xi="ncase",age=x))
 ir.res=as.data.frame(do.call(rbind, ir.res))
 ir.res[,4]=as.numeric(ir.res[,4])
-ir.res$agecat=factor(ir.res$agecat,levels=
-        c("6 months","12 months","18 months","24 months"))
+ir.res$agecat.f=as.factor(ifelse(ir.res$agecat=="3 months","0-3 months",
+                                 ifelse(ir.res$agecat=="6 months","4-6 months",
+                                        ifelse(ir.res$agecat=="12 months","7-12 months",
+                                               ifelse(ir.res$agecat=="18 months","13-18 months","19-24 months")))))
+ir.res$agecat.f=factor(ir.res$agecat.f,levels=c("0-3 months","4-6 months",
+                                                "7-12 months","13-18 months","19-24 months"))
+
 
 ir.res
 ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
@@ -109,15 +114,15 @@ ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
 ir.res$ptest.f=sprintf("%0.02f",ir.res$est*1000)
 
 pdf("U:/Figures/stunting-inc-pool.pdf",width=8,height=4,onefile=TRUE)
-ggplot(ir.res,aes(y=est*1000,x=agecat))+
+ggplot(ir.res,aes(y=est*1000,x=agecat.f))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb*1000,ymax=ub*1000),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Incidence rate per 1,000 child-days (95% CI)")+
-  scale_y_continuous(limits=c(0,4.25))+
-  annotate("text",x=ir.res$agecat,y=0.2,label=ir.res$pt.f,size=3)+
-  annotate("text",x=ir.res$agecat,y=0.01,label=ir.res$nstudy.f,size=3)+
-  annotate("text",label=ir.res$ptest.f,x=ir.res$agecat,
+  scale_y_continuous(limits=c(0,7.2))+
+  annotate("text",x=ir.res$agecat.f,y=0.4,label=ir.res$pt.f,size=3)+
+  annotate("text",x=ir.res$agecat.f,y=0.01,label=ir.res$nstudy.f,size=3)+
+  annotate("text",label=ir.res$ptest.f,x=ir.res$agecat.f,
            y=ir.res$est*1000,hjust=-0.3,size=3)+
   ggtitle("Pooled stunting incidence rate")
 dev.off()
