@@ -2,7 +2,7 @@
 # Stunting analysis
 # Objective 1a
 # Calculate incidence at
-# 6, 12, 18, and 24 mo of age
+# 3, 6, 12, 18, and 24 mo of age
 
 # Incidence rate pooled using random effects
 #-----------------------------------
@@ -113,7 +113,7 @@ ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
                   " person-days")
 ir.res$ptest.f=sprintf("%0.02f",ir.res$est*1000)
 
-pdf("U:/Figures/stunting-inc-pool.pdf",width=8,height=4,onefile=TRUE)
+pdf("U:/Figures/stunting-inc-pool.pdf",width=9,height=4,onefile=TRUE)
 ggplot(ir.res,aes(y=est*1000,x=agecat.f))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb*1000,ymax=ub*1000),width=0.05) +

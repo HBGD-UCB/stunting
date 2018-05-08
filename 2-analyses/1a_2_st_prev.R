@@ -2,7 +2,7 @@
 # Stunting analysis
 # Objective 1a
 # Calculate point prevalence at
-# Birth, 6, 12, 18, and 24 mo of age
+# Birth, 3, 6, 12, 18, and 24 mo of age
 
 # Prevalence pooled using random effects
 #-----------------------------------
@@ -63,7 +63,7 @@ prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","3 months","6 months","1
 prev.res$ptest.f=sprintf("%0.0f",prev.res$est)
 
 # plot prevalence
-pdf("U:/Figures/stunting-ptprev-pool.pdf",width=9,height=4,onefile=TRUE)
+pdf("U:/Figures/stunting-ptprev-pool.pdf",width=10,height=4,onefile=TRUE)
 ggplot(prev.res,aes(y=est,x=agecat))+
   geom_point(size=3)+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
