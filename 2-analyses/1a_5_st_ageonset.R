@@ -34,11 +34,6 @@ dmonthly=inner_join(d,keep)
 # ---------------------------------------
 # identify incident cases
 # ---------------------------------------
-sem<-function(x){
-  sd(x)/sqrt(length(x))
-}
-
-
 inc = dmonthly %>%
   # ungroup(studyid) %>%
   # mutate(studyid=as.factor(studyid)) %>%
@@ -59,6 +54,7 @@ inc = dmonthly %>%
   filter(inccase==1) %>%
   select(studyid,country,subjid,agedays)
  
+
 # cohort specific mean
 age.onset.study = inc %>%
   # make region
@@ -81,8 +77,8 @@ age.onset.study = inc %>%
             se=sem(agedays),
             Nmeas=n(),
             Nchild=sum(length(unique(subjid)))) %>%
-  mutate(lb=se-qnorm(0.975)*se,
-         ub=se+qnorm(0.975)*se) 
+  mutate(lb=mn-qnorm(0.975)*se,
+         ub=mn+qnorm(0.975)*se) 
 
 # sort by mean age
 age.onset.study$study_country=factor(age.onset.study$study_country, 
