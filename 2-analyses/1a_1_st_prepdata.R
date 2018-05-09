@@ -8,6 +8,38 @@ library(dplyr)
 library(ggplot2)
 library(data.table)
 
+#--------------------------------------------
+# Read in .csv file and save as an .rds file
+#--------------------------------------------
+d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
+dim(d)
+head(d)
+colnames(d)
+saveRDS(d, "FINAL.rds")
+
+#Read rds file
+#d<- readRDS("FINAL.rds")
+
+#--------------------------------------------
+#Check for duplicate agedays
+#--------------------------------------------
+dup_age <- d %>% group_by(STUDYID, SUBJID, AGEDAYS) %>% summarize(N=n())
+mean(dup_age$N)
+
+#--------------------------------------------
+# Save just identifying and haz data
+#--------------------------------------------
+df<-d %>% subset(., select=c(STUDYID, SUBJID, COUNTRY, TR, AGEDAYS, HAZ))
+colnames(df) <- tolower(colnames(df))
+save(df, file="U:/data/Stunting/Full-compiled-data/compiled_HAZ_dataset.RData")
+
+
+
+
+#--------------------------------------------
+# Load only the anthropometry data
+#--------------------------------------------
+
 setwd("U:/data/GHAP_data/")
 load("U:/data/Stunting/Full-compiled-data/compiled_HAZ_dataset.RData")
 
