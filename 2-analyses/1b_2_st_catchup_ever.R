@@ -2,7 +2,7 @@
 # Stunting analysis
 # Objective 1b
 # Calculate catch up growth at
-# 3, 6, 12, 18, and 24 mo of age
+# 3, 6, 9, 12, 18, and 24 mo of age
 
 # Cohort specific estimates & 
 # Pooled estimates using random effects
