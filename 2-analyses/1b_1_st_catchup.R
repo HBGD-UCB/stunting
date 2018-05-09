@@ -2,7 +2,7 @@
 # Stunting analysis
 # Objective 1b
 # Calculate catch up growth at
-# 3, 6, 12, 18, and 24 mo of age
+# 3, 6, 9, 12, 18, and 24 mo of age
 
 # Cohort specific estimates & 
 # Pooled estimates using random effects
@@ -108,7 +108,7 @@ rev3 = left_join(rev2, inc.child, by=c("studyid","subjid","agecat")) %>%
          rec12m=ifelse(minhazlag< -2  & rec_age==1 & agecat=="12 months",1,0),
          rec18m=ifelse(minhazlag< -2  & rec_age==1 & agecat=="18 months",1,0),
          rec24m=ifelse(minhazlag< -2  & rec_age==1 & agecat=="24 months",1,0))
-  
+
 rev.data=rev3 %>%
   # subset to kids at risk
   filter(atrisk==1) %>%
@@ -168,43 +168,64 @@ ggplot(rev.res,aes(y=est,x=agecat.f))+
   ggtitle("Percentage of children who recovered from stunting")
 dev.off()
 
+#   
+# rev[rev$studyid=="ki1000108-CMC-V-BCS-2002" & rev$subjid==9,
+#     c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#       "meas_age","maxmeas_age","rec_age")][1:20,]
+# 
+# rev.child[rev.child$studyid=="ki1000108-CMC-V-BCS-2002" & rev.child$subjid==9,
+#           c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#             "rec_age","countrec")]
+# inc.child[inc.child$studyid=="ki1000108-CMC-V-BCS-2002" & inc.child$subjid==9,]
+# 
+# 
+# 
+# rev2[rev2$studyid=="ki1000108-CMC-V-BCS-2002" & rev2$subjid==9,
+#     c("subjid","measid","agedays","agecat","haz","minhaz","atrisk",
+#       "meas_age","maxmeas_age","rec_age","firstrec")][1:20,]
+# rev3[rev3$studyid=="ki1000108-CMC-V-BCS-2002" & rev3$subjid==9,
+#        c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#           "meas_age","maxmeas_age","rec_age","minhaz","minhazlag",
+#          "rec9m")][1:20,]
+# 
+# rev3[rev3$studyid=="ki1000108-CMC-V-BCS-2002" & rev3$subjid==9,
+#      c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#        "meas_age","maxmeas_age","rec_age","firstrec","inc_age",
+#       "rec9m")][1:20,]
+# rev3[rev3$studyid=="ki1000108-CMC-V-BCS-2002" & rev3$subjid==12,
+#      c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#        "meas_age","maxmeas_age","rec_age","minhaz","minhazlag",
+#        "rec9m")][1:20,]
+# 
+# # recovered
+# rev[rev$studyid=="ki1000108-CMC-V-BCS-2002" & rev$subjid==1,
+#     c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#       "meas_age","maxmeas_age","rec3m_row","rec3m_age")][1:20,]
+# 
+# rev3[rev3$studyid=="kiGH5241-JiVitA-3" & rev3$subjid==9683,
+#      c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
+#        "meas_age","maxmeas_age","rec_age","firstrec","inc_age",
+#        "rec3m","rec6m")]
   
-rev[rev$studyid=="ki1000108-CMC-V-BCS-2002" & rev$subjid==9,
-    c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-      "meas_age","maxmeas_age","rec_age")][1:20,]
+# export
+rec=rev3 %>%
+  # subset to kids at risk
+  filter(atrisk==1) %>%
+  # child level data 
+  group_by(agecat,studyid,country,subjid) %>%
+  summarise_at(.vars=c("rec3m", "rec6m","rec9m", "rec12m", "rec18m", "rec24m"),
+               .funs=max) %>%
+  # organize into single column
+  mutate(rec=ifelse(rec3m==1,1,
+                    ifelse(rec6m==1,1,
+                           ifelse(rec9m==1,1,
+                                  ifelse(rec12m==1,1,
+                                         ifelse(rec18m==1,1,
+                                                ifelse(rec24m==1,1,0))))))) %>%
+  select(studyid,subjid,country,agecat,rec)
 
-rev.child[rev.child$studyid=="ki1000108-CMC-V-BCS-2002" & rev.child$subjid==9,
-          c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-            "rec_age","countrec")]
-inc.child[inc.child$studyid=="ki1000108-CMC-V-BCS-2002" & inc.child$subjid==9,]
+save(rev3,file="U:/Data/Stunting/st_rec_interim.RData")
+save(rec,file="U:/Data/Stunting/st_rec.RData")
+save(rec,file="U:/UCB-Superlearner/Stunting rallies/st_rec.RData")
 
 
-
-rev2[rev2$studyid=="ki1000108-CMC-V-BCS-2002" & rev2$subjid==9,
-    c("subjid","measid","agedays","agecat","haz","minhaz","atrisk",
-      "meas_age","maxmeas_age","rec_age","firstrec")][1:20,]
-rev3[rev3$studyid=="ki1000108-CMC-V-BCS-2002" & rev3$subjid==9,
-       c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-          "meas_age","maxmeas_age","rec_age","minhaz","minhazlag",
-         "rec9m")][1:20,]
-
-rev3[rev3$studyid=="ki1000108-CMC-V-BCS-2002" & rev3$subjid==9,
-     c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-       "meas_age","maxmeas_age","rec_age","firstrec","inc_age",
-      "rec9m")][1:20,]
-rev3[rev3$studyid=="ki1000108-CMC-V-BCS-2002" & rev3$subjid==12,
-     c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-       "meas_age","maxmeas_age","rec_age","minhaz","minhazlag",
-       "rec9m")][1:20,]
-
-# recovered
-rev[rev$studyid=="ki1000108-CMC-V-BCS-2002" & rev$subjid==1,
-    c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-      "meas_age","maxmeas_age","rec3m_row","rec3m_age")][1:20,]
-
-rev3[rev3$studyid=="kiGH5241-JiVitA-3" & rev3$subjid==9683,
-     c("subjid","measid","agedays","agecat","haz","inccase","atrisk",
-       "meas_age","maxmeas_age","rec_age","firstrec","inc_age",
-       "rec3m","rec6m")]
-  
-  
