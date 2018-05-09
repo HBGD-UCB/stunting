@@ -15,3 +15,6 @@ fit.rma=function(data,age,ni,xi){
 }
 
 
+sem<-function(x){
+  sd(x)/sqrt(length(x))
+}
