@@ -97,7 +97,7 @@ dur.data$study_country=factor(dur.data$study_country,
 c(est=pool.fit$beta, se=pool.fit$se, lb=pool.fit$ci.lb, ub=pool.fit$ci.ub)
 
 
-pdf("U:/Figures/stunting-rec-dur.pdf",width=10,height=4,onefile=TRUE)
+pdf("U:/Figures/stunting-rec-dur.pdf",width=10,height=5,onefile=TRUE)
 ggplot(dur.data,aes(x=study_country,y=mn))+
   geom_point(aes(size=Nchild,col=region))+
   geom_errorbar(aes(ymin=lb,ymax=ub,col=region))+
