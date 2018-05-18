@@ -38,7 +38,7 @@ d %>%
 # identify ever stunted children
   evs = d %>%
     filter(!is.na(agecat)) %>%
-    group_by(studyid,subjid) %>%
+    group_by(studyid,country,subjid) %>%
     arrange(studyid,subjid) %>%
     #create variable with minhaz by age category, cumulatively
     mutate(minhaz=ifelse(agecat=="3 months",min(haz[agecat=="3 months"]),
@@ -48,7 +48,7 @@ d %>%
           min(haz)))))) %>%
     # create indicator for whether the child was ever stunted
     # by age category
-    group_by(studyid,agecat,subjid) %>%
+    group_by(studyid,country,agecat,subjid) %>%
     summarise(minhaz=min(minhaz)) %>%
     mutate(ever_stunted=ifelse(minhaz< -2,1,0))
     
@@ -56,7 +56,7 @@ d %>%
 # exclude time points if number of measurements per age
 # in a study is <50  
 cuminc.data= evs%>%
-  group_by(studyid,agecat) %>%
+  group_by(studyid,country,agecat) %>%
   summarise(
     nchild=length(unique(subjid)),
     nstudy=length(unique(studyid)),
@@ -113,7 +113,7 @@ bc= d %>% group_by(studyid,country) %>%
 # excluding birth in birth cohort studies
 evs.sens.nobirth = left_join(d, bc, by=c("studyid","country")) %>%
   filter(birthcohort==1 & !is.na(agecat) & agedays>1) %>%
-  group_by(studyid,subjid) %>%
+  group_by(studyid,country,subjid) %>%
   arrange(studyid,subjid) %>%
   #create variable with minhaz by age category, cumulatively
   mutate(minhaz=ifelse(agecat=="3 months",min(haz[agecat=="3 months"]),
@@ -123,7 +123,7 @@ evs.sens.nobirth = left_join(d, bc, by=c("studyid","country")) %>%
                                             min(haz)))))) %>%
   # create indicator for whether the child was ever stunted
   # by age category
-  group_by(studyid,agecat,subjid) %>%
+  group_by(studyid,country,agecat,subjid) %>%
   summarise(minhaz=min(minhaz)) %>%
   mutate(ever_stunted=ifelse(minhaz< -2,1,0))
 
@@ -131,7 +131,7 @@ evs.sens.nobirth = left_join(d, bc, by=c("studyid","country")) %>%
 # exclude time points if number of measurements per age
 # in a study is <50  
 cuminc.data.nobirth= evs.sens.nobirth%>%
-  group_by(studyid,agecat) %>%
+  group_by(studyid,country,agecat) %>%
   summarise(
     nchild=length(unique(subjid)),
     nstudy=length(unique(studyid)),
@@ -179,7 +179,7 @@ dev.off()
 # including birth in birth cohort studies
 evs.sens.birth = left_join(d, bc, by=c("studyid","country")) %>%
   filter(birthcohort==1 & !is.na(agecat)) %>%
-  group_by(studyid,subjid) %>%
+  group_by(studyid,country,subjid) %>%
   arrange(studyid,subjid) %>%
   #create variable with minhaz by age category, cumulatively
   mutate(minhaz=ifelse(agecat=="3 months",min(haz[agecat=="3 months"]),
@@ -189,7 +189,7 @@ evs.sens.birth = left_join(d, bc, by=c("studyid","country")) %>%
                                             min(haz)))))) %>%
   # create indicator for whether the child was ever stunted
   # by age category
-  group_by(studyid,agecat,subjid) %>%
+  group_by(studyid,country,agecat,subjid) %>%
   summarise(minhaz=min(minhaz)) %>%
   mutate(ever_stunted=ifelse(minhaz< -2,1,0))
 
@@ -197,7 +197,7 @@ evs.sens.birth = left_join(d, bc, by=c("studyid","country")) %>%
 # exclude time points if number of measurements per age
 # in a study is <50  
 cuminc.data.birth= evs.sens.birth%>%
-  group_by(studyid,agecat) %>%
+  group_by(studyid,country,agecat) %>%
   summarise(
     nchild=length(unique(subjid)),
     nstudy=length(unique(studyid)),
@@ -240,9 +240,9 @@ ggplot(ci.res.birth,aes(y=est,x=agecat.f))+
 dev.off()
 
 # export data 
-cuminc=evs %>% select(studyid,subjid,agecat,ever_stunted) 
+cuminc=evs %>% select(studyid,country,subjid,agecat,ever_stunted) 
 
 save(cuminc,file="U:/Data/Stunting/st_cuminc.RData")
-save(cuminc,file="U:/UCB-Superlearner/Stunting rallies/st_cuminc.RData")
+save(cuminc,file="U:/ucb-superlearner/Stunting rallies/st_cuminc.RData")
 
 
