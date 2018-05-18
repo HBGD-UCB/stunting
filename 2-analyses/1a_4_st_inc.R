@@ -134,5 +134,5 @@ inc = inc.prep %>%
          atrisk,inccase,pdays)
 
 save(inc,file="U:/Data/Stunting/st_inc.RData")
-save(inc,file="U:/UCB-Superlearner/Stunting rallies/st_inc.RData")
+save(inc,file="U:/ucb-superlearner/Stunting rallies/st_inc.RData")
 

@@ -16,27 +16,15 @@ source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
-# check that measurements are approx monthly
-keep=d %>%
-  group_by(studyid,country,subjid) %>%
-  mutate(agelag=lag(agedays),
-         agediff=agedays-agelag) %>%
-  group_by(studyid,country) %>%
-  summarise(min=min(agediff,na.rm=TRUE),
-            mean=mean(agediff,na.rm=TRUE),
-            max=max(agediff,na.rm=TRUE)) %>%
-  filter(mean<=40) %>%
-  select(studyid,country) %>%
-  mutate(keep=1)
-
-dmonthly=inner_join(d,keep)
+# subset to monthly data
+d <- d %>% filter(measurefreq=="monthly")
 
 # ---------------------------------------
 # identify incident cases
 # ---------------------------------------
-inc = dmonthly %>%
-  # ungroup(studyid) %>%
-  # mutate(studyid=as.factor(studyid)) %>%
+inc = d %>%
+  # subset to children <=24 months
+  filter(agedays<=360*2) %>%
   group_by(studyid,subjid) %>%
   arrange(studyid,subjid,agedays) %>%
   
@@ -52,7 +40,8 @@ inc = dmonthly %>%
   mutate(cnewcaselag=cumsum(newcaselag)) %>%
   mutate(inccase=ifelse(cnewcaselag>=1,0,newcase)) %>%
   filter(inccase==1) %>%
-  select(studyid,country,subjid,agedays)
+  select(studyid,country,subjid,agedays) %>%
+  mutate(agem=agedays/30.4167)
  
 
 # cohort specific mean
@@ -78,7 +67,8 @@ age.onset.study = inc %>%
             Nmeas=n(),
             Nchild=sum(length(unique(subjid)))) %>%
   mutate(lb=mn-qnorm(0.975)*se,
-         ub=mn+qnorm(0.975)*se) 
+         ub=mn+qnorm(0.975)*se)  %>%
+  mutate(mn_m=mn/30.4167)
 
 # sort by mean age
 age.onset.study$study_country=factor(age.onset.study$study_country, 
@@ -93,13 +83,31 @@ pool.fit=rma(yi=age.onset.study$mn,
 c(est=pool.fit$beta, se=pool.fit$se, lb=pool.fit$ci.lb, ub=pool.fit$ci.ub)
 
 
-ggplot(age.onset.study,aes(x=study_country,y=mn))+
-  geom_point(aes(size=Nchild,col=region))+coord_flip()+
-  geom_hline(yintercept=pool.fit$ci.lb,linetype="dashed")+
-  geom_hline(yintercept=pool.fit$ci.ub,linetype="dashed")+
-  geom_hline(yintercept=pool.fit$beta)+
-  scale_y_continuous(breaks=seq(0,850,50),labels=seq(0,850,50))+
-  xlab("Study & Country") + ylab("Age in days")
+res=paste0(sprintf("%0.1f",pool.fit$beta/30.4167)," (95% CI ",
+           sprintf("%0.1f",pool.fit$ci.lb/30.4167),",",
+           sprintf("%0.1f",pool.fit$ci.ub/30.4167),")")
+
+pdf("U:/Figures/stunting-age-onset.pdf",width=10,height=4,onefile=TRUE)
+ggplot(age.onset.study,aes(x=study_country,y=mn_m))+
+  geom_point(aes(size=Nchild,col=region),shape=15)+coord_flip()+
+  geom_hline(yintercept=pool.fit$ci.lb/30.4167,linetype="dashed")+
+  geom_hline(yintercept=pool.fit$ci.ub/30.4167,linetype="dashed")+
+  geom_hline(yintercept=pool.fit$beta/30.4167)+
+  scale_y_continuous(breaks=seq(0,12,1),labels=seq(0,12,1))+
+  xlab("Study & Country") + ylab("Age in months")+
+  annotate("text",x=1, y=9.5, label=paste0("Mean ",res))
+dev.off()
+
+pdf("U:/Figures/stunting-age-onset-hist.pdf",width=8,height=4,onefile=TRUE)
+ggplot(inc,aes(x=agem))+
+  geom_histogram(col="black",fill="gray",binwidth=1)+
+  geom_vline(xintercept=pool.fit$beta/30.4167,linetype="dashed",size=1)+
+  scale_x_continuous(breaks=seq(0,24,3),labels=seq(0,24,3))+
+  scale_y_continuous(breaks=seq(0,1000,100),labels=seq(0,1000,100))+
+  xlab("Age in months") + ylab("Number of children")+
+  ggtitle("Distribution of age in months at first incident of stunting")+
+  annotate("text",x=10, y=900, label=paste0("Mean ",res))
+dev.off()
 
 
 

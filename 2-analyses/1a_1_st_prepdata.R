@@ -12,16 +12,16 @@ library(data.table)
 # Read in .csv file and save as an .rds file
 #--------------------------------------------
 
-setwd("U:/data/")
-
-d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
-dim(d)
-head(d)
-colnames(d)
-saveRDS(d, "FINAL.rds")
+# setwd("U:/data/")
+# d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
+# d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
+# dim(d)
+# head(d)
+# colnames(d)
+# saveRDS(d, "FINAL.rds")
 
 #Read rds file
-#d<- readRDS("FINAL.rds")
+d<- readRDS("FINAL.rds")
 
 
 #--------------------------------------------
@@ -42,8 +42,6 @@ mean(dup_age$N)
 # Mark monthly, quarterly, and yearly-measured 
 # studies
 #--------------------------------------------
-
-
 #Drop studies Vishak added to data product that don't meet inclusion criteria
 d <- d %>% filter(studyid!="ki1000301-DIVIDS" & studyid!="ki1055867-WomenFirst" & studyid!="ki1135782-INCAP")
 
@@ -115,14 +113,14 @@ save(d, file="U:/data/Stunting/Full-compiled-data/compiled_HAZ_dataset.RData")
 # Load only the anthropometry data
 #--------------------------------------------
 
-setwd("U:/data/GHAP_data/")
+# setwd("U:/data/GHAP_data/")
 load("U:/data/Stunting/Full-compiled-data/compiled_HAZ_dataset.RData")
 
 #--------------------------------------------
 # Subset to relevant variables
 #--------------------------------------------
 colnames(d)=tolower(colnames(d))
-d <- d %>% select(studyid, subjid, country, tr, agedays, haz)
+d <- d %>% select(studyid, subjid, country, tr, agedays, haz, measurefreq)
 
 nrow(d)
 
@@ -159,6 +157,6 @@ ggplot(d[d$agedays<=365*2,],aes(x=agedays,y=haz))+geom_point(alpha=0.3)+geom_smo
 dev.off()
 
 
-
 save(d,file="U:/Data/Stunting/stunting_data.RData")
+
 

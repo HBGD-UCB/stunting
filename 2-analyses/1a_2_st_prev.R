@@ -29,8 +29,7 @@ d = d %>%
               ifelse(agedays>17*30.4167 & agedays<19*30.4167,"18 months",
                      ifelse(agedays>23*30.4167& agedays<25*30.4167,"24 months",""))))))) %>%
     mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months",
-                                         "12 months","18 months","24 months"))) %>%
-    mutate(stunted=ifelse(haz< -2, 1,0),sstunted=ifelse(haz< -3, 1,0))
+                                         "12 months","18 months","24 months"))) 
 
 # check age categories
 d %>%
@@ -40,12 +39,19 @@ d %>%
             mean=mean(agedays/30.4167),
             max=max(agedays/30.4167))
 
+# take mean of multiple measurements within age window
+dmn <- d %>%
+  filter(!is.na(agecat)) %>%
+  group_by(studyid,country,subjid,agecat) %>%
+  summarise(haz=mean(haz)) %>%
+  mutate(stunted=ifelse(haz< -2, 1,0),sstunted=ifelse(haz< -3, 1,0))
+  
 # count measurements per study by age
 # exclude time points if number of measurements per age
 # in a study is <50
-prev.data = d %>%
+prev.data = dmn %>%
   filter(!is.na(agecat)) %>%
-  group_by(studyid,agecat) %>%
+  group_by(studyid,country,agecat) %>%
   summarise(nmeas=sum(!is.na(haz)),
             prev=mean(stunted),
             nxprev=sum(stunted==1)) %>%
@@ -79,11 +85,11 @@ dev.off()
 
 
 # export
-prev = d %>% filter(!is.na(agecat)) %>%
-  select(studyid,subjid,country,tr,agedays,haz,agecat,
+prev = dmn %>% 
+  select(studyid,subjid,country,agecat,
          stunted, sstunted)
 
 save(prev,file="U:/Data/Stunting/st_prev.RData")
-save(prev,file="U:/UCB-Superlearner/Stunting rallies/st_prev.RData")
+save(prev,file="U:/ucb-superlearner/Stunting rallies/st_prev.RData")
 
 
