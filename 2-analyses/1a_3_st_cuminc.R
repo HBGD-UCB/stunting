@@ -68,7 +68,7 @@ cuminc.data
   
 # estimate random effects, format results
 ci.res=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
-    fit.rma(data=cuminc.data,ni="N", xi="ncases",age=x))
+    fit.rma(data=cuminc.data,ni="N", xi="ncases",age=x,measure="PR",nlab=" measurements"))
 ci.res=as.data.frame(do.call(rbind, ci.res))
 ci.res[,4]=as.numeric(ci.res[,4])
 ci.res = ci.res %>%
@@ -143,7 +143,7 @@ cuminc.data.nobirth
 
 # estimate random effects, format results
 ci.res.nobirth=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
-  fit.rma(data=cuminc.data.nobirth,ni="N", xi="ncases",age=x))
+  fit.rma(data=cuminc.data.nobirth,ni="N", xi="ncases",age=x,measure="PR",nlab=" measurements"))
 ci.res.nobirth=as.data.frame(do.call(rbind, ci.res.nobirth))
 ci.res.nobirth[,4]=as.numeric(ci.res.nobirth[,4])
 ci.res.nobirth = ci.res.nobirth %>%
@@ -209,7 +209,7 @@ cuminc.data.birth
 
 # estimate random effects, format results
 ci.res.birth=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
-  fit.rma(data=cuminc.data.birth,ni="N", xi="ncases",age=x))
+  fit.rma(data=cuminc.data.birth,ni="N", xi="ncases",age=x,measure="PR",nlab=" measurements"))
 ci.res.birth=as.data.frame(do.call(rbind, ci.res.birth))
 ci.res.birth[,4]=as.numeric(ci.res.birth[,4])
 ci.res.birth = ci.res.birth %>%

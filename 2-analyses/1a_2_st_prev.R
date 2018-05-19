@@ -60,7 +60,7 @@ prev.data = dmn %>%
 
 # estimate random effects, format results
 prev.res=lapply(list("Birth","3 months","6 months","12 months","18 months","24 months"),function(x) 
-  fit.rma(prev.data,ni="nmeas", xi="nxprev",age=x))
+  fit.rma(data=prev.data,ni="nmeas", xi="nxprev",age=x,measure="PR",nlab=" children"))
 prev.res=as.data.frame(do.call(rbind, prev.res))
 prev.res[,4]=as.numeric(prev.res[,4])
                 prev.res = prev.res %>%
