@@ -6,8 +6,13 @@
 # random effects function, save results nicely
 fit.rma=function(data,age,ni,xi,measure,nlab){
   data=filter(data,agecat==age)
-  fit<-rma(ni=data[[ni]], xi=data[[xi]], 
+  if(measure!="IR"){
+    fit<-rma(ni=data[[ni]], xi=data[[xi]], 
            method="REML", measure=measure)
+  }else{
+    fit<-rma(ti=data[[ni]], xi=data[[xi]], 
+             method="REML", measure=measure)
+  }
   out=data %>%
     ungroup() %>%
     summarise(nstudies=length(unique(studyid)),
