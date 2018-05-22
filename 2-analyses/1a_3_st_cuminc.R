@@ -65,6 +65,37 @@ cuminc.data= evs%>%
   filter(N>=50)
   
 cuminc.data
+
+# cohort specific results
+ci.cohort=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x) 
+  fit.escalc(data=cuminc.data,ni="N", xi="ncases",age=x,meas="PR"))
+ci.cohort=as.data.frame(do.call(rbind, ci.cohort))
+ci.cohort = ci.cohort %>%
+  mutate(yi=yi*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
+ci.cohort$agecat=factor(ci.cohort$agecat,levels=
+     c("3 months","6 months","12 months","18 months","24 months"))
+ci.cohort$yi.f=sprintf("%0.0f",ci.cohort$yi)
+ci.cohort$cohort=paste0(ci.cohort$studyid,"-",ci.cohort$country)
+ci.cohort = ci.cohort %>% mutate(region = ifelse(country=="BANGLADESH" | country=="INDIA"|
+                                                   country=="NEPAL" | country=="PAKISTAN"|
+                                                   country=="PHILIPPINES" ,"Asia",
+                                                 ifelse(country=="BURKINA FASO"|
+                                                          country=="GUINEA-BISSAU"|
+                                                          country=="MALAWI"|
+                                                          country=="SOUTH AFRICA"|
+                                                          country=="TANZANIA, UNITED REPUBLIC OF"|
+                                                          country=="ZIMBABWE"|
+                                                          country=="GAMBIA","Africa",
+                                                        ifelse(country=="BELARUS","Europe",
+                                                               "Latin America"))))
+ci.cohort <- ci.cohort %>% 
+  mutate(age.f=ifelse(agecat=="3 months","0-3m",
+                      ifelse(agecat=="6 months","4-6m",
+                                    ifelse(agecat=="12 months","7-12m",
+                                           ifelse(agecat=="18 months","13-18m","19-24m")))))
+ci.cohort$age.f=factor(ci.cohort$age.f,levels=
+                         c("0-3m","4-6m","7-12m","13-18m","19-24m"))
+
   
 # estimate random effects, format results
 ci.res=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
@@ -82,6 +113,45 @@ ci.res$agecat.f=factor(ci.res$agecat.f,levels=c("0-3 months","4-6 months",
 ci.res$ptest.f=sprintf("%0.0f",ci.res$est)
 
 ci.res
+
+
+# plot cohort prevalence
+pdf("U:/Figures/stunting-cuminc-africa.pdf",width=11,height=5,onefile=TRUE)
+ggplot(ci.cohort[ci.cohort$region=="Africa",],
+       aes(y=yi,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Cumulative incidence (95% CI)")+
+  ggtitle("Cohort-specific cumulative incidence of stunting - Africa")
+dev.off()
+
+pdf("U:/Figures/stunting-cuminc-latamer-eur.pdf",width=8,height=5,onefile=TRUE)
+ggplot(ci.cohort[ci.cohort$region=="Latin America"|
+                   ci.cohort$region=="Europe",],
+       aes(y=yi,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Cumulative incidence (95% CI)")+
+  ggtitle("Cohort-specific cumulative incidence of stunting - Latin America & Europe")
+dev.off()
+
+pdf("U:/Figures/stunting-cuminc-asia.pdf",width=11,height=7,onefile=TRUE)
+ggplot(ci.cohort[ci.cohort$region=="Asia",],
+       aes(y=yi,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific cumulative incidence of stunting - Asia")
+dev.off()
 
 # plot pooled cumulative incidence
 pdf("U:/Figures/stunting-cuminc-pool.pdf",width=9,height=3.5,onefile=TRUE)
