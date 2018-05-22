@@ -47,7 +47,7 @@ sem<-function(x){
 # ci.lb = lower bound of 95% confidence interval
 # ci.ub = upper bound of 95% confidence interval
 
-fit.escalc <- function(data,age,ni,xi, meas="PR"){
+fit.escalc <- function(data,age,ni,xi, meas){
   data=filter(data,agecat==age)
   
   if(meas=="PR"){
