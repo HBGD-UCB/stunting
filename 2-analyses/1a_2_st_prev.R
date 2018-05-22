@@ -25,10 +25,11 @@ d = d %>%
   mutate(agecat=ifelse(agedays==1,"Birth",
      ifelse(agedays>2*30.4167 & agedays<4*30.4167,"3 months",
       ifelse(agedays>5*30.4167 & agedays<7*30.4167,"6 months",
-       ifelse(agedays>11*30.4167 & agedays<13*30.4167,"12 months",
+             ifelse(agedays>8*30.4167 & agedays<10*30.4167,"9 months",
+                  ifelse(agedays>11*30.4167 & agedays<13*30.4167,"12 months",
               ifelse(agedays>17*30.4167 & agedays<19*30.4167,"18 months",
-                     ifelse(agedays>23*30.4167& agedays<25*30.4167,"24 months",""))))))) %>%
-    mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months",
+                     ifelse(agedays>23*30.4167& agedays<25*30.4167,"24 months","")))))))) %>%
+    mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months","9 months",
                                          "12 months","18 months","24 months"))) 
 
 # check age categories
@@ -57,18 +58,86 @@ prev.data = dmn %>%
             nxprev=sum(stunted==1)) %>%
   filter(nmeas>=50) 
   
+# cohort specific results
+prev.cohort=lapply(list("Birth","3 months","6 months","9 months","12 months","18 months","24 months"),function(x) 
+  fit.escalc(data=prev.data,ni="nmeas", xi="nxprev",age=x,meas="PR"))
+prev.cohort=as.data.frame(do.call(rbind, prev.cohort))
+prev.cohort = prev.cohort %>%
+  mutate(prev=prev*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
+prev.cohort$agecat=factor(prev.cohort$agecat,levels=c("Birth","3 months","6 months","9 months","12 months","18 months","24 months"))
+prev.cohort$prev.f=sprintf("%0.0f",prev.cohort$prev)
+prev.cohort$cohort=paste0(prev.cohort$studyid,"-",prev.cohort$country)
+prev.cohort = prev.cohort %>% mutate(region = ifelse(country=="BANGLADESH" | country=="INDIA"|
+                         country=="NEPAL" | country=="PAKISTAN"|
+                         country=="PHILIPPINES" ,"Asia",
+                       ifelse(country=="BURKINA FASO"|
+                                country=="GUINEA-BISSAU"|
+                                country=="MALAWI"|
+                                country=="SOUTH AFRICA"|
+                                country=="TANZANIA, UNITED REPUBLIC OF"|
+                                country=="ZIMBABWE"|
+                                country=="GAMBIA","Africa",
+                              ifelse(country=="BELARUS","Europe",
+                                     "Latin America"))))
+prev.cohort <- prev.cohort %>% 
+  mutate(age.f=ifelse(agecat=="3 months","3m",
+                      ifelse(agecat=="6 months","6m",
+                             ifelse(agecat=="9 months","9m",
+                                    ifelse(agecat=="12 months","12m",
+                                           ifelse(agecat=="18 months","18m",
+                                                  ifelse(agecat=="24 months","24m","Birth")))))))
+prev.cohort$age.f=factor(prev.cohort$age.f,levels=
+    c("Birth","3m","6m","9m","12m","18m","24m"))
 
 # estimate random effects, format results
-prev.res=lapply(list("Birth","3 months","6 months","12 months","18 months","24 months"),function(x) 
+prev.res=lapply(list("Birth","3 months","6 months","9 months","12 months","18 months","24 months"),function(x) 
   fit.rma(data=prev.data,ni="nmeas", xi="nxprev",age=x,measure="PR",nlab=" children"))
 prev.res=as.data.frame(do.call(rbind, prev.res))
 prev.res[,4]=as.numeric(prev.res[,4])
                 prev.res = prev.res %>%
   mutate(est=est*100,lb=lb*100,ub=ub*100)
-prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","3 months","6 months","12 months","18 months","24 months"))
+prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","3 months","6 months","9 months","12 months","18 months","24 months"))
 prev.res$ptest.f=sprintf("%0.0f",prev.res$est)
 
-# plot prevalence
+# plot cohort prevalence
+pdf("U:/Figures/stunting-ptprev-africa.pdf",width=11,height=5,onefile=TRUE)
+ggplot(prev.cohort[prev.cohort$region=="Africa",],
+       aes(y=prev,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,90))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific point prevalence of stunting - Africa")
+dev.off()
+
+pdf("U:/Figures/stunting-ptprev-latamer-eur.pdf",width=8,height=5,onefile=TRUE)
+ggplot(prev.cohort[prev.cohort$region=="Latin America"|
+                     prev.cohort$region=="Europe",],
+       aes(y=prev,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,90))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific point prevalence of stunting - Latin America & Europe")
+dev.off()
+
+pdf("U:/Figures/stunting-ptprev-asia.pdf",width=11,height=7,onefile=TRUE)
+ggplot(prev.cohort[prev.cohort$region=="Asia",],
+       aes(y=prev,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,90))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific point prevalence of stunting - Asia")
+dev.off()
+
+# plot pooled prevalence
 pdf("U:/Figures/stunting-ptprev-pool.pdf",width=10,height=4,onefile=TRUE)
 ggplot(prev.res,aes(y=est,x=agecat))+
   geom_point(size=3)+
