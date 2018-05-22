@@ -94,6 +94,36 @@ inc.data = inc.prep %>%
             nchild=length(unique(subjid)),
             nstudy=length(unique(studyid))) %>%
   filter(nchild>=50)
+
+
+# cohort specific results
+inc.cohort=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x) 
+  fit.escalc(data=inc.data,ni="ptar", xi="ncase",age=x,meas="IR"))
+inc.cohort=as.data.frame(do.call(rbind, inc.cohort))
+inc.cohort$agecat=factor(inc.cohort$agecat,levels=
+                           c("3 months","6 months","12 months","18 months","24 months"))
+inc.cohort$yi.f=sprintf("%0.0f",inc.cohort$yi)
+inc.cohort$cohort=paste0(inc.cohort$studyid,"-",inc.cohort$country)
+inc.cohort = inc.cohort %>% mutate(region = ifelse(country=="BANGLADESH" | country=="INDIA"|
+                                                     country=="NEPAL" | country=="PAKISTAN"|
+                                                     country=="PHILIPPINES" ,"Asia",
+                                                   ifelse(country=="BURKINA FASO"|
+                                                            country=="GUINEA-BISSAU"|
+                                                            country=="MALAWI"|
+                                                            country=="SOUTH AFRICA"|
+                                                            country=="TANZANIA, UNITED REPUBLIC OF"|
+                                                            country=="ZIMBABWE"|
+                                                            country=="GAMBIA","Africa",
+                                                          ifelse(country=="BELARUS","Europe",
+                                                                 "Latin America"))))
+inc.cohort <- inc.cohort %>% 
+  mutate(age.f=ifelse(agecat=="3 months","0-3m",
+                      ifelse(agecat=="6 months","4-6m",
+                             ifelse(agecat=="12 months","7-12m",
+                                    ifelse(agecat=="18 months","13-18m","19-24m")))))
+inc.cohort$age.f=factor(inc.cohort$age.f,levels=
+                          c("0-3m","4-6m","7-12m","13-18m","19-24m"))
+
     
 # estimate random effects, format results
 ir.res=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
@@ -112,6 +142,60 @@ ir.res
 ir.res$pt.f=paste0("N=",format(ir.res$nmeas,big.mark=",",scientific=FALSE),
                   " person-days")
 ir.res$ptest.f=sprintf("%0.02f",ir.res$est*1000)
+
+
+
+# plot cohort incidence
+lab.af=inc.cohort[inc.cohort$region=="Africa",] %>% group_by(cohort) %>% summarise(N=sum(nchild))
+lab.af.f=paste0("N=",lab.af$N)
+
+pdf("U:/Figures/stunting-inc-africa.pdf",width=12,height=6,onefile=TRUE)
+ggplot(inc.cohort[inc.cohort$region=="Africa",],
+       aes(y=yi*1000,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb*1000,ymax=ci.ub*1000),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-0.1,22))+
+  xlab("Age category")+
+  ylab("Cumulative incidence (95% CI)")+
+  ggtitle("Cohort-specific stunting rate - Africa")+
+  annotate("text", x=4.5,y=20,label=lab.af.f,size=4)
+dev.off()
+
+lab.lae=inc.cohort[inc.cohort$region=="Latin America"|  inc.cohort$region=="Europe",] %>% 
+  group_by(cohort) %>% summarise(N=sum(nchild))
+lab.lae.f=paste0("N=",lab.lae$N)
+
+pdf("U:/Figures/stunting-inc-latamer-eur.pdf",width=12,height=6,onefile=TRUE)
+ggplot(inc.cohort[inc.cohort$region=="Latin America"|
+                    inc.cohort$region=="Europe",],
+       aes(y=yi*1000,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb*1000,ymax=ci.ub*1000),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-0.1,22))+
+  xlab("Age category")+
+  ylab("Cumulative incidence (95% CI)")+
+  ggtitle("Cohort-specific stunting rate - Latin America & Europe")+
+  annotate("text", x=4.5,y=20,label=lab.lae.f,size=4)
+dev.off()
+
+lab.asia=inc.cohort[inc.cohort$region=="Asia",] %>% group_by(cohort) %>% summarise(N=sum(nchild))
+lab.asia.f=paste0("N=",lab$N)
+
+pdf("U:/Figures/stunting-inc-asia.pdf",width=13,height=8,onefile=TRUE)
+ggplot(inc.cohort[inc.cohort$region=="Asia",],
+       aes(y=yi*1000,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb*1000,ymax=ci.ub*1000),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-0.1,22))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific stunting rate - Asia")+
+  annotate("text", x=4.5,y=20,label=lab.asia.f,size=4)
+dev.off()
+
 
 pdf("U:/Figures/stunting-inc-pool.pdf",width=9,height=4,onefile=TRUE)
 ggplot(ir.res,aes(y=est*1000,x=agecat.f))+
