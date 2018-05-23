@@ -6,7 +6,6 @@
 
 # Prevalence pooled using random effects
 #-----------------------------------
-rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
