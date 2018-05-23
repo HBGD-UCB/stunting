@@ -127,5 +127,5 @@ x[x$studyid=="ki1000108-CMC-V-BCS-2002" & x$subjid==9,
 dur <- dur %>% select(studyid,country,subjid,tr,haz,agecat,duration)
 
 save(dur,file="U:/Data/Stunting/st_dur.RData")
-save(dur,file="U:/UCB-Superlearner/Stunting rallies/st_dur.RData")
+save(dur,file="U:/ucb-superlearner/Stunting rallies/st_dur.RData")
 

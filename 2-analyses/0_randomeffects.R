@@ -4,17 +4,22 @@
 #---------------------------------------
 
 # random effects function, save results nicely
-fit.rma=function(data,age,ni,xi){
+fit.rma=function(data,age,ni,xi,measure,nlab){
   data=filter(data,agecat==age)
-  fit<-rma(ni=data[[ni]], xi=data[[xi]], 
-           method="REML", measure="PR")
+  if(measure!="IR"){
+    fit<-rma(ni=data[[ni]], xi=data[[xi]], 
+           method="REML", measure=measure)
+  }else{
+    fit<-rma(ti=data[[ni]], xi=data[[xi]], 
+             method="REML", measure=measure)
+  }
   out=data %>%
     ungroup() %>%
     summarise(nstudies=length(unique(studyid)),
               nmeas=sum(data[[ni]][agecat==age])) %>%
     mutate(agecat=age,est=fit$beta, se=fit$se, lb=fit$ci.lb, ub=fit$ci.ub,
            nmeas.f=paste0("N=",format(sum(data[[ni]]),big.mark=",",scientific=FALSE),
-                          " measurements"),
+                          nlab),
            nstudy.f=paste0("N=",nstudies," studies"))
   return(out)
 }
@@ -42,7 +47,7 @@ sem<-function(x){
 # ci.lb = lower bound of 95% confidence interval
 # ci.ub = upper bound of 95% confidence interval
 
-fit.escalc <- function(data,age,ni,xi, meas="PR"){
+fit.escalc <- function(data,age,ni,xi, meas){
   data=filter(data,agecat==age)
   
   if(meas=="PR"){

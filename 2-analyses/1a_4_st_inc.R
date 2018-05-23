@@ -97,7 +97,7 @@ inc.data = inc.prep %>%
     
 # estimate random effects, format results
 ir.res=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
-  fit.rma(data=inc.data,ni="ptar", xi="ncase",age=x))
+  fit.rma(data=inc.data,ni="ptar", xi="ncase",age=x,measure="IR",nlab=" person-days"))
 ir.res=as.data.frame(do.call(rbind, ir.res))
 ir.res[,4]=as.numeric(ir.res[,4])
 ir.res$agecat.f=as.factor(ifelse(ir.res$agecat=="3 months","0-3 months",
@@ -119,7 +119,7 @@ ggplot(ir.res,aes(y=est*1000,x=agecat.f))+
   geom_errorbar(aes(ymin=lb*1000,ymax=ub*1000),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Incidence rate per 1,000 child-days (95% CI)")+
-  scale_y_continuous(limits=c(0,7.2))+
+  scale_y_continuous(limits=c(0,8))+
   annotate("text",x=ir.res$agecat.f,y=0.4,label=ir.res$pt.f,size=3)+
   annotate("text",x=ir.res$agecat.f,y=0.01,label=ir.res$nstudy.f,size=3)+
   annotate("text",label=ir.res$ptest.f,x=ir.res$agecat.f,
