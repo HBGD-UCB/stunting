@@ -6,7 +6,6 @@
 
 # Cumulative incidence pooled using random effects
 #-----------------------------------
-rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -115,7 +114,11 @@ ci.res$ptest.f=sprintf("%0.0f",ci.res$est)
 ci.res
 
 
-# plot cohort prevalence
+# plot cohort incidence
+
+lab.af=ci.cohort[ci.cohort$region=="Africa",] %>% group_by(cohort) %>% summarise(N=sum(nchild))
+lab.af.f=paste0("N=",lab.af$N)
+
 pdf("U:/Figures/stunting-cuminc-africa.pdf",width=11,height=5,onefile=TRUE)
 ggplot(ci.cohort[ci.cohort$region=="Africa",],
        aes(y=yi,x=age.f))+
