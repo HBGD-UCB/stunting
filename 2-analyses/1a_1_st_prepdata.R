@@ -124,6 +124,21 @@ d <- d %>% select(studyid, subjid, country, tr, agedays, haz, measurefreq)
 
 nrow(d)
 
+
+#--------------------------------------------
+# drop yearly measured intervention trials
+#--------------------------------------------
+#Keep monthly and quarterly studies
+d <- d %>% filter(measurefreq!="yearly")
+
+#--------------------------------------------
+# subset to control arms in intervention studies
+#--------------------------------------------
+
+#Subset to control arms for intervention studies
+d <- filter(d, tr=="Control" | tr=="")
+
+
 #--------------------------------------------
 # drop unrealistic HAZ
 #--------------------------------------------
