@@ -188,6 +188,7 @@ ggplot(rdist %>% filter(rec_onset==1), aes(x=haz))+
 dev.off()
 
 
+
 # rdist %>%  group_by(studyid, subjid) %>%
 #   filter(studyid=="ki0047075b-MAL-ED"&
 #            subjid=="1.01728116478713e-320") 

@@ -6,7 +6,6 @@
 
 # Prevalence pooled using random effects
 #-----------------------------------
-rm(list=ls())
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -63,9 +62,9 @@ prev.cohort=lapply(list("Birth","3 months","6 months","9 months","12 months","18
   fit.escalc(data=prev.data,ni="nmeas", xi="nxprev",age=x,meas="PR"))
 prev.cohort=as.data.frame(do.call(rbind, prev.cohort))
 prev.cohort = prev.cohort %>%
-  mutate(prev=prev*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
+  mutate(yi=yi*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
 prev.cohort$agecat=factor(prev.cohort$agecat,levels=c("Birth","3 months","6 months","9 months","12 months","18 months","24 months"))
-prev.cohort$prev.f=sprintf("%0.0f",prev.cohort$prev)
+prev.cohort$yi.f=sprintf("%0.0f",prev.cohort$yi)
 prev.cohort$cohort=paste0(prev.cohort$studyid,"-",prev.cohort$country)
 prev.cohort = prev.cohort %>% mutate(region = ifelse(country=="BANGLADESH" | country=="INDIA"|
                          country=="NEPAL" | country=="PAKISTAN"|
@@ -102,7 +101,7 @@ prev.res$ptest.f=sprintf("%0.0f",prev.res$est)
 # plot cohort prevalence
 pdf("U:/Figures/stunting-ptprev-africa.pdf",width=11,height=5,onefile=TRUE)
 ggplot(prev.cohort[prev.cohort$region=="Africa",],
-       aes(y=prev,x=age.f))+
+       aes(y=yi,x=age.f))+
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
@@ -115,7 +114,7 @@ dev.off()
 pdf("U:/Figures/stunting-ptprev-latamer-eur.pdf",width=8,height=5,onefile=TRUE)
 ggplot(prev.cohort[prev.cohort$region=="Latin America"|
                      prev.cohort$region=="Europe",],
-       aes(y=prev,x=age.f))+
+       aes(y=yi,x=age.f))+
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
@@ -127,7 +126,7 @@ dev.off()
 
 pdf("U:/Figures/stunting-ptprev-asia.pdf",width=11,height=7,onefile=TRUE)
 ggplot(prev.cohort[prev.cohort$region=="Asia",],
-       aes(y=prev,x=age.f))+
+       aes(y=yi,x=age.f))+
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +

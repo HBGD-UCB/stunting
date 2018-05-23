@@ -72,7 +72,7 @@ evs = d %>%
                                             min(haz)))))) %>%
   # create indicator for whether the child was ever stunted
   # by age category
-  group_by(studyid,agecat,subjid) %>%
+  group_by(studyid,subjid,agecat) %>%
   summarise(minhaz=min(minhaz)) %>%
   mutate(ever_stunted=ifelse(minhaz< -2,1,0))
 
@@ -85,16 +85,18 @@ maxage <- d %>%
   summarise(maxagem=max(agedays)/30.4167)
 
 # merge maxagem back onto main data
-d3 <- left_join(d2, maxage,by=c("studyid","country","subjid"))
+d3 <- left_join(d2, maxage,by=c("studyid","country","subjid")) %>%
+   ungroup() %>%
+   mutate(subjid=as.character(subjid))
 
-# function to create indicator for recovery by certain age
-rec.age=function(age){
+# function to create indicator for ever stunted by certain age
+st.age=function(age){
   x <- d3 %>%
     # subset to kids with measurement at agedays 24 months
     # who were ever stunted
     filter(maxagem>=age & ever_stunted==1 & agedays<=age*30.4167 &
              agecatr==paste0(age," months")) %>%
-    # calculate recovery at 24 months
+    # calculate ever stunted at age=x
     group_by(studyid,country,subjid) %>%
     summarise(maxhaz=max(haz)) %>%
     mutate(rec = ifelse(maxhaz>=-2,1,0),
@@ -102,17 +104,44 @@ rec.age=function(age){
   return(x)
 }
 
-d.age=rbind(rec.age(24),rec.age(36),rec.age(48),rec.age(60))
+d.age=rbind(st.age(24),st.age(36),st.age(48),st.age(60))
 
 # cohort specific means
-rev.data=d.age %>%
+rec.data=d.age %>%
   group_by(studyid,country,agecatr) %>%
   summarise(n.rec=length(subjid[rec==1]),N=n()) %>%
   rename(agecat=agecatr)
 
+rec.cohort=lapply(list("24 months","36 months","48 months","60 months"),function(x) 
+  fit.escalc(data=rec.data,ni="N", xi="n.rec",age=x,meas="PR"))
+rec.cohort=as.data.frame(do.call(rbind, rec.cohort))
+rec.cohort$agecat=factor(rec.cohort$agecat,
+      levels=c("24 months","36 months","48 months","60 months"))
+rec.cohort$yi.f=sprintf("%0.0f",rec.cohort$yi)
+rec.cohort$cohort=paste0(rec.cohort$studyid,"-",rec.cohort$country)
+rec.cohort = rec.cohort %>% mutate(region = ifelse(country=="BANGLADESH" | country=="INDIA"|
+                                                     country=="NEPAL" | country=="PAKISTAN"|
+                                                     country=="PHILIPPINES" ,"Asia",
+                                                   ifelse(country=="BURKINA FASO"|
+                                                            country=="GUINEA-BISSAU"|
+                                                            country=="MALAWI"|
+                                                            country=="SOUTH AFRICA"|
+                                                            country=="TANZANIA, UNITED REPUBLIC OF"|
+                                                            country=="ZIMBABWE"|
+                                                            country=="GAMBIA","Africa",
+                                                          ifelse(country=="BELARUS","Europe",
+                                                                 "Latin America"))))
+rec.cohort$agecat.f=as.factor(ifelse(rec.cohort$agecat=="24 months","Recover by\n 24 months",
+                                     ifelse(rec.cohort$agecat=="36 months","Recover by\n36 months",
+                                            ifelse(rec.cohort$agecat=="48 months","Recover by\n48 months",
+                                                   ifelse(rec.cohort$agecat=="60 months","Recover by\n60 months","")))))
+rec.cohort$agecat.f=factor(rec.cohort$agecat.f,levels=c("Recover by\n 24 months",
+                                                        "Recover by\n36 months", "Recover by\n48 months",
+                                                        "Recover by\n60 months"))
+
 # estimate random effects, format results
 rev.res=lapply(list("24 months","36 months","48 months","60 months"),function(x) 
-  fit.rma(rev.data,ni="N", xi="n.rec",age=x))
+  fit.rma(rec.data,ni="N", xi="n.rec",age=x,measure="PR",nlab=" children"))
 rev.res=as.data.frame(do.call(rbind, rev.res))
 rev.res[,4]=as.numeric(rev.res[,4])
 rev.res = rev.res %>%
@@ -130,7 +159,45 @@ rev.res$ptest.f=sprintf("%0.0f",rev.res$est)
 
 rev.res
 
-# NOTE THE PLOT SAYS MEASUREMENTS BUT IT IS KIDS< NEED TO FIX FUNCTION
+
+# plot cohort prevalence
+pdf("U:/Figures/stunting-rec-everst-africa.pdf",width=11,height=5,onefile=TRUE)
+ggplot(rec.cohort[rec.cohort$region=="Africa",],
+       aes(y=yi,x=agecat.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-0.4,1.06))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific proportion of stunted children who recover by age - Africa")
+dev.off()
+
+pdf("U:/Figures/stunting-rec-everst-latamer-eur.pdf",width=8,height=5,onefile=TRUE)
+ggplot(rec.cohort[rec.cohort$region=="Latin America"|
+                    rec.cohort$region=="Europe",],
+       aes(y=yi,x=agecat.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-0.4,1.06))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific proportion of stunted children who recover by age - Latin America & Europe")
+dev.off()
+
+pdf("U:/Figures/stunting-rec-everst-asia.pdf",width=11,height=7,onefile=TRUE)
+ggplot(rec.cohort[rec.cohort$region=="Asia",],
+       aes(y=yi,x=agecat.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-0.4,1.06))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific proportion of stunted children who recover by age - Asia")
+dev.off()
+
 
 # plot % recovered by age
 pdf("U:/Figures/stunting-rec-everst-pool.pdf",width=9,height=4,onefile=TRUE)
