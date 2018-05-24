@@ -25,6 +25,10 @@ colnames(cuminc)
 head(prev)
 head(cuminc)
 
+#convert subjid to character for the merge with covariate dataset
+prev$subjid <- as.character(prev$subjid)
+cuminc$subjid <- as.character(cuminc$subjid)
+
 
 #------------------------------------
 # Create cumulative incidence dataset
@@ -42,16 +46,19 @@ Y<-c("ever_stunted")
 A<-c( "sex",              "gagebrth",      "birthwt",      
       "birthlen",      "enstunt",       "vagbrth",       "hdlvry",        "mage",          "mhtcm",         "mwtkg",        
       "mbmi",          "single",        "fage",          "fhtcm",         "nrooms",        "nhh",           "nchldlt5",     
-      "hhwealth_quart")
-
+      "hhwealth_quart", "month", "brthmon", "parity",   "meducyrs", 
+      "feducyrs", "hfoodsec")
 #Vector of covariate names
 W<-c("")
 
 #Subgroup variable
 V <- c("agecat")
 
+#clusterid ID variable
+id <- c("id")
 
-save(d, Y, A,V, file="st_cuminc_rf.Rdata")
+
+save(d, Y, A,V, id, file="st_cuminc_rf.Rdata")
 
 
 #------------------------------------
@@ -69,4 +76,4 @@ Y<-c("stunted","sstunted")
 
 
 
-save(d, Y, A,V, file="st_prev_rf.Rdata")
+save(d, Y, A,V, id, file="st_prev_rf.Rdata")
