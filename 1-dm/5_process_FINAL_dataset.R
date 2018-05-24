@@ -1,6 +1,16 @@
 
 
-#Add instructions for downloadin FINAL dataset
+# Instructions for downloading FINAL dataset
+
+# Go to https://git.ghap.io/stash/projects/HBGD/repos/adhoc/browse
+# click clone button
+# Copy link (mine is https://andrew.mertens@git.ghap.io/stash/scm/hbgd/adhoc.git)
+# Open Sourcetree (Click window icon in bottom left, then search magnifying glass icon
+# in the top right, and search Sourcetree to find)
+# Click clone button in source tree 
+# Paste link in source path box
+# Add U:/data/FINAL/ to the destination path (make sure FINAL folder is empty)
+# Click clone
 
 
 
