@@ -27,7 +27,28 @@ gc()
 
 
 #Read rds file and drop unneeded columns
-d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T,
+#Andrew's
+# d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T,
+#          drop = c( "AGEIMPFL",  "WTKG",    "HTCM",    "LENCM",   "WAZ",      
+#                    "WHZ",     "BAZ",     "HCAZ",    "MUAZ",    
+#                    "REGCTRY", "REGCTYP", "CITYTOWN","LATITUDE","LONGITUD", "HHID",    "ARM", 
+#                    "DEAD",    "AGEDTH",  "CAUSEDTH","FEEDING",
+#                    "DURBRST", "BRTHYR",  
+#                    "ENSTUNT",
+#                    "FWTKG", "FBMI",
+#                    "BRFEED", 
+#                    "SUMEP",   "SUMDIAR", "SUMDAYS",
+#                    "PCTDIAR", "IMPSAN",  "SOAP",    "SAFEH2O", "TRTH2O",  "CLEANCK",
+#                    "IMPFLOOR","H2OTIME",
+#                    "CHICKEN", "COW",     "CATTLE",  "INCTOT", 
+#                    "INCTOTU", "BFEDFL",  "EXBFEDFL","WEANFL",  "ANMLKFL", "PWMLKFL",
+#                    "FORMLKFL","BOTTLEFL","H20FEDFL","OTHFEDFL","SLDFEDFL","NBFYES",  "EARLYBF", "CMFDINT", "DIARFL",  "LSSTLFL",
+#                    "NUMLS",   "BLDSTLFL","DIARFL_R","LSSTFL_R","NUMLS_R", "BLDSTL_R",
+#                    "DUR_R"))
+
+
+#Jade's
+d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T,
          drop = c( "AGEIMPFL",  "WTKG",    "HTCM",    "LENCM",   "WAZ",      
                    "WHZ",     "BAZ",     "HCAZ",    "MUAZ",    
                    "REGCTRY", "REGCTYP", "CITYTOWN","LATITUDE","LONGITUD", "HHID",    "ARM", 
@@ -44,6 +65,8 @@ d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T,
                    "FORMLKFL","BOTTLEFL","H20FEDFL","OTHFEDFL","SLDFEDFL","NBFYES",  "EARLYBF", "CMFDINT", "DIARFL",  "LSSTLFL",
                    "NUMLS",   "BLDSTLFL","DIARFL_R","LSSTFL_R","NUMLS_R", "BLDSTL_R",
                    "DUR_R"))
+
+
 colnames(d) <- tolower(colnames(d))
 gc()
 
@@ -352,7 +375,7 @@ quantile_rf_bystudy <- function(df){
 #Overall quantile
 d$gagebrth <- quantile_rf(d$gagebrth)
 d$birthwt <- quantile_rf(d$birthwt)
-d$birthlen <- quantile_rf(d$birthlen)
+# d$birthlen <- quantile_rf(d$birthlen)
 d$mage <- quantile_rf(d$mage)
 d$mhtcm <- quantile_rf(d$mhtcm)
 d$mwtkg <- quantile_rf(d$mwtkg)
@@ -370,8 +393,8 @@ table(res2$studyid, res2$nchldlt5)
  d <- d %>% group_by(studyid, country) %>%
    do(quantile_rf_bystudy(.))
 
-
-
+# subject matter cutoffs for categorical variables
+d <- d %>% he
 
 #Categorize nrooms, nhh, nchild5
  table(d$nrooms)
