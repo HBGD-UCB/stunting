@@ -66,4 +66,59 @@ data$ci.ub <- data$yi + 1.96 * data$se
 }
 
 
+#---------------------------------------
+# cohort-specific output formatting
+#---------------------------------------
+# if percentage, multiply est and ci by 100
+# create cohort name for plotting
+# create region variable 
+# add age labels for x-axis
 
+# Input:
+# data frame with fit.escalc output 
+# vector of labels for plotting
+
+#Returns:
+# data frame formatted for plotting cohort specific results
+cohort.format=function(df, lab, est="percent"){
+  # rescale percentages
+  if(est=="percent"){
+    df = df %>% mutate(yi=yi*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
+  }
+  if(est=="rate"){
+    df = df %>% mutate(yi=yi*1000,ci.lb=ci.lb*1000,ci.ub=ci.ub*1000)
+  }
+
+  # cohort name
+  df = df %>% mutate(cohort=paste0(df$studyid,"-",df$country)) %>%
+              mutate(cohort=gsub("ki[^-]*-","",df$cohort))
+  
+  # region variable
+  df <- df %>% mutate(region = case_when(
+    country=="BANGLADESH" | country=="INDIA"|
+      country=="NEPAL" | country=="PAKISTAN"|
+      country=="PHILIPPINES"                   ~ "Asia", 
+      
+      country=="BURKINA FASO"|
+      country=="GUINEA-BISSAU"|
+      country=="MALAWI"|
+      country=="SOUTH AFRICA"|
+      country=="TANZANIA, UNITED REPUBLIC OF"|
+      country=="ZIMBABWE"|
+      country=="GAMBIA"                       ~ "Africa",
+      country=="BELARUS"                      ~ "Europe",
+      country=="BRAZIL" | country=="GUATEMALA" |
+      country=="PERU"                         ~ "Latin America",
+      TRUE                                    ~ "Other"
+  ))
+  
+   # create formatted age categories for plotting 
+  df <- df %>%  mutate(agecat=droplevels(agecat))
+  df <- df %>%  mutate(age.f2 = factor(agecat,levels=levels(df$agecat),
+                           labels=lab))
+
+  return(df)
+}
+
+lab=c("2 days to \n3 months", "4 to 6\nmonths", "7 to 9\nmonths",
+      "10 to 12\nmonths", "13 to 18\nmonths", "19 to 24\nmonths")
