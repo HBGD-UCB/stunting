@@ -19,7 +19,7 @@ fit.rma=function(data,age,ni,xi,measure,nlab){
               nmeas=sum(data[[ni]][agecat==age])) %>%
     mutate(agecat=age,est=fit$beta, se=fit$se, lb=fit$ci.lb, ub=fit$ci.ub,
            nmeas.f=paste0("N=",format(sum(data[[ni]]),big.mark=",",scientific=FALSE),
-                          nlab),
+                          " ",nlab),
            nstudy.f=paste0("N=",nstudies," studies"))
   return(out)
 }
