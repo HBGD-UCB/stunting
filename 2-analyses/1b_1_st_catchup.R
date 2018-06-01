@@ -22,7 +22,7 @@ library(metafor)
 theme_set(theme_bw())
 
 # load random effects function
-source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
+source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -105,6 +105,15 @@ rev.data <- rev.agecat %>%
             N=sum(!is.na(rec)))
 
 
+# cohort specific results
+rec.cohort=lapply(list("3 months","6 months","9 months","12 months","18 months","24 months"),function(x) 
+  fit.escalc(data=rev.data,ni="N", xi="n",age=x,meas="PR"))
+rec.cohort=as.data.frame(do.call(rbind, rec.cohort))
+rec.cohort=cohort.format(rec.cohort, lab=  c("2 days to \n3 months", 
+    "4 to 6\nmonths", "7 to 9\nmonths",
+    "10 to 12\nmonths", "13 to 18\nmonths", "19 to 24\nmonths"))
+
+
 # estimate random effects, format results
 rev.res=lapply(list("3 months","6 months","9 months","12 months","18 months",
      "24 months"),function(x) 
@@ -132,7 +141,58 @@ rev.res$ptest.f=sprintf("%0.0f",rev.res$est)
 
 rev.res
 
-# plot % recovered by age
+# MAKE INTO FUNCTION
+lab.af=rec.cohort[rec.cohort$region=="Africa",] %>% 
+  group_by(cohort) %>% summarise(N=sum(N))
+lab.af.f=paste0("N=",lab.af$N)
+
+# plot cohort % recovered by age
+pdf("U:/Figures/stunting-rec-africa.pdf",width=8,height=5,onefile=TRUE)
+ggplot(rec.cohort[rec.cohort$region=="Africa",],
+       aes(y=yi,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-6,55),breaks=seq(0,50,10),
+                     labels=seq(0,50,10))+
+  xlab("Age category")+
+  ylab("Percentage (95% CI)")+
+  ggtitle("Cohort-specific percentage of children who were stunted and recovered\nwithin age intervals - Africa")+
+  annotate("text", x=6,y=50,label=lab.af.f,size=4)
+dev.off()
+
+lab.lae=rec.cohort[rec.cohort$region=="Latin America"|  rec.cohort$region=="Europe",] %>% 
+  group_by(cohort) %>% summarise(N=sum(N))
+lab.lae.f=paste0("N=",lab.lae$N)
+
+pdf("U:/Figures/stunting-rec-latamer-eur.pdf",width=10,height=5,onefile=TRUE)
+ggplot(rec.cohort[rec.cohort$region=="Latin America"|
+                    rec.cohort$region=="Europe",],
+       aes(y=yi,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(-6,55),breaks=seq(0,50,10),
+                     labels=seq(0,50,10))+
+  xlab("Age category")+
+  ylab("Percentage (95% CI)")+
+  ggtitle("Cohort-specific percentage of children who were stunted and recovered\nwithin age intervals - Latin America & Europe")
+dev.off()
+
+pdf("U:/Figures/stunting-ptprev-asia.pdf",width=11,height=7,onefile=TRUE)
+ggplot(prev.cohort[prev.cohort$region=="Asia",],
+       aes(y=yi,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,90))+
+  xlab("Age category")+
+  ylab("Point prevalence (95% CI)")+
+  ggtitle("Cohort-specific point prevalence of stunting - Asia")
+dev.off()
+
+
+# plot pooled % recovered by age
 pdf("U:/Figures/stunting-rec-pool.pdf",width=10,height=4,onefile=TRUE)
 ggplot(rev.res,aes(y=est,x=agecat.f))+
   geom_point(size=3)+
