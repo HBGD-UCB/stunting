@@ -13,8 +13,8 @@ library(data.table)
 #--------------------------------------------
 
 # setwd("U:/data/")
- d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
-# d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
+ # d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
+d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
 # dim(d)
 # head(d)
 # colnames(d)
@@ -35,7 +35,8 @@ d<-d %>% subset(., select=c(studyid, subjid, country, tr, agedays, haz))
 #--------------------------------------------
 #Check for duplicate agedays
 #--------------------------------------------
-dup_age <- d %>% group_by(studyid, subjid, agedays) %>% summarize(N=n())
+dup_age <- d %>% group_by(studyid, subjid, agedays) %>%
+  summarize(N=n())
 mean(dup_age$N)
 
 #--------------------------------------------
