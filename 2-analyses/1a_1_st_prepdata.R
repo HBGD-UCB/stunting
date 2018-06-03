@@ -133,11 +133,22 @@ nrow(d)
 d <- d %>% filter(measurefreq!="yearly")
 
 #--------------------------------------------
-# subset to control arms in intervention studies
+# subset to control arms in intervention studies with effects
 #--------------------------------------------
 
 #Subset to control arms for intervention studies
-d <- filter(d, tr=="Control" | tr=="")
+#d <- filter(d, tr=="Control" | tr=="")
+
+#--------------------------------------------
+# drop trial arms with intervention impact on HAZ
+# potentially subset cmin and cohorts to control too,
+# but currently there is no tr variable for them
+#--------------------------------------------
+d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
 
 
 #--------------------------------------------
