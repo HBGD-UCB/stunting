@@ -31,11 +31,7 @@ gc()
 
 
 #Read rds file and drop unneeded columns
-#Andrew's
-d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T,
-         
-         #Jade's
-         #d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T,
+d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T,
          drop = c( "AGEIMPFL",  "WTKG",    "HTCM",    "LENCM",       
                    "WHZ",     "BAZ",     "HCAZ",    "MUAZ",    
                    "REGCTRY", "REGCTYP", "CITYTOWN","LATITUDE","LONGITUD", "HHID",    "ARM", 
@@ -129,13 +125,14 @@ d <- d %>% subset(., select=-c(measurefreq))
 # potentially subset cmin and cohorts to control too,
 # but currently there is no tr variable for them
 #--------------------------------------------
-d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
+# d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
+# d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
+# d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
+# d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
+# d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
+# 
 
-
+#Note-drop trial arms in the outcome dataset, not her
 
 
 #--------------------------------------------------------
