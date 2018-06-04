@@ -13,7 +13,7 @@ library(metafor)
 theme_set(theme_bw())
 
 # load random effects function
-source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
+source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 

@@ -13,7 +13,7 @@ library(data.table)
 #--------------------------------------------
 
 # setwd("U:/data/")
- # d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
+#  d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
 d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
 # dim(d)
 # head(d)
