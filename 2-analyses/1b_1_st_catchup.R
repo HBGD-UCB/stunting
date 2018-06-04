@@ -60,10 +60,13 @@ rev <- d %>%
   filter(!is.na(agecat)) %>%
   group_by(studyid,country,subjid) %>%
   mutate(stunted=ifelse(haz< -2,1,0),
-         lagstunted=lag(stunted))  %>%
+         lagstunted=lag(stunted),
+         leadstunted=lead(stunted))  %>%
   # unique stunting episode
-  mutate(sepisode=ifelse(lagstunted==0 & stunted==1 |
-                         stunted==1 & measid==1,1,0))
+  mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
+                         stunted==1 & measid==1,1,0)) %>%
+  # if last obs, then lead stunted is na, so can't be onset
+  # because we don't know the subsequent measurement
 
 
 #------------------------------------------
