@@ -1,8 +1,7 @@
 #-----------------------------------
 # Stunting analysis
 # Objective 1b
-# Calculate catch up growth at
-# 3, 6, 9, 12, 18, and 24 mo of age
+# Calculate catch up growth 
 
 # extra questions: 
 
@@ -25,17 +24,19 @@ load("U:/Data/Stunting/st_rec_interim.RData")
 #------------------------------------------
 episode.child <- rev %>%
   group_by(studyid,country,subjid) %>%
+  filter(!is.na(sepisode)) %>%
   summarise(nrev=sum(sepisode))
 
 labs=paste0(sprintf("%0.1f",prop.table(table(episode.child$nrev))*100),"%")
 
 pdf("U:/Figures/stunting-n-episodes.pdf",width=8,height=4,onefile=TRUE)
-ggplot(episode.child, aes(nrev))+geom_histogram(binwidth=0.5,col="black",fill="gray")+
-  scale_x_continuous(labels=seq(0,7),breaks=seq(0,7)) +
-  annotate("text",x=seq(0,7),y=as.numeric(table(episode.child$nrev)),
+ggplot(episode.child, aes(nrev))+geom_histogram(binwidth=0.5,
+                        col="black",fill="gray")+
+  scale_x_continuous(labels=seq(0,5),breaks=seq(0,5)) +
+  annotate("text",x=seq(0,5),y=as.numeric(table(episode.child$nrev)),
            label=labs, vjust=-0.4)+
-  scale_y_continuous(limits=c(0,7000),labels=seq(0,7000,500),
-                     breaks=seq(0,7000,500))+
+  scale_y_continuous(limits=c(0,5500),labels=seq(0,5500,500),
+                     breaks=seq(0,5500,500))+
   xlab("Number of stunting episodes per child")+
   ylab("Number of children")
 dev.off()
@@ -45,23 +46,9 @@ dev.off()
 # distribution of stunting among those who 
 # have recovered and those who have not 
 #------------------------------------------
-rdist=rev.ind %>%
-  select(studyid, subjid, country, agem, agecat,haz, 
-         stunted,lagstunted,recrow,rec) %>%
-  # identify row with onset of stunting
-  mutate(laghaz=lag(haz),
-         st_onset=ifelse(laghaz>= -2 & haz< -2,1,0)) %>%
-  # identify row with onset of recovery
-  mutate(rec_onset=ifelse(laghaz< -2 & haz>= -2,1,0)) 
-
-# rdist[rdist$studyid=="ki0047075b-MAL-ED" & 
-#         rdist$subjid==2, c("agecat","agem",
-#      "haz","stunted","lagstunted","recrow",
-#      "rec","st_onset","rec_onset")][21:30,]
-
 # plot dist among stunted
 pdf("U:/Figures/stunting-rec-onset-st-dist.pdf",width=8,height=4,onefile=TRUE)
-ggplot(rdist %>% filter(st_onset==1), aes(x=haz))+
+ggplot(rev.ind %>% filter(sepisode==1), aes(x=haz))+
   geom_histogram(binwidth=0.05,col="black",fill="gray",
                  position="dodge")+
   xlab("LAZ at stunting onset")+ylab("Number of children")+
@@ -70,7 +57,7 @@ dev.off()
 
 # plot dist among recovered
 pdf("U:/Figures/stunting-rec-onset-rec-dist.pdf",width=8,height=4,onefile=TRUE)
-ggplot(rdist %>% filter(rec_onset==1), aes(x=haz))+
+ggplot(rev.ind %>% filter(recrow==1), aes(x=haz))+
   geom_histogram(binwidth=0.1,col="black",fill="gray")+
   xlab("LAZ at first measurement in which child is not stunted")+
   ylab("Number of children")+

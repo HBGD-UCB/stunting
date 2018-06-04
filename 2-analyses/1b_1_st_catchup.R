@@ -58,13 +58,14 @@ d %>%
 # create indicators for stunting
 rev <- d %>%
   filter(!is.na(agecat)) %>%
+  mutate(measid=seq_along(subjid))  %>%
   group_by(studyid,country,subjid) %>%
   mutate(stunted=ifelse(haz< -2,1,0),
          lagstunted=lag(stunted),
          leadstunted=lead(stunted))  %>%
   # unique stunting episode
   mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
-                         stunted==1 & measid==1,1,0)) %>%
+                         stunted==1 & measid==1,1,0))
   # if last obs, then lead stunted is na, so can't be onset
   # because we don't know the subsequent measurement
 
@@ -78,7 +79,8 @@ rev.ind <- rev %>%
   mutate(hazinc=ifelse(haz>lag(haz),1,0)) %>%
   # create recovery indicator
   # NA means that it was the age cat of first measurement 
-  mutate(recrow=ifelse(stunted==0 & lagstunted==1,1,0)) %>%
+  mutate(recrow=ifelse(stunted==0 & lagstunted==1 & lag(lagstunted)==1,
+                       1,0)) %>%
   # cumulative sum of recovery indicator
   group_by(studyid,country,subjid,agecat) %>%
   mutate(notst=ifelse(stunted==0,1,0)) %>%
@@ -89,17 +91,23 @@ rev.ind <- rev %>%
   mutate(rec=ifelse(recsum>=2 & contig==1 &
       notst==1,1,0))
 
+# REC NEEDS TO BE BASED ON SEPISODE NOT STUNTED
+
 rev.agecat <- rev.ind %>%
   group_by(studyid,country,subjid,agecat) %>%
   summarise(rec=max(rec))
 
 # test code
-# rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" & 
-#         rev.ind$subjid=="9.88131291682493e-324", c("agecat","agem",
-#     "haz","stunted","lagstunted","hazinc","recrow",
-#      "notst","recsum","contig","rec")][21:30,]
-# rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
-#              rev.agecat$subjid=="9.88131291682493e-324",]
+rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED", c("agecat","agem",
+                                                     "haz","stunted","lagstunted","sepisode","hazinc","recrow",
+                      "notst","recsum","contig","rec")][1:10,]
+
+rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" &
+        rev.ind$subjid=="9.88131291682493e-324", c("agecat","agem",
+    "haz","stunted","lagstunted","sepisode","hazinc","recrow",
+     "notst","recsum","contig","rec")][11:20,]
+rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
+             rev.agecat$subjid=="9.88131291682493e-324",]
 
 # prepare data for pooling 
 rev.data <- rev.agecat %>%
