@@ -80,18 +80,20 @@ data$ci.ub <- data$yi + 1.96 * data$se
 
 #Returns:
 # data frame formatted for plotting cohort specific results
-cohort.format=function(df, lab, est="percent"){
+cohort.format=function(df, lab, y, est="percent"){
+  y = as.numeric(y)
+  
   # rescale percentages
   if(est=="percent"){
-    df = df %>% mutate(yi=yi*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
+    df = df %>% mutate(y=y*100,ci.lb=ci.lb*100,ci.ub=ci.ub*100)
   }
   if(est=="rate"){
-    df = df %>% mutate(yi=yi*1000,ci.lb=ci.lb*1000,ci.ub=ci.ub*1000)
+    df = df %>% mutate(y=y*1000,ci.lb=ci.lb*1000,ci.ub=ci.ub*1000)
   }
 
   # cohort name
-  df = df %>% mutate(cohort=paste0(df$studyid,"-",df$country)) %>%
-              mutate(cohort=gsub("ki[^-]*-","",df$cohort))
+  df = df %>% mutate(cohort=paste0(studyid,"-",country)) %>%
+              mutate(cohort=gsub("ki[^-]*-","",cohort))
   
   # region variable
   df <- df %>% mutate(region = case_when(
@@ -114,11 +116,11 @@ cohort.format=function(df, lab, est="percent"){
   
    # create formatted age categories for plotting 
   df <- df %>%  mutate(agecat=droplevels(agecat))
-  df <- df %>%  mutate(age.f2 = factor(agecat,levels=levels(df$agecat),
+  df <- df %>%  mutate(age.f = factor(agecat,levels=levels(df$agecat),
                            labels=lab))
 
   return(df)
 }
 
-lab=c("2 days to \n3 months", "4 to 6\nmonths", "7 to 9\nmonths",
-      "10 to 12\nmonths", "13 to 18\nmonths", "19 to 24\nmonths")
+
+
