@@ -8,10 +8,9 @@
 
 # create dataset for risk factor analyses: 
 # stunting from birth to 3 months, recover by 24 months
-#-----------------------------------
-# OPEN ISSUE: there are multiple measurements for the same kid in jvita3, maybe others
-# waiting on vishak's response 
 
+# Not used for descriptive analyses
+#-----------------------------------
 rm(list=ls())
 library(dplyr)
 library(ggplot2)
@@ -19,8 +18,8 @@ library(tidyr)
 library(metafor)
 theme_set(theme_bw())
 
-# load random effects function
-source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
+# load base functions
+source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -58,15 +57,6 @@ d %>%
             mean=mean(agedays/30.4167,na.rm=TRUE),
             max=max(agedays/30.4167))
 
-
-# create indicators for stunting
-rev <- d %>%
-  filter(!is.na(agecat)) %>%
-  group_by(studyid,country,subjid) %>%
-  # 
-  mutate(stunted=ifelse(haz< -2,1,0),
-         lagstunted=lag(stunted))  
-
 # subset to stunted between birth and 3 months
 stunt.03 <- d %>%
   filter(agecat=="Birth" | agecat=="3 months") %>%
@@ -74,12 +64,19 @@ stunt.03 <- d %>%
   summarise(minlaz03=min(haz)) %>%
   mutate(stunted03=ifelse(minlaz03< -2, 1, 0)) 
 
-# recovered by 24 months
 rec.24 <- d %>%
   filter(agecat=="24 months") %>%
+  # identify last two measurements prior to 24 months
   group_by(studyid,country,subjid) %>%
-  summarise(minlaz24=min(haz)) %>%
-  mutate(rec24=ifelse(minlaz24> -2, 1, 0)) 
+  mutate(rank=min_rank(-agedays)) %>%
+  filter(rank<= 2) %>%
+  # flag kids with 2 measurements not stunted
+  mutate(rec=ifelse(haz>= -2,1,0)) %>%
+  mutate(recsum=cumsum(rec)) %>%
+  # one row for each kid, indicator for recovered
+  summarise(maxrec=max(recsum)) %>%
+  mutate(rec24=ifelse(maxrec==2,1,0)) %>%
+  select(-c(maxrec))
 
 rev <- full_join(stunt.03, rec.24,by=c("studyid","country","subjid")) %>%
   mutate(s03rec24=ifelse(stunted03==1 & rec24==1,1,0)) %>%
