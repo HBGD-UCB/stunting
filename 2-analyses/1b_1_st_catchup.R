@@ -88,14 +88,16 @@ rev.ind <- rev %>%
       notst==1,1,0))
 
 rev.agecat <- rev.ind %>%
+  group_by(studyid,country,subjid,agecat) %>%
   summarise(rec=max(rec))
 
-rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" & 
-        rev.ind$subjid==2, c("agecat","agem",
-    "haz","stunted","lagstunted","hazinc","recrow",
-     "notst","recsum","contig","rec")][1:20,]
-rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
-             rev.agecat$subjid==2,]
+# test code
+# rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" & 
+#         rev.ind$subjid=="9.88131291682493e-324", c("agecat","agem",
+#     "haz","stunted","lagstunted","hazinc","recrow",
+#      "notst","recsum","contig","rec")][21:30,]
+# rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
+#              rev.agecat$subjid=="9.88131291682493e-324",]
 
 # prepare data for pooling 
 rev.data <- rev.agecat %>%
@@ -109,7 +111,8 @@ rev.data <- rev.agecat %>%
 rec.cohort=lapply(list("3 months","6 months","9 months","12 months","18 months","24 months"),function(x) 
   fit.escalc(data=rev.data,ni="N", xi="n",age=x,meas="PR"))
 rec.cohort=as.data.frame(do.call(rbind, rec.cohort))
-rec.cohort=cohort.format(rec.cohort, lab=  c("2 days to \n3 months", 
+rec.cohort=cohort.format(rec.cohort,y=rec.cohort$yi,
+    lab=  c("2 days to \n3 months", 
     "4 to 6\nmonths", "7 to 9\nmonths",
     "10 to 12\nmonths", "13 to 18\nmonths", "19 to 24\nmonths"))
 
@@ -120,6 +123,15 @@ rev.res=lapply(list("3 months","6 months","9 months","12 months","18 months",
       fit.rma(rev.data,ni="N", xi="n",age=x,measure="PR",
               nlab="children"))
 rev.res=as.data.frame(do.call(rbind, rev.res))
+rev.res=cohort.format(rev.res, lab=  c("2 days to \n3 months",
+                                       "4 to 6\nmonths", 
+                                       "7 to 9\nmonths",
+                                       "10 to 12\nmonths",
+                                       "13 to 18\nmonths",
+                                       "19 to 24\nmonths"))
+
+
+
 rev.res[,4]=as.numeric(rev.res[,4])
 rev.res = rev.res %>%
   mutate(est=est*100,lb=lb*100,ub=ub*100)
@@ -141,7 +153,6 @@ rev.res$ptest.f=sprintf("%0.0f",rev.res$est)
 
 rev.res
 
-# MAKE INTO FUNCTION
 lab.af=rec.cohort[rec.cohort$region=="Africa",] %>% 
   group_by(cohort) %>% summarise(N=sum(N))
 lab.af.f=paste0("N=",lab.af$N)
@@ -149,7 +160,7 @@ lab.af.f=paste0("N=",lab.af$N)
 # plot cohort % recovered by age
 pdf("U:/Figures/stunting-rec-africa.pdf",width=8,height=5,onefile=TRUE)
 ggplot(rec.cohort[rec.cohort$region=="Africa",],
-       aes(y=yi,x=age.f))+
+       aes(y=y,x=age.f))+
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
@@ -168,7 +179,7 @@ lab.lae.f=paste0("N=",lab.lae$N)
 pdf("U:/Figures/stunting-rec-latamer-eur.pdf",width=10,height=5,onefile=TRUE)
 ggplot(rec.cohort[rec.cohort$region=="Latin America"|
                     rec.cohort$region=="Europe",],
-       aes(y=yi,x=age.f))+
+       aes(y=y,x=age.f))+
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
@@ -179,13 +190,17 @@ ggplot(rec.cohort[rec.cohort$region=="Latin America"|
   ggtitle("Cohort-specific percentage of children who were stunted and recovered\nwithin age intervals - Latin America & Europe")
 dev.off()
 
-pdf("U:/Figures/stunting-ptprev-asia.pdf",width=11,height=7,onefile=TRUE)
-ggplot(prev.cohort[prev.cohort$region=="Asia",],
-       aes(y=yi,x=age.f))+
+lab.asia=rec.cohort[rec.cohort$region=="Asia",] %>% 
+  group_by(cohort) %>% summarise(N=sum(N))
+lab.asia.f=paste0("N=",lab.asia$N)
+
+pdf("U:/Figures/stunting-rec-asia.pdf",width=15,height=7,onefile=TRUE)
+ggplot(rec.cohort[rec.cohort$region=="Asia",],
+       aes(y=y,x=age.f))+
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
-  scale_y_continuous(limits=c(0,90))+
+  scale_y_continuous(limits=c(-6,55))+
   xlab("Age category")+
   ylab("Point prevalence (95% CI)")+
   ggtitle("Cohort-specific point prevalence of stunting - Asia")
