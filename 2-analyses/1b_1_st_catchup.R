@@ -21,7 +21,7 @@ library(tidyr)
 library(metafor)
 theme_set(theme_bw())
 
-# load random effects function
+# load base functions
 source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
@@ -59,7 +59,6 @@ d %>%
 rev <- d %>%
   filter(!is.na(agecat)) %>%
   group_by(studyid,country,subjid) %>%
-  # 
   mutate(stunted=ifelse(haz< -2,1,0),
          lagstunted=lag(stunted))  %>%
   # unique stunting episode
