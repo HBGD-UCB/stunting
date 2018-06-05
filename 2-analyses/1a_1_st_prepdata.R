@@ -141,14 +141,18 @@ d <- d %>% filter(measurefreq!="yearly")
 
 #--------------------------------------------
 # drop trial arms with intervention impact on HAZ
-# potentially subset cmin and cohorts to control too,
-# but currently there is no tr variable for them
+# -either based on published literature or analysis
+# of effects on CI of stunting by 24months of age
 #--------------------------------------------
 d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
 d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
 d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
 d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
 d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
+d=d[-which(d$studyid=="kiGH5241-JiVitA-3" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1135781-COHORTS" & d$tr=="Other"),]
+
+
 
 
 #--------------------------------------------
