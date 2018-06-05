@@ -11,8 +11,8 @@ library(tidyr)
 library(metafor)
 theme_set(theme_bw())
 
-# load random effects function
-source("U:/Scripts/Stunting/2-analyses/0_randomeffects.R")
+# load base functions
+source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -42,7 +42,7 @@ inc = d %>%
   filter(inccase==1) %>%
   select(studyid,country,subjid,agedays) %>%
   mutate(agem=agedays/30.4167)
- 
+
 
 # cohort specific mean
 age.onset.study = inc %>%
@@ -63,12 +63,13 @@ age.onset.study = inc %>%
   mutate(study_country=paste0(studyid,"-",country)) %>%
   group_by(region,study_country) %>%
   summarise(mn=mean(agedays),
+            med=median(agedays),
             se=sem(agedays),
             Nmeas=n(),
             Nchild=sum(length(unique(subjid)))) %>%
   mutate(lb=mn-qnorm(0.975)*se,
          ub=mn+qnorm(0.975)*se)  %>%
-  mutate(mn_m=mn/30.4167)
+  mutate(mn_m=mn/30.4167,med_m=med/30.4167)
 
 # sort by mean age
 age.onset.study$study_country=factor(age.onset.study$study_country, 
@@ -86,6 +87,7 @@ c(est=pool.fit$beta, se=pool.fit$se, lb=pool.fit$ci.lb, ub=pool.fit$ci.ub)
 res=paste0(sprintf("%0.1f",pool.fit$beta/30.4167)," (95% CI ",
            sprintf("%0.1f",pool.fit$ci.lb/30.4167),",",
            sprintf("%0.1f",pool.fit$ci.ub/30.4167),")")
+med = sprintf("%0.1f",median(inc$agedays/30.4167))
 
 pdf("U:/Figures/stunting-age-onset.pdf",width=10,height=4,onefile=TRUE)
 ggplot(age.onset.study,aes(x=study_country,y=mn_m))+
@@ -101,14 +103,31 @@ dev.off()
 pdf("U:/Figures/stunting-age-onset-hist.pdf",width=8,height=4,onefile=TRUE)
 ggplot(inc,aes(x=agem))+
   geom_histogram(col="black",fill="gray",binwidth=1)+
-  geom_vline(xintercept=pool.fit$beta/30.4167,linetype="dashed",size=1)+
   scale_x_continuous(breaks=seq(0,24,3),labels=seq(0,24,3))+
   scale_y_continuous(breaks=seq(0,1000,100),labels=seq(0,1000,100))+
   xlab("Age in months") + ylab("Number of children")+
   ggtitle("Distribution of age in months at first incident of stunting")+
-  annotate("text",x=10, y=900, label=paste0("Mean ",res))
+  annotate("text",x=23, y=900, label=paste0("Mean: ",res))+
+  annotate("text",x=21.55, y=800, label=paste0("Median: ",med))
 dev.off()
 
+inc = inc %>% mutate(cohort=paste0(studyid,"-",country)) %>%
+  mutate(cohort=gsub("ki[^-]*-","",cohort))
 
+age.onset.study$mn.f=paste0("Mean: ",sprintf("%0.1f",
+      age.onset.study$mn_m))
+age.onset.study$med.f=paste0("Median: ",sprintf("%0.1f",
+      age.onset.study$med_m))
+
+pdf("U:/Figures/stunting-age-onset-hist-cohort.pdf",width=8,height=4,onefile=TRUE)
+ggplot(inc,aes(x=agem))+
+  geom_histogram(col="black",fill="gray",binwidth=1)+
+  geom_vline(xintercept=pool.fit$beta/30.4167,linetype="dashed",size=1)+
+  xlab("Age in months") + ylab("Number of children")+
+  ggtitle("Distribution of age in months at first incident of stunting")+
+  facet_wrap(~cohort)+
+  annotate("text",y=180,x=19,label=paste(age.onset.study$mn.f))+
+  annotate("text",y=140,x=18.1,label=paste(age.onset.study$med.f))
+dev.off()
 
 
