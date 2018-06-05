@@ -156,9 +156,9 @@ plot.df=bind_rows(as.data.frame(pooled),cohort)
 # sort by recovery %
 plot.df$cohort=factor(plot.df$cohort, 
       levels = plot.df$cohort[order(plot.df$y)])
-plot.df$y[plot.df$cohort=="Pooled" ]=plot.df$y*100
-plot.df$ci.lb[plot.df$cohort=="Pooled"]=plot.df$ci.lb*100
-plot.df$ci.ub[plot.df$cohort=="Pooled"]=plot.df$ci.ub*100
+plot.df$y[plot.df$cohort=="Pooled"]=plot.df$y[plot.df$cohort=="Pooled"]*100
+plot.df$ci.lb[plot.df$cohort=="Pooled"]=plot.df$ci.lb[plot.df$cohort=="Pooled"]*100
+plot.df$ci.ub[plot.df$cohort=="Pooled"]=plot.df$ci.ub[plot.df$cohort=="Pooled"]*100
 plot.df$pooled=as.factor(ifelse(plot.df$cohort=="Pooled",1,0))
 
 # plot recovery

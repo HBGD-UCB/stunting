@@ -107,8 +107,8 @@ ggplot(inc,aes(x=agem))+
   scale_y_continuous(breaks=seq(0,1000,100),labels=seq(0,1000,100))+
   xlab("Age in months") + ylab("Number of children")+
   ggtitle("Distribution of age in months at first incident of stunting")+
-  annotate("text",x=23, y=900, label=paste0("Mean: ",res))+
-  annotate("text",x=21.55, y=800, label=paste0("Median: ",med))
+  annotate("text",x=22, y=900, label=paste0("Mean: ",res))+
+  annotate("text",x=20.1, y=840, label=paste0("Median: ",med))
 dev.off()
 
 inc = inc %>% mutate(cohort=paste0(studyid,"-",country)) %>%
@@ -119,15 +119,14 @@ age.onset.study$mn.f=paste0("Mean: ",sprintf("%0.1f",
 age.onset.study$med.f=paste0("Median: ",sprintf("%0.1f",
       age.onset.study$med_m))
 
-pdf("U:/Figures/stunting-age-onset-hist-cohort.pdf",width=8,height=4,onefile=TRUE)
+pdf("U:/Figures/stunting-age-onset-hist-cohort.pdf",width=12,height=8,onefile=TRUE)
 ggplot(inc,aes(x=agem))+
   geom_histogram(col="black",fill="gray",binwidth=1)+
-  geom_vline(xintercept=pool.fit$beta/30.4167,linetype="dashed",size=1)+
   xlab("Age in months") + ylab("Number of children")+
   ggtitle("Distribution of age in months at first incident of stunting")+
   facet_wrap(~cohort)+
-  annotate("text",y=180,x=19,label=paste(age.onset.study$mn.f))+
-  annotate("text",y=140,x=18.1,label=paste(age.onset.study$med.f))
+  annotate("text",y=190,x=19,label=paste(age.onset.study$mn.f))+
+  annotate("text",y=160,x=18.1,label=paste(age.onset.study$med.f))
 dev.off()
 
 

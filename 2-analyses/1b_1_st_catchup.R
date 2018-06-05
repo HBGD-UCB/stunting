@@ -91,23 +91,22 @@ rev.ind <- rev %>%
   mutate(rec=ifelse(recsum>=2 & contig==1 &
       notst==1,1,0))
 
-# REC NEEDS TO BE BASED ON SEPISODE NOT STUNTED
 
 rev.agecat <- rev.ind %>%
   group_by(studyid,country,subjid,agecat) %>%
   summarise(rec=max(rec))
 
-# test code
-rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED", c("agecat","agem",
-                                                     "haz","stunted","lagstunted","sepisode","hazinc","recrow",
-                      "notst","recsum","contig","rec")][1:10,]
-
-rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" &
-        rev.ind$subjid=="9.88131291682493e-324", c("agecat","agem",
-    "haz","stunted","lagstunted","sepisode","hazinc","recrow",
-     "notst","recsum","contig","rec")][11:20,]
-rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
-             rev.agecat$subjid=="9.88131291682493e-324",]
+# # test code
+# rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED", c("agecat","agem",
+#                                                      "haz","stunted","lagstunted","sepisode","hazinc","recrow",
+#                       "notst","recsum","contig","rec")][1:10,]
+# 
+# rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" &
+#         rev.ind$subjid=="9.88131291682493e-324", c("agecat","agem",
+#     "haz","stunted","lagstunted","sepisode","hazinc","recrow",
+#      "notst","recsum","contig","rec")][11:20,]
+# rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
+#              rev.agecat$subjid=="9.88131291682493e-324",]
 
 # prepare data for pooling 
 rev.data <- rev.agecat %>%
@@ -159,7 +158,7 @@ rev.res$agecat.f=factor(rev.res$agecat.f,levels=c("2 days to \n3 months",
                                                   "10 to 12\nmonths",
                                                   "13 to 18\nmonths",
                                                   "19 to 24\nmonths"))
-rev.res$ptest.f=sprintf("%0.0f",rev.res$est)
+rev.res$ptest.f=sprintf("%0.1f",rev.res$est)
 
 rev.res
 
@@ -174,12 +173,11 @@ ggplot(rec.cohort[rec.cohort$region=="Africa",],
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
-  scale_y_continuous(limits=c(-6,55),breaks=seq(0,50,10),
-                     labels=seq(0,50,10))+
+  scale_y_continuous(limits=c(-6,40))+
   xlab("Age category")+
   ylab("Percentage (95% CI)")+
   ggtitle("Cohort-specific percentage of children who were stunted and recovered\nwithin age intervals - Africa")+
-  annotate("text", x=6,y=50,label=lab.af.f,size=4)
+  annotate("text", x=6,y=36,label=lab.af.f,size=4)
 dev.off()
 
 lab.lae=rec.cohort[rec.cohort$region=="Latin America"|  rec.cohort$region=="Europe",] %>% 
@@ -193,11 +191,11 @@ ggplot(rec.cohort[rec.cohort$region=="Latin America"|
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
-  scale_y_continuous(limits=c(-6,55),breaks=seq(0,50,10),
-                     labels=seq(0,50,10))+
+  scale_y_continuous(limits=c(-6,40))+
   xlab("Age category")+
   ylab("Percentage (95% CI)")+
-  ggtitle("Cohort-specific percentage of children who were stunted and recovered\nwithin age intervals - Latin America & Europe")
+  ggtitle("Cohort-specific percentage of children who were stunted and recovered within age intervals - Latin America")+
+  annotate("text", x=6,y=36,label=lab.lae.f,size=4)
 dev.off()
 
 lab.asia=rec.cohort[rec.cohort$region=="Asia",] %>% 
@@ -210,10 +208,11 @@ ggplot(rec.cohort[rec.cohort$region=="Asia",],
   geom_point(size=2)+facet_wrap(~cohort)+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
-  scale_y_continuous(limits=c(-6,55))+
+  scale_y_continuous(limits=c(-6,40))+
   xlab("Age category")+
   ylab("Point prevalence (95% CI)")+
-  ggtitle("Cohort-specific point prevalence of stunting - Asia")
+  ggtitle("Cohort-specific percentage of children who were stunted and recovered within age intervals - Asia")+
+  annotate("text", x=6,y=36,label=lab.asia.f,size=4)
 dev.off()
 
 
@@ -224,11 +223,11 @@ ggplot(rev.res,aes(y=est,x=agecat.f))+
   geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
   scale_color_manual(values=tableau10)+xlab("Age category")+
   ylab("Percentage (95% CI)")+
-  scale_y_continuous(limits=c(0,12))+
-  annotate("text",x=rev.res$agecat.f,y=0.5,label=rev.res$nmeas.f,size=3)+
-  annotate("text",x=rev.res$agecat.f,y=0,label=rev.res$nstudy.f,size=3)+
+  scale_y_continuous(limits=c(-0.8,6))+
+  annotate("text",x=rev.res$agecat.f,y=-0.1,label=rev.res$nmeas.f,size=3)+
+  annotate("text",x=rev.res$agecat.f,y=-0.5,label=rev.res$nstudy.f,size=3)+
   annotate("text",label=rev.res$ptest.f,x=rev.res$agecat.f,
-           y=rev.res$est,hjust=-1.1,size=3)+
+           y=rev.res$est,hjust=-0.5,size=3)+
   ggtitle("Percentage of children who were stunted and recovered within age intervals")
 dev.off()
 

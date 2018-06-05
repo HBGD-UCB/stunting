@@ -103,6 +103,6 @@ ggplot(rev2, aes(x=agediff))+
   annotate("text",x=seq(0,5),y=as.numeric(table(rev2$agediff)[1:6]),
            label=labs, vjust=-0.4,size=2.25)+
   xlab("Duration of stunting episodes in months")+
-  ylab("Number of children")+
+  ylab("Number of child-episodes")+
   ggtitle("Distribution of the duration of stunting episodes prior to 24 months")
 dev.off()

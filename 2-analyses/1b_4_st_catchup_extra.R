@@ -35,8 +35,8 @@ ggplot(episode.child, aes(nrev))+geom_histogram(binwidth=0.5,
   scale_x_continuous(labels=seq(0,5),breaks=seq(0,5)) +
   annotate("text",x=seq(0,5),y=as.numeric(table(episode.child$nrev)),
            label=labs, vjust=-0.4)+
-  scale_y_continuous(limits=c(0,5500),labels=seq(0,5500,500),
-                     breaks=seq(0,5500,500))+
+  scale_y_continuous(limits=c(0,7000),labels=seq(0,7000,500),
+                     breaks=seq(0,7000,500))+
   xlab("Number of stunting episodes per child")+
   ylab("Number of children")
 dev.off()
