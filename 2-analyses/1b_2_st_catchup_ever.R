@@ -46,11 +46,7 @@ d = d %>%
                                             ifelse(agedays>12*30.4167 & agedays<=18*30.4167,"18 months",
                                                    ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months",""))))))) %>%
   mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months",
-        "12 months","18 months","24 months",""))) %>%
-  mutate(age24=ifelse(agem<=25,1,0),
-         age36=ifelse(agem<=37,1,0),
-         age48=ifelse(agem<=49,1,0),
-         age60=ifelse(agem<=61,1,0))
+        "12 months","18 months","24 months","")))
 
 # check age categories
 d %>%
@@ -60,8 +56,37 @@ d %>%
             mean=mean(agedays/30.4167,na.rm=TRUE),
             max=max(agedays/30.4167))
 
-# indicator for stunted
-rev <- d %>%
+# count observations in each age bin
+# because of the small n's for older ages, just focusing
+# on 24 months
+d %>% ungroup() %>% filter(agem<=24) %>% summarise(n24=n())
+d %>% ungroup() %>% filter(agem>24 & agem<=36) %>% summarise(n36=n())
+d %>% ungroup() %>% filter(agem>36 & agem<=48) %>% summarise(n48=n())
+d %>% ungroup() %>% filter(agem>48 & agem<=60) %>% summarise(n60=n())
+
+
+# # indicator for stunted
+# st <- d %>%
+#   group_by(studyid,country,subjid) %>%
+#   mutate(measid=seq_along(subjid))  %>%
+#   mutate(stunted=ifelse(haz< -2,1,0),
+#          lagstunted=lag(stunted),
+#          leadstunted=lead(stunted))  %>%
+#   # unique stunting episode
+#   mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
+#                            stunted==1 & measid==1,1,0)) 
+# 
+# # stunted by 24 months
+# stunt.24 <- st %>%
+#   filter(agem<=25) %>%
+#   group_by(studyid,country,subjid) %>%
+#   summarise(maxst=max(sepisode)) %>%
+#   mutate(stunted24=ifelse(maxst==1,1,0))
+
+
+# subset to stunted between birth and 3 months
+stunt.24 <- d %>%
+  filter(agem<=25) %>%
   group_by(studyid,country,subjid) %>%
   mutate(measid=seq_along(subjid))  %>%
   mutate(stunted=ifelse(haz< -2,1,0),
@@ -69,51 +94,52 @@ rev <- d %>%
          leadstunted=lead(stunted))  %>%
   # unique stunting episode
   mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
-                           stunted==1 & measid==1,1,0)) 
+                           stunted==1 & measid==1,1,0)) %>%
+  # identify whether child had stunting episode between 0 and 3 months 
+  summarise(stunted24=max(sepisode,na.rm=TRUE))
+# 
+# # recovery by x months
+# rec <- rev %>%
+#   filter(agem<=25) %>%
+#   arrange(studyid,country,subjid,agecat,agedays) %>%
+#   # indicator for whether haz in time t> haz in time t-1
+#   mutate(hazinc=ifelse(haz>lag(haz),1,0)) %>%
+#   # create recovery indicator
+#   # NA means that it was the age cat of first measurement 
+#   mutate(recrow=ifelse(stunted==0 & lagstunted==1 & lag(lagstunted)==1,
+#                        1,0)) %>%
+#   # cumulative sum of recovery indicator
+#   group_by(studyid,country,subjid,agecat) %>%
+#   mutate(notst=ifelse(stunted==0,1,0)) %>%
+#   mutate(recsum=cumsum(notst)) %>%
+#   # assess whether recsum is for contiguous rec indicators
+#   mutate(contig = ifelse(lag(recrow)==1,1,0)) %>%
+#   # count as recovery if at least two meas have haz>=-2
+#   mutate(rec=ifelse(recsum>=2 & contig==1 &
+#         notst==1,1,0)) 
 
-# stunted by 24 months
-stunt.24 <- rev %>%
-  filter(agem<=25) %>%
+# rec.24<- rec %>%
+#   ungroup() %>%
+#   filter(age24==1) %>%
+#   select(studyid,country,subjid,haz,agem,rec)
+
+rec.24 <- d %>%
+  filter(agecat=="24 months") %>%
+  # identify last two measurements prior to 24 months
   group_by(studyid,country,subjid) %>%
-  summarise(maxst=max(sepisode)) %>%
-  mutate(stunted24=ifelse(maxst==1,1,0))
-
-# recovery by x months
-rec <- rev %>%
-  # mutate(agecat=droplevels(agecat)) %>%
-  arrange(studyid,country,subjid,agecat,agedays) %>%
-  # indicator for whether haz in time t> haz in time t-1
-  mutate(hazinc=ifelse(haz>lag(haz),1,0)) %>%
-  # create recovery indicator
-  # NA means that it was the age cat of first measurement 
-  mutate(recrow=ifelse(stunted==0 & lagstunted==1 & lag(lagstunted)==1,
-                       1,0)) %>%
-  # cumulative sum of recovery indicator
-  group_by(studyid,country,subjid,agecat) %>%
-  mutate(notst=ifelse(stunted==0,1,0)) %>%
-  mutate(recsum=cumsum(notst)) %>%
-  # assess whether recsum is for contiguous rec indicators
-  mutate(contig = ifelse(lag(recrow)==1,1,0)) %>%
-  # count as recovery if at least two meas have haz>=-2
-  mutate(rec=ifelse(recsum>=2 & contig==1 &
-        notst==1,1,0)) 
-
-# count observations in each age bin
-# because of the small n's for older ages, just focusing
-# on 24 months
-rec %>% ungroup() %>% filter(agem<=24) %>% summarise(n24=n())
-rec %>% ungroup() %>% filter(agem>24 & agem<=36) %>% summarise(n36=n())
-rec %>% ungroup() %>% filter(agem>36 & agem<=48) %>% summarise(n48=n())
-rec %>% ungroup() %>% filter(agem>48 & agem<=60) %>% summarise(n60=n())
-
-rec.24<- rec %>%
-  ungroup() %>%
-  filter(age24==1) %>%
-  select(studyid,country,subjid,haz,agem,rec)
+  mutate(rank=min_rank(-agedays)) %>%
+  filter(rank<= 2) %>%
+  # flag kids with 2 measurements not stunted
+  mutate(rec=ifelse(haz>= -2,1,0)) %>%
+  mutate(recsum=cumsum(rec)) %>%
+  # one row for each kid, indicator for recovered
+  summarise(maxrec=max(recsum)) %>%
+  mutate(rec24=ifelse(maxrec==2,1,0)) %>%
+  select(-c(maxrec))
 
 rs.24<- full_join(stunt.24,rec.24,by=c("studyid","country","subjid")) %>%
   group_by(studyid,country,subjid) %>%
-  summarise(st=max(stunted24),rec=max(rec)) %>%
+  summarise(st=max(stunted24),rec=max(rec24)) %>%
   mutate(str=ifelse(st==1 & rec==1,1,0))
 
 # cohort specific means
@@ -126,8 +152,6 @@ rec.data=rs.24 %>%
 rec.cohort=fit.escalc(data=rec.data,ni="N", xi="n",age="24 months",meas="PR")
 rec.cohort=cohort.format(rec.cohort, y=rec.cohort$yi,
     lab="24 months")
-
-
 
 # estimate random effects, format results
 fit=rma(ni = rec.data$N, xi = rec.data$n, method = "REML", 
@@ -167,7 +191,7 @@ ggplot(plot.df,aes(y=y,x=cohort))+
   geom_point(aes(shape=pooled),size=2)+coord_flip()+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
-  scale_y_continuous(limits=c(0,100))+
+  scale_y_continuous(limits=c(0,60))+
   scale_shape_manual("",values=c(16,15),guide=FALSE)+
   xlab("Cohort")+
   ylab("Percentage (95% CI)")+
