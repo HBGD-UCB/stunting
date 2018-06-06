@@ -115,7 +115,7 @@ cohort.format=function(df, lab, y, est="percent"){
   ))
   
    # create formatted age categories for plotting 
-  df <- df %>%  mutate(agecat=droplevels(agecat))
+  df <- df %>%  mutate(agecat=droplevels(as.factor(agecat)))
   df <- df %>%  mutate(age.f = factor(agecat,levels=levels(df$agecat),
                            labels=lab))
 
@@ -123,4 +123,92 @@ cohort.format=function(df, lab, y, est="percent"){
 }
 
 
+
+#---------------------------------------
+# recovery from stunted at age x by age y
+#---------------------------------------
+rec=function(agem,data){
+  rec <- data %>%
+    filter(agem<=r.agem[2]) %>%
+    # identify last two measurements prior to 24 months
+    group_by(studyid,country,subjid) %>%
+    mutate(rank=min_rank(-agedays)) %>%
+    # keep last two measurements 
+    filter(rank<= 2) %>%
+    # flag kids with 2 measurements not stunted
+    mutate(rec=ifelse(haz>= -2,1,0)) %>%
+    mutate(recsum=cumsum(rec)) %>%
+    # one row for each kid, indicator for recovered
+    summarise(maxrec=max(recsum)) %>%
+    mutate(rec=ifelse(maxrec==2,1,0)) %>%
+    select(-c(maxrec))
+  return(rec)
+}
+
+# inputs:
+rec.age=function(s.agem,r.agem,data){
+  # subset to stunted between birth and 3 months
+  stunt <- data %>%
+    filter(agem<=s.agem) 
+  
+    if(s.agem>1){
+      # identify last two measurements prior to 24 months
+      stunt <- stunt %>%
+        group_by(studyid,country,subjid) %>%
+        mutate(rank=min_rank(-agedays)) %>%
+        # drop last 2 measurements prior to 24 m
+        filter(rank> 2) 
+    }
+    # create stunting indicator
+   stunt <- stunt %>%
+    mutate(measid=seq_along(subjid))  %>%
+    mutate(stunted=ifelse(haz< -2,1,0),
+           lagstunted=lag(stunted),
+           leadstunted=lead(stunted))  %>%
+    # unique stunting episode
+    mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
+                             stunted==1 & measid==1,1,0)) %>%
+    # identify whether child had stunting episode by 24 months 
+     group_by(studyid,country,subjid) %>%
+     summarise(stunted=max(sepisode,na.rm=TRUE))
+  
+   rec.prev <- data %>%
+     filter(agem<=s.agem) %>%
+     # identify last two measurements prior to 24 months
+     group_by(studyid,country,subjid) %>%
+     mutate(rank=min_rank(-agedays)) %>%
+     # keep last two measurements 
+     filter(rank<= 2) %>%
+     # flag kids with 2 measurements not stunted
+     mutate(rec=ifelse(haz>= -2,1,0)) %>%
+     mutate(recsum=cumsum(rec)) %>%
+     # one row for each kid, indicator for recovered
+     summarise(maxrec=max(recsum)) %>%
+     mutate(rec.prev=ifelse(maxrec==2,1,0)) %>%
+     select(-c(maxrec))
+   
+   rec <- data %>%
+     filter(agem>s.agem & agem<=r.agem) %>%
+     # identify last two measurements prior to 24 months
+     group_by(studyid,country,subjid) %>%
+     mutate(rank=min_rank(-agedays)) %>%
+     # keep last two measurements 
+     filter(rank<= 2) %>%
+     # flag kids with 2 measurements not stunted
+     mutate(rec=ifelse(haz>= -2,1,0)) %>%
+     mutate(recsum=cumsum(rec)) %>%
+     # one row for each kid, indicator for recovered
+     summarise(maxrec=max(recsum)) %>%
+     mutate(rec=ifelse(maxrec==2,1,0)) %>%
+     select(-c(maxrec))
+  
+    rev <- full_join(stunt, rec,by=c("studyid","country","subjid")) 
+    rev <- full_join(rev, rec.prev,by=c("studyid","country","subjid")) %>%
+    # subset to kids who were stunted
+    filter(stunted==1) %>%
+    mutate(recovered=ifelse(stunted==1 & rec==1 & rec.prev==0,1,0)) %>%
+    select(-c(stunted,rec,rec.prev))
+  
+  return(rev)
+}
 
