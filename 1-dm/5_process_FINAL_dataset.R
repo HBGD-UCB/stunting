@@ -295,7 +295,7 @@ table(d$studyid, d$single)
 
 #Note Jivita-4 single mother seems way too high
 #drop single mother in kiGH5241-JiVitA-4 until the raw data can be checked more thoroughly
-d$gagebrth[d$studyid=="kiGH5241-JiVitA-4"] <-NA
+d$single[d$studyid=="kiGH5241-JiVitA-4"] <-NA
 
 
 #Calculate bmi from height and weight, and vice versa, for when 2 of 3 are measured
@@ -310,6 +310,13 @@ d$mwtkg[flag] <- d$mbmi[flag] * (d$mhtcm[flag] / 100)^2
 #height
 flag <- is.na(d$mhtcm) & !is.na(d$mwtkg) & !is.na(d$mbmi)
 d$mhtcm[flag] <- sqrt(d$mwtkg[flag] / d$mbmi[flag]) * 100
+
+
+#drop maternal weight and bmi in kiGH5241-JiVitA-3 as it is measured during pregnancy
+d$mbmi[d$studyid=="kiGH5241-JiVitA-3"] <-NA
+d$mwtkg[d$studyid=="kiGH5241-JiVitA-3"] <-NA
+
+
 
 #--------------------------------------------------------------------------
 # house characteristics
@@ -624,34 +631,6 @@ d$fage <- relevel(d$fage, ref=">=35")
 d$fhtcm <- relevel(d$fhtcm, ref="[160-170)")
 
 
-
-
-#---------------------------------------
-#Create an ID variable
-#---------------------------------------
-
-d$id <- NA
-d$id[d$studyid %in% c("ki1112895-iLiNS-Zinc",
-                      "kiGH5241-JiVitA-3",    
-                      "kiGH5241-JiVitA-4",
-                      "ki1119695-PROBIT",
-                      "ki1000304b-SAS-CompFeed")] <-d$clustid[d$studyid %in% c("ki1112895-iLiNS-Zinc",
-                                                                               "kiGH5241-JiVitA-3",    
-                                                                               "kiGH5241-JiVitA-4",
-                                                                               "ki1119695-PROBIT",
-                                                                               "ki1000304b-SAS-CompFeed")]
-d$id[!(d$studyid %in% c("ki1112895-iLiNS-Zinc",
-                        "kiGH5241-JiVitA-3",    
-                        "kiGH5241-JiVitA-4",
-                        "ki1119695-PROBIT",
-                        "ki1000304b-SAS-CompFeed"))] <-d$subjid[!(d$studyid %in% c("ki1112895-iLiNS-Zinc",
-                                                                                   "kiGH5241-JiVitA-3",    
-                                                                                   "kiGH5241-JiVitA-4",
-                                                                                   "ki1119695-PROBIT",
-                                                                                   "ki1000304b-SAS-CompFeed"))]
-d$id[d$studyid=="ki1135781-COHORTS" & d$country=="GUATEMALA"] <-d$clustid[d$studyid=="ki1135781-COHORTS" & d$country=="GUATEMALA"]
-
-table(is.na(d$id))
 
 
 #Set remaining risk factors to factors
