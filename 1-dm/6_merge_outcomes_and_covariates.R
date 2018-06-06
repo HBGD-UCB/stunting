@@ -37,6 +37,9 @@ cuminc$subjid <- as.character(cuminc$subjid)
 rev$subjid <- as.character(rev$subjid)
 
 
+null<-c("")
+
+
 #------------------------------------
 # Create cumulative incidence dataset
 #------------------------------------
@@ -65,7 +68,7 @@ V <- c("agecat")
 id <- c("id")
 
 
-save(d, Y, A,V, id, file="st_cuminc_rf.Rdata")
+save(d, Y, A,V, id, null,  file="st_cuminc_rf.Rdata")
 
 
 #------------------------------------
@@ -83,7 +86,7 @@ Y<-c("stunted","sstunted")
 
 
 
-save(d, Y, A,V, id, file="st_prev_rf.Rdata")
+save(d, Y, A,V, id, null,  file="st_prev_rf.Rdata")
 
 
 #------------------------------------
