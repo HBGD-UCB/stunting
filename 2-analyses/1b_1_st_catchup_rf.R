@@ -61,8 +61,15 @@ d %>%
 stunt.03 <- d %>%
   filter(agecat=="Birth" | agecat=="3 months") %>%
   group_by(studyid,country,subjid) %>%
-  summarise(minlaz03=min(haz)) %>%
-  mutate(stunted03=ifelse(minlaz03< -2, 1, 0)) 
+  mutate(measid=seq_along(subjid))  %>%
+  mutate(stunted=ifelse(haz< -2,1,0),
+         lagstunted=lag(stunted),
+         leadstunted=lead(stunted))  %>%
+  # unique stunting episode
+  mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
+                           stunted==1 & measid==1,1,0)) %>%
+  # identify whether child had stunting episode between 0 and 3 months 
+  summarise(stunted03=max(sepisode,na.rm=TRUE))
 
 rec.24 <- d %>%
   filter(agecat=="24 months") %>%
