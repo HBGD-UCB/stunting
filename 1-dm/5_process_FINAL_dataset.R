@@ -158,7 +158,7 @@ d <- d %>% subset(., select=-c(agedays, haz, waz))
 #merge in household assets PCA wealth
 #--------------------------------------------------------
 
-#convert subjid to character for the merge
+#convert subjid to character for the merge with covariate dataset
 d$subjid <- as.character(d$subjid)
 
 #load in pca results

@@ -188,6 +188,10 @@ ggplot(d[d$agedays<=365*2,],aes(x=agedays,y=haz))+geom_point(alpha=0.3)+geom_smo
 dev.off()
 
 
+#convert subjid to character for the merge with covariate dataset
+d$subjid <- as.character(d$subjid)
+
+
 save(d,file="U:/Data/Stunting/stunting_data.RData")
 
 
