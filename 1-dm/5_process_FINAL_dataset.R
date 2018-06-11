@@ -104,6 +104,12 @@ d$measurefreq[d$studyid %in% c(
   "ki1000304-ZnMort"
 )] <- "yearly"
 
+#Mark COHORTS and CMIN cohorts with different measurement frequency than quarterly
+d$measurefreq[d$studyid=="ki1114097-CMIN" & d$country=="BANGLADESH"] <- "monthly"
+d$measurefreq[d$studyid=="ki1114097-CMIN" & d$country=="PERU"] <- "monthly"
+d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="BRAZIL"),] #Drop because yearly but not an RCT
+d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop because yearly but not an RCT
+
 
 #--------------------------------------------------------
 #Code to keep monthly and quarterly studies
