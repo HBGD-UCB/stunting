@@ -54,8 +54,7 @@ colnames(d) <- tolower(colnames(d))
 gc()
 
 #Drop studies Vishak added to data product that don't meet inclusion criteria
-#d <- d %>% filter(studyid!="ki1000301-DIVIDS" & studyid!="ki1055867-WomenFirst" & studyid!="ki1135782-INCAP")
-d <- d[studyid!="ki1000301-DIVIDS" & studyid!="ki1055867-WomenFirst" & studyid!="ki1135782-INCAP"]
+d <- d[d$studyid!="ki1000301-DIVIDS" & d$studyid!="ki1055867-WomenFirst" & d$studyid!="ki1135782-INCAP"]
 
 #mark measure frequencies
 d$measurefreq <- NA
