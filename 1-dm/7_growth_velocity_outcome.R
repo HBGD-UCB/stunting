@@ -169,11 +169,11 @@ d[agedays>0, lencm := round(who_zscore2htcm(agedays-1, haz, sex = sex),1)]
 # take the closest available observations within (t1-/+tgap,t2-/+tgap)
 # where tgap is a preset window in days (14)
 t1vec = c(0,3,6,12)  ## 1st time-point in months
-t2vec = c(3,6,12,24) ## 1nd time-point in months
+t2vec = c(3,6,12,24) ## 2nd time-point in months
 outvec = c("haz","waz","lencm","wtkg")
 
 # t1mths   ## 1st time-point in months
-# t2mths   ## 1nd time-point in months
+# t2mths   ## 2nd time-point in months
 # tgap     ## number of days around the time-point of interest (measurement time)
 # yname    ## outcome
 growth_velocity = function(d, t1mths, t2mths, yname = "haz", tgap = 14) {
@@ -230,18 +230,31 @@ diffcatlevs = paste0(t1vec, "-", t2vec, " months")
 dd_out[, "diffcat" := factor(diffcat, levels = diffcatlevs)]
 head(dd_out[["diffcat"]])
 
-saveRDS(dd_out, file="velocity_haz_len_waz_wt.rds")
+saveRDS(dd_out, file="velocity_longfmt.rds")
+
+#--------------------------------------------------------------------------
+# resave in wide format (diff and rate for each outcome type are separate columns)
+#--------------------------------------------------------------------------
+dd_out <- readRDS(file="velocity_longfmt.rds")
+## cast to wide format:
+dd_out_wide <- dcast(dd_out,country+studyid+subjid+diffcat~ycat,value.var=c("y_diff","y_rate"))
+saveRDS(dd_out_wide, file="velocity_widefmt.rds")
 
 #--------------------------------------------------------------------------
 # add the baseline characteristics to the data (becomes "_rf")
 #--------------------------------------------------------------------------
 cov<-readRDS("FINAL_temp_clean_covariates.rds")
+dd_out <- readRDS(file="velocity_longfmt.rds")
 cov$subjid = as.integer64(cov$subjid)
-head(subjidint,1000)
+setDT(cov)
 
 dd_out_RF <- left_join(dd_out, cov, by=c("studyid", "subjid", "country"))
 dd_out_RF <- data.table(dd_out_RF)
-saveRDS(dd_out_RF, file="velocity_haz_len_waz_wt_rf.rds")
+saveRDS(dd_out_RF, file="velocity_longfmt_rf.rds")
+
+dd_out_wide_RF <- left_join(dd_out_wide, cov, by=c("studyid", "subjid", "country"))
+dd_out_wide_RF <- data.table(dd_out_wide_RF)
+saveRDS(dd_out_wide_RF, file="velocity_widefmt_rf.rds")
 
 dd_out_RF[, list(Mean_rate = mean(y_rate), N = .N), by = list(sex, ycat, diffcat)]
 #        sex  ycat      diffcat    Mean_rate     N
@@ -253,7 +266,6 @@ dd_out_RF[, list(Mean_rate = mean(y_rate), N = .N), by = list(sex, ycat, diffcat
 #  6:   Male   haz  6-12 months -0.034587049 27037
 #  7: Female   haz 12-24 months -0.032788457 12658
 #  8:   Male   haz 12-24 months -0.024167496 13267
-
 #  9: Female   waz   0-3 months  0.025372963 30198
 # 10:   Male   waz   0-3 months -0.036246121 31036
 # 11: Female   waz   3-6 months  0.052576208 26813
@@ -373,4 +385,5 @@ data.frame(dat_countr[N>500, ])
 # 103 Female   waz 12-24 months                       MALAWI -0.026440094   705
 # 104 Female   waz 12-24 months                  PHILIPPINES -0.028203970  1078
 # 105   Male   waz 12-24 months                  PHILIPPINES -0.017488925  1184
+
 
