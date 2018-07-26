@@ -126,33 +126,6 @@ d <- d %>% select(studyid, subjid, country, tr, agedays, haz, measurefreq)
 nrow(d)
 
 
-#--------------------------------------------
-# drop yearly measured intervention trials
-#--------------------------------------------
-#Keep monthly and quarterly studies
-d <- d %>% filter(measurefreq!="yearly")
-
-#--------------------------------------------
-# subset to control arms in intervention studies with effects
-#--------------------------------------------
-
-#Subset to control arms for intervention studies
-#d <- filter(d, tr=="Control" | tr=="")
-
-#--------------------------------------------
-# drop trial arms with intervention impact on HAZ
-# -either based on published literature or analysis
-# of effects on CI of stunting by 24months of age
-#--------------------------------------------
-d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
-d=d[-which(d$studyid=="kiGH5241-JiVitA-3" & d$tr!="Control"),]
-d=d[-which(d$studyid=="ki1135781-COHORTS" & d$tr=="Other"),]
-
-
 
 
 #--------------------------------------------
@@ -179,6 +152,47 @@ length(names(table(d$studyid)))
 table(d$studyid)
 table(d$studyid,d$country)
 
+#convert subjid to character for the merge with covariate dataset
+d$subjid <- as.character(d$subjid)
+
+
+#--------------------------------------------
+# Save intervention effects dataset
+#--------------------------------------------
+
+save(d,file="U:/Data/Stunting/int_stunting_data.RData")
+
+#--------------------------------------------
+# Subset to and save risk factor data
+#--------------------------------------------
+
+#Keep monthly and quarterly studies
+d <- d %>% filter(measurefreq!="yearly")
+
+save(d,file="U:/Data/Stunting/rf_stunting_data.RData")
+
+
+#--------------------------------------------
+# Subset to and save descriptive epi data
+#--------------------------------------------
+
+#--------------------------------------------
+# drop trial arms with intervention impact on HAZ
+# -either based on published literature or analysis
+# of effects on CI of stunting by 24months of age
+#--------------------------------------------
+d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
+d=d[-which(d$studyid=="kiGH5241-JiVitA-3" & d$tr!="Control"),]
+d=d[-which(d$studyid=="ki1135781-COHORTS" & d$tr=="Other"),]
+
+
+save(d,file="U:/Data/Stunting/stunting_data.RData")
+
+
 #--------------------------------------------
 # plot HAZ by agedays for included studies
 #--------------------------------------------
@@ -187,11 +201,5 @@ ggplot(d[d$agedays<=365*2,],aes(x=agedays,y=haz))+geom_point(alpha=0.3)+geom_smo
   facet_wrap(~studyid+country)+geom_hline(yintercept=-2,linetype="dashed",col="red")
 dev.off()
 
-
-#convert subjid to character for the merge with covariate dataset
-d$subjid <- as.character(d$subjid)
-
-
-save(d,file="U:/Data/Stunting/stunting_data.RData")
 
 

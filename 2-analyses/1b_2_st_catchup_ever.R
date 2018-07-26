@@ -142,6 +142,8 @@ nrow(rev.data)
 sum(rev.data$N.r)
 
 
+head(rev.data)
+
 rec.cohort=fit.escalc(data=rev.data,ni="N", xi="n",age="24 months",meas="PR")
 rec.cohort=cohort.format(rec.cohort, y=rec.cohort$yi,
                          lab="24 months")

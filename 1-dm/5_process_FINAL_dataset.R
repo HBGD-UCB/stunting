@@ -22,7 +22,6 @@ library(data.table)
 # install.packages("growthstandards")
 library(growthstandards)
 
-source("U:/GHAP-Data-Management/HBGDki_functions.R")
 
 
 setwd("U:/data")
@@ -32,20 +31,16 @@ gc()
 
 #Read rds file and drop unneeded columns
 d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T,
-         drop = c( "AGEIMPFL",  "WTKG",    "HTCM",    "LENCM",       
-                   "WHZ",     "BAZ",     "HCAZ",    "MUAZ",    
+         drop = c( "AGEIMPFL",  "WTKG",    "HTCM",    "LENCM",
+                   "BAZ",     "HCAZ",    "MUAZ",    
                    "REGCTRY", "REGCTYP", "CITYTOWN","LATITUDE","LONGITUD", "HHID",    "ARM", 
                    "DEAD",    "AGEDTH",  "CAUSEDTH","FEEDING",
-                   "DURBRST", "BRTHYR",  
-                   "ENSTUNT",
-                   "FWTKG", "FBMI",
-                   "BRFEED", 
-                   "SUMEP",   "SUMDIAR", "SUMDAYS",
-                   "PCTDIAR", "IMPSAN",  "SOAP",    "SAFEH2O", "TRTH2O",  "CLEANCK",
-                   "IMPFLOOR","H2OTIME",
+                   "DURBRST", "BRTHYR", "ENSTUNT", "FWTKG", "FBMI",
+                   "BRFEED", "SUMEP",   "SUMDIAR", "SUMDAYS",
+                   "PCTDIAR", "IMPSAN",  "SOAP",    "SAFEH2O", "H2OTIME",
                    "CHICKEN", "COW",     "CATTLE",  "INCTOT", 
                    "INCTOTU", "BFEDFL",  "EXBFEDFL","WEANFL",  "ANMLKFL", "PWMLKFL",
-                   "FORMLKFL","BOTTLEFL","H20FEDFL","OTHFEDFL","SLDFEDFL","NBFYES",  "EARLYBF", "CMFDINT", "DIARFL",  "LSSTLFL",
+                   "FORMLKFL","BOTTLEFL","H20FEDFL","OTHFEDFL","SLDFEDFL","NBFYES",   "CMFDINT", "DIARFL",  "LSSTLFL",
                    "NUMLS",   "BLDSTLFL","DIARFL_R","LSSTFL_R","NUMLS_R", "BLDSTL_R",
                    "DUR_R"))
 
@@ -54,7 +49,9 @@ colnames(d) <- tolower(colnames(d))
 gc()
 
 #Drop studies Vishak added to data product that don't meet inclusion criteria
-d <- d[d$studyid!="ki1000301-DIVIDS" & d$studyid!="ki1055867-WomenFirst" & d$studyid!="ki1135782-INCAP"]
+dim(d)
+d <- d[d$studyid!="ki1000301-DIVIDS" & d$studyid!="ki1055867-WomenFirst" & d$studyid!="ki1135782-INCAP",]
+dim(d)
 
 #mark measure frequencies
 d$measurefreq <- NA
@@ -110,6 +107,31 @@ d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="BRAZIL"),] #Drop because ye
 d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop because yearly but not an RCT
 
 
+
+
+#--------------------------------------------------------
+# Calculate longitudinal prevalence of wasting and stunting
+# in the first 6 months.
+#--------------------------------------------------------
+
+lprev <- d %>% group_by(studyid, country, subjid) %>%
+  #only keep it in monthly studies
+  filter(measurefreq=="monthly") %>%
+  filter(agedays<6*30.4167) %>%
+  mutate(wast=as.numeric(whz < -2), stunt=as.numeric(haz < -2)) %>%
+  summarize(wastprev06=mean(wast, na.rm=T), stuntprev06=mean(stunt, na.rm=T), anywast06=as.numeric(wastprev06>0), anystunt06=as.numeric(stuntprev06>0), 
+            pers_wast=as.numeric(wastprev06>=0.5), pers_stunt=as.numeric(stuntprev06>=0.5))
+head(lprev)
+
+table(lprev$anywast06)
+table(lprev$anystunt06)
+table(lprev$pers_wast)
+table(lprev$pers_stunt)
+
+lprev <- lprev %>% subset(., select = c(studyid, country,subjid, anywast06,  pers_wast))
+
+d <- left_join(d, lprev, by=c("studyid","country","subjid"))
+
 #--------------------------------------------------------
 #Code to keep monthly and quarterly studies
 #--------------------------------------------------------
@@ -119,34 +141,17 @@ d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop beca
 d <- d %>% subset(., select=-c(measurefreq))
 
 
-#--------------------------------------------------------
-#Subset to control arms for intervention studies
-#--------------------------------------------------------
-#table(d$studyid, d$tr)
-#d <- filter(d, tr=="Control" | tr=="")
 
-#--------------------------------------------
-# drop trial arms with intervention impact on HAZ
-# potentially subset cmin and cohorts to control too,
-# but currently there is no tr variable for them
-#--------------------------------------------
-# d=d[-which(d$studyid=="kiGH5241-JiVitA-4" & d$tr!="Control"),]
-# d=d[-which(d$studyid=="ki1119695-PROBIT" & d$tr!="Control"),]
-# d=d[-which(d$studyid=="ki1000304b-SAS-FoodSuppl" & d$tr!="Control"),]
-# d=d[-which(d$studyid=="ki1112895-iLiNS-Zinc" & d$tr!="Control"),]
-# d=d[-which(d$studyid=="ki1000304b-SAS-CompFeed" & d$tr!="Control"),]
-# 
-
-#Note-drop trial arms in the outcome dataset, not her
 
 
 #--------------------------------------------------------
-#Calculate stunting at enrollment and keep one observation per child
+#Calculate stunting and wastingat enrollment and keep one observation per child
 #Also check if children without a recorded birthweight or birthlength have WAZ or HAZ in the first year of life
 #--------------------------------------------------------
 d <- d %>% group_by(studyid, subjid) %>% 
-  arrange(agedays) %>% 
+  arrange(studyid, subjid, agedays) %>% 
   mutate(enstunt= as.numeric(haz < -2),
+         enwast= as.numeric(whz < -2),
          birthLAZ= haz,
          birthWAZ= waz) %>%
   slice(1) 
@@ -156,7 +161,7 @@ table(is.na(d$birthwt), d$agedays>1)
 #keep where anthro is measured on first day, but birth anthro is not recorded
 d$birthLAZ[d$agedays>1] <- NA 
 d$birthWAZ[d$agedays>1] <- NA
-d <- d %>% subset(., select=-c(agedays, haz, waz))
+d <- d %>% subset(., select=-c(agedays, haz, waz, whz))
 
 
 #--------------------------------------------------------
@@ -391,7 +396,7 @@ table(is.na(d$id))
 #--------------------------------------------------------
 
 colnames(d)
-d <- subset(d, select = -c(siteid, region,  clustid, tr, brthweek,   brthordr, ses))
+d <- subset(d, select = -c(siteid, region,  clustid, brthweek,   brthordr, ses))
 
 
 
@@ -666,6 +671,11 @@ for(i in 1:ncol(d)){
 
 
 
+#--------------------------------------------
+# Merge in raw data-extracted risk factors
+#--------------------------------------------
+
+
 #drop remaining unneeded columns
 d <- subset(d, select=-c(birthLAZ, birthWAZ))
 
@@ -675,6 +685,7 @@ d <- subset(d, select=-c(birthLAZ, birthWAZ))
 saveRDS(d, file="FINAL_temp_clean_covariates.rds")
 
 saveRDS(d, file="U:/UCB-SuperLearner/Stunting rallies/FINAL_temp_clean_covariates.rds")
+
 
 
 

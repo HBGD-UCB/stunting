@@ -1,5 +1,5 @@
 
-rm(list=ls())
+
 # FINAL dataset of all studies
 library(tidyverse)
 library(data.table)
@@ -19,7 +19,7 @@ gc()
 
 #Read rds file and drop unneeded columns
 d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T,
-         #colClasses = c(SUBJID = "integer64"),
+         colClasses = c(SUBJID = "integer64"),
          drop = c( "AGEIMPFL",  
                    # "WTKG",    "HTCM",    "LENCM",       
                    "WHZ",     "BAZ",     "HCAZ",    "MUAZ",    
@@ -103,8 +103,6 @@ d$measurefreq[d$studyid=="ki1114097-CMIN" & d$country=="PERU"] <- "monthly"
 d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="BRAZIL"),] #Drop because yearly but not an RCT
 d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop because yearly but not an RCT
 
-
-d$subjid <- as.character(d$subjid)
 
 #--------------------------------------------------------
 # filter out obs with missing sex
@@ -232,30 +230,31 @@ diffcatlevs = paste0(t1vec, "-", t2vec, " months")
 dd_out[, "diffcat" := factor(diffcat, levels = diffcatlevs)]
 head(dd_out[["diffcat"]])
 
-saveRDS(dd_out, file="U:/UCB-SuperLearner/Stunting rallies/velocity_longfmt.rds")
+saveRDS(dd_out, file="velocity_longfmt.rds")
 
 #--------------------------------------------------------------------------
 # resave in wide format (diff and rate for each outcome type are separate columns)
 #--------------------------------------------------------------------------
-dd_out <- readRDS(file="U:/UCB-SuperLearner/Stunting rallies/velocity_longfmt.rds")
+dd_out <- readRDS(file="velocity_longfmt.rds")
 ## cast to wide format:
 dd_out_wide <- dcast(dd_out,country+studyid+subjid+diffcat~ycat,value.var=c("y_diff","y_rate"))
-saveRDS(dd_out_wide, file="U:/UCB-SuperLearner/Stunting rallies/velocity_widefmt.rds")
+saveRDS(dd_out_wide, file="velocity_widefmt.rds")
 
 #--------------------------------------------------------------------------
 # add the baseline characteristics to the data (becomes "_rf")
 #--------------------------------------------------------------------------
 cov<-readRDS("U:/UCB-SuperLearner/Stunting rallies/FINAL_temp_clean_covariates.rds")
-dd_out <- readRDS(file="U:/UCB-SuperLearner/Stunting rallies/velocity_longfmt.rds")
+dd_out <- readRDS(file="velocity_longfmt.rds")
+cov$subjid = as.integer64(cov$subjid)
 setDT(cov)
 
 dd_out_RF <- left_join(dd_out, cov, by=c("studyid", "subjid", "country"))
 dd_out_RF <- data.table(dd_out_RF)
-saveRDS(dd_out_RF, file="U:/UCB-SuperLearner/Stunting rallies/velocity_longfmt_rf.rds")
+saveRDS(dd_out_RF, file="velocity_longfmt_rf.rds")
 
 dd_out_wide_RF <- left_join(dd_out_wide, cov, by=c("studyid", "subjid", "country"))
 dd_out_wide_RF <- data.table(dd_out_wide_RF)
-saveRDS(dd_out_wide_RF, file="U:/UCB-SuperLearner/Stunting rallies/velocity_widefmt_rf.rds")
+saveRDS(dd_out_wide_RF, file="velocity_widefmt_rf.rds")
 
 dd_out_RF[, list(Mean_rate = mean(y_rate), N = .N), by = list(sex, ycat, diffcat)]
 #        sex  ycat      diffcat    Mean_rate     N
@@ -386,6 +385,5 @@ data.frame(dat_countr[N>500, ])
 # 103 Female   waz 12-24 months                       MALAWI -0.026440094   705
 # 104 Female   waz 12-24 months                  PHILIPPINES -0.028203970  1078
 # 105   Male   waz 12-24 months                  PHILIPPINES -0.017488925  1184
-
 
 

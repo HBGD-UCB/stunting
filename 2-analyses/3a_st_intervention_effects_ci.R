@@ -17,8 +17,8 @@ library(washb)
 #--------------------------------------------
 
 # setwd("U:/data/")
-#  d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
-d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
+  d<-fread("U:/data/FINAL/UCB Rally7/Main/adam/FINAL.csv", header = T)
+#d<-fread("U:/data/Stunting/Full-compiled-data/FINAL.csv", header = T)
 
 #change names to lower case
 colnames(d) <- tolower(colnames(d))
@@ -131,14 +131,6 @@ d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="BRAZIL"),] #Drop because ye
 d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop because yearly but not an RCT
 
 
-
-#--------------------------------------------
-# drop yearly measured intervention trials
-#--------------------------------------------
-#Keep monthly and quarterly studies
-d <- d %>% filter(measurefreq!="yearly")
-
-
 #--------------------------------------------
 # Keep intervention studies
 #--------------------------------------------
@@ -173,12 +165,11 @@ length(names(table(d$studyid)))
 
 # define age windows
 d = d %>% 
-  mutate(agecat=ifelse(agedays<=3*30.4167,"3 months",
-                       ifelse(agedays>3*30.4167 & agedays<=6*30.4167,"6 months",
+  mutate(agecat=ifelse(agedays<=6*30.4167,"6 months",
                               ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
                                      ifelse(agedays>12*30.4167 & agedays<=18*30.4167,"18 months",
-                                            ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months","")))))) %>%
-  mutate(agecat=factor(agecat,levels=c("3 months","6 months","12 months","18 months","24 months")))
+                                            ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months",""))))) %>%
+  mutate(agecat=factor(agecat,levels=c("6 months","12 months","18 months","24 months")))
 
 # check age categories
 d %>%
@@ -194,11 +185,10 @@ evs = d %>%
   group_by(studyid,country,subjid) %>%
   arrange(studyid,subjid) %>%
   #create variable with minhaz by age category, cumulatively
-  mutate(minhaz=ifelse(agecat=="3 months",min(haz[agecat=="3 months"]),
-                       ifelse(agecat=="6 months",min(haz[agecat=="3 months" | agecat=="6 months"]),
-                              ifelse(agecat=="12 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="12 months"]),
-                                     ifelse(agecat=="18 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="12 months"|agecat=="18 months"]),
-                                            min(haz)))))) %>%
+  mutate(minhaz=ifelse(ifelse(agecat=="6 months",min(haz[agecat=="6 months"]),
+                              ifelse(agecat=="12 months",min(haz[agecat=="12 months"]),
+                                     ifelse(agecat=="18 months",min(haz[agecat=="18 months"]),
+                                            min(haz))))) %>%
   # create indicator for whether the child was ever stunted
   # by age category
   group_by(studyid,country,agecat,subjid) %>%

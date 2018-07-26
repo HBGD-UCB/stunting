@@ -100,7 +100,8 @@ cohort.format=function(df, lab, y, est="percent"){
     country=="BANGLADESH" | country=="INDIA"|
       country=="NEPAL" | country=="PAKISTAN"|
       country=="PHILIPPINES"                   ~ "Asia", 
-      
+      country=="KENYA"|
+      country=="GHANA"|
       country=="BURKINA FASO"|
       country=="GUINEA-BISSAU"|
       country=="MALAWI"|

@@ -1,0 +1,121 @@
+
+
+
+
+rm(list=ls())
+library(tidyverse)
+
+
+#quantiling functions
+quantile_rf <- function(A, labs=NULL, Acuts=NULL){
+  A<-as.numeric(A)
+  if(sum(is.na(A))!=length(A)){
+    if(is.null(Acuts)){
+      Acuts=c(0, as.numeric(quantile(A, probs = c(.25,.5,.75), na.rm=T)), max(A, na.rm=T))
+    }
+    
+    if(length(Acuts)==4){
+      Alevels=c(paste0("<",round(Acuts[2],2)), 
+                paste0("[",round(Acuts[2],2),"-",round(Acuts[3],2),")"),
+                paste0(">=",round(Acuts[3],2))) 
+    }
+    if(length(Acuts)==5){
+      Alevels=c(paste0("<",round(Acuts[2],2)), 
+                paste0("[",round(Acuts[2],2),"-",round(Acuts[3],2),")"),
+                paste0("[",round(Acuts[3],2),"-",round(Acuts[4],2),")"), 
+                paste0(">=",round(Acuts[4],2))) 
+    }
+    if(length(Acuts)==6){
+      Alevels=c(paste0("<",round(Acuts[2],2)), 
+                paste0("[",round(Acuts[2],2),"-",round(Acuts[3],2),")"),
+                paste0("[",round(Acuts[3],2),"-",round(Acuts[4],2),")"),
+                paste0("[",round(Acuts[4],2),"-",round(Acuts[5],2),")"), 
+                paste0(">=",round(Acuts[5],2))) 
+    }    
+    
+    
+    if(!is.null(labs)){
+      Alevels=labs
+    }
+    
+    if(length(unique(Acuts))==length((Acuts))){
+      A <- cut(A, include.lowest = T, right = FALSE, breaks=Acuts,labels=Alevels)
+    }else{
+      A <- cut(A, include.lowest = T, right = FALSE, breaks=4,labels=c("Q1","Q2","Q3","Q4","Q5")[1:(length(Acuts)-1)])
+    }
+    A <- factor(A)
+    return(A)
+  }
+}
+
+
+
+
+#merge covariates with additional raw data covariates
+
+# setwd("U:/UCB-SuperLearner/Stunting rallies/")
+setwd("U:/ucb-superlearner/Stunting rallies/")
+
+#load covariates
+d<-readRDS("FINAL_temp_clean_covariates.rds")
+
+
+load("U:/data/Raw Data Cleaning/BF_dataset.Rdata")
+load("U:/data/Raw Data Cleaning/rawdiar_df.Rdata")
+load("U:/data/Raw Data Cleaning/improved_sanitation_dataset.Rdata")
+load("U:/data/Raw Data Cleaning/improved_water_dataset.Rdata")
+
+
+
+head(bf_6mo)
+head(diar)
+head(dh20)
+head(dsan)
+
+
+#Sanitation
+dsan <- dsan %>% subset(., select = c(impsan, studyid, country, subjid))
+
+
+table(dsan$impsan)
+table(dsan$studyid, dsan$impsan)
+
+dsan$subjid <- as.character(dsan$subjid)
+d <- left_join(d, dsan, by=c("studyid", "country", "subjid"))
+table(d$impsan)
+table(d$studyid, d$impsan)
+
+
+#Drinking water
+dh20$subjid <- as.character(dh20$subjid)
+d <- left_join(d, dh20, by=c("studyid", "country", "subjid"))
+table(d$safeh20)
+table(d$studyid, d$safeh20)
+
+#diarrhea
+diar$subjid <- as.character(diar$subjid)
+d <- left_join(d, diar, by=c("studyid", "subjid"))
+
+#quartile diarrhea
+summary(d$perdiar6)
+summary(d$perdiar24)
+
+d$perdiar6 <- quantile_rf(d$perdiar6, labs=c("Q1","Q2","Q3","Q4"))
+d$perdiar24 <- quantile_rf(d$perdiar24, labs=c("Q1","Q2","Q3","Q4"))
+
+#breastfeeding
+d <- left_join(d, bf_6mo, by=c("studyid", "country", "subjid"))
+
+
+#Convert all columns to factors
+for(i in 3:ncol(d)){
+  if(class(d[,i])!="factor"){
+    d[,i] <- as.factor(d[,i])
+  }
+}
+d$id <- as.numeric(d$id)
+
+saveRDS(d, "FINAL_clean_covariates.rds")
+
+
+

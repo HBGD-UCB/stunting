@@ -2,7 +2,7 @@
 # Stunting analysis
 # Objective 1b
 # Calculate catch up growth at
-# 3, 6, 9, 12, 18, and 24 mo of age
+# 3, 6, 9, 12, 18, 24, 30, 36, 42, and 48 mo of age
 
 # Cohort specific estimates & 
 # Pooled estimates using random effects
@@ -13,7 +13,13 @@
 # What proportion of children stunted at 9 months were no longer stunted at 12 months? 
 # What proportion of children stunted at 12 months were no longer stunted at 18 months? 
 # What proportion of children stunted at 18 months were no longer stunted at 24 months? 
+
+# What proportion of children stunted at 24 months were no longer stunted at 30 months? 
+# What proportion of children stunted at 24 months were no longer stunted at 36 months? 
+# What proportion of children stunted at 24 months were no longer stunted at 42 months? 
+# What proportion of children stunted at 24 months were no longer stunted at 48 months? 
 #-----------------------------------
+
 rm(list=ls())
 library(dplyr)
 library(ggplot2)
@@ -42,14 +48,25 @@ d <- d %>% ungroup() %>% mutate(subjid=as.character(subjid))
 # (ie, for 6 months, consider recovery in the window  up to 7 months)
 d = d %>% 
   mutate(agecat=ifelse(agedays==1,"Birth",
-                   ifelse(agedays>1 & agedays<=3.5*30.4167,"3 months",
-                       ifelse(agedays>3.5*30.4167 & agedays<=6.5*30.4167,"6 months",
-                              ifelse(agedays>6.5*30.4167 & agedays<=9.5*30.4167,"9 months",
-                                  ifelse(agedays>9.5*30.4167 & agedays<=12.5*30.4167,"12 months",
-                                     ifelse(agedays>12.5*30.4167 & agedays<=18.5*30.4167,"18 months",
-                                            ifelse(agedays>18.5*30.4167& agedays<=24.5*30.4167,"24 months","")))))))) %>%
-  mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months","9 months","12 months","18 months","24 months")))
-
+                       ifelse(agedays>1 & agedays<=3.5*30.4167,"3 months",
+                              ifelse(agedays>3.5*30.4167 & agedays<=6.5*30.4167,"6 months",
+                                     ifelse(agedays>6.5*30.4167 & agedays<=9.5*30.4167,"9 months",
+                                            ifelse(agedays>9.5*30.4167 & agedays<=12.5*30.4167,"12 months",
+                                                   ifelse(agedays>12.5*30.4167 & agedays<=15.5*30.4167,"15 months",
+                                                          ifelse(agedays>15.5*30.4167 & agedays<=18.5*30.4167,"18 months",
+                                                                 ifelse(agedays>18.5*30.4167 & agedays<=21.5*30.4167,"21 months",
+                                                                        ifelse(agedays>21.5*30.4167 & agedays<=24.5*30.4167,"24 months",
+                                                                               ifelse(agedays>24.5*30.4167 & agedays<=27.5*30.4167,"27 months",
+                                                                                      ifelse(agedays>27.5*30.4167 & agedays<=30.5*30.4167,"30 months",
+                                                                                             ifelse(agedays>30.5*30.4167 & agedays<=33.5*30.4167,"33 months",
+                                                                                                    ifelse(agedays>33.5*30.4167 & agedays<=36.5*30.4167,"36 months",
+                                                                                                           ifelse(agedays>36.5*30.4167 & agedays<=39.5*30.4167,"39 months",
+                                                                                                                  ifelse(agedays>39.5*30.4167 & agedays<=42.5*30.4167,"42 months",
+                                                                                                                         ifelse(agedays>42.5*30.4167 & agedays<=45.5*30.4167,"45 months",
+                                                                                                                                ifelse(agedays>45.5*30.4167& agedays<=48.5*30.4167,"48 months","")))))))))))))))))) %>%
+  mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months","9 months","12 months","18 months","24 months",
+                                       "27 months", "30 months", "33 months", "36 months", "39 months", "42 months", 
+                                       "45 months", "48 months")))
 # check age categories
 d %>%
   group_by(agecat) %>%

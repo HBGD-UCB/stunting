@@ -19,6 +19,7 @@ load("U:/Data/Stunting/stunting_data.RData")
 
 # define age windows
 d = d %>% 
+  #filter(agedays>1) %>%
   mutate(agecat=ifelse(agedays<=3*30.4167,"3 months",
        ifelse(agedays>3*30.4167 & agedays<=6*30.4167,"6 months",
            ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
@@ -50,6 +51,8 @@ d %>%
     group_by(studyid,country,agecat,subjid) %>%
     summarise(minhaz=min(minhaz)) %>%
     mutate(ever_stunted=ifelse(minhaz< -2,1,0))
+  
+  
     
 # count incident cases per study by age
 # exclude time points if number of measurements per age
@@ -285,10 +288,204 @@ ggplot(ci.res.birth,aes(y=est,x=agecat.f))+
   ggtitle("Pooled cumulative incidence of stunting - birth cohorts only - CI includes birth")
 dev.off()
 
+
+
+
+#--------------------------------------
+# Calculate cumulative incidence of
+# Stunting in certain age ranges for the
+# Intervention effects analysis
+#--------------------------------------
+
+
+# identify ever stunted children in age ranges
+df<-d
+df$agecat[df$agecat=="3 months"] <- "6 months"
+
+stunt_ci_age_ranges = df %>% ungroup() %>%
+  filter(!is.na(agecat)) %>%
+  group_by(studyid,country,subjid, agecat) %>%
+  #create variable with minhaz by age category, cumulatively
+  mutate(minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0), N=n()) %>% slice(1) %>%
+  ungroup() 
+
+cuminc.data.agerange <- stunt_ci_age_ranges %>% group_by(studyid,country, agecat) %>% 
+  summarize(nstudy=1, ncases=sum(ever_stunted),nchild=n()) %>%
+  subset(., select=c(studyid, country, agecat, nchild, nstudy, ncases,N))
+
+# estimate random effects, format results
+ci.res.agerange=lapply(list("6 months","12 months","18 months","24 months"),function(x)
+  fit.rma(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,measure="PR",nlab=" measurements"))
+ci.res.agerange=as.data.frame(do.call(rbind, ci.res.agerange))
+ci.res.agerange[,4]=as.numeric(ci.res.agerange[,4])
+ci.res.agerange = ci.res.agerange %>%
+  mutate(est=est*100, lb=lb*100, ub=ub*100)
+ci.res.agerange$agecat.f=as.factor(ifelse(ci.res.agerange$agecat=="6 months","0-6 months",
+                                        ifelse(ci.res.agerange$agecat=="12 months","7-12 months",
+                                               ifelse(ci.res.agerange$agecat=="18 months","13-18 months","19-24 months"))))
+ci.res.agerange$agecat.f=factor(ci.res.agerange$agecat.f,levels=c("0-6 months",
+                                                "7-12 months","13-18 months","19-24 months"))
+ci.res.agerange$ptest.f=sprintf("%0.0f",ci.res.agerange$est)
+
+ci.res.agerange
+
+# plot pooled cumulative incidence
+pdf("U:/Figures/stunting-cuminc-pool-agerange.pdf",width=9,height=3.5,onefile=TRUE)
+ggplot(ci.res.agerange,aes(y=est,x=agecat.f))+
+  geom_point(size=3)+
+  geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
+  scale_y_continuous(limits=c(0,80))+
+  xlab("Age category")+
+  ylab("Cumulative incidence per 100 children (95% CI)")+
+  annotate("text",x=ci.res.agerange$agecat.f,y=5,label=ci.res.agerange$nmeas.f,size=3)+
+  annotate("text",x=ci.res.agerange$agecat.f,y=1,label=ci.res.agerange$nstudy.f,size=3)+
+  annotate("text",label=ci.res.agerange$ptest.f,x=ci.res.agerange$agecat.f,
+           y=ci.res.agerange$est,hjust=-0.75,size=3)+
+  ggtitle("Pooled cumulative incidence of stunting within 6-month age ranges")
+dev.off()
+
+
+
+
+#--------------------------------------
+# Calculate cumulative incidence of
+# Stunting in certain age ranges only
+# including children who had not yet
+# become stunted in prior age ranges
+#--------------------------------------
+
+
+stunt_ci = d %>% ungroup() %>%
+  #filter(!is.na(agecat) ) %>%
+  filter(!is.na(agecat) & agedays>1) %>%
+  group_by(studyid,country,subjid) %>%
+  arrange(studyid,country,subjid,agedays) %>%
+  mutate(stunt = as.numeric(haz < -2), stunt_nmeas=cumsum(stunt), stunt_onset= as.numeric(stunt==1 & stunt_nmeas==1)) %>%
+  filter(stunt_nmeas<2) %>%
+  ungroup() %>% group_by(studyid,country, agecat) %>% mutate(N=n()) %>%
+  ungroup() %>% group_by(studyid,country,subjid, agecat) %>% arrange(desc(stunt_onset)) %>% slice(1) %>% 
+  ungroup() 
+
+
+# count incident cases per study by age
+# exclude time points if number of measurements per age
+# in a study is <50  
+cuminc.data.agerange <- stunt_ci%>%
+  group_by(studyid,country,agecat) %>%
+  summarise(
+    nchild=length(unique(subjid)),
+    nstudy=length(unique(studyid)),
+    ncases=sum(stunt_onset),
+    N=sum(length(stunt_onset))) %>%
+  filter(N>=50)
+
+
+
+# manually calculate incident cases, person-time at risk at each time point
+stunt_ci %>% group_by(studyid,country,agecat) %>% filter(N>=50) %>%
+  group_by(agecat) %>%
+  summarise(inc.case=sum(stunt_onset),N= n())
+
+
+#cuminc.data %>% group_by(agecat) %>% summarise(mean(ncases/nchild))
+cuminc.data.agerange %>% group_by(agecat) %>% summarize(sum(ncases), sum(N), one=mean(ncases/N), two=sum(ncases)/sum(N))
+
+
+# estimate random effects, format results
+gc()
+ci.res.agerange=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
+  fit.rma(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,measure="PR",nlab=" at-risk"))
+ci.res.agerange=as.data.frame(do.call(rbind, ci.res.agerange))
+ci.res.agerange[,4]=as.numeric(ci.res.agerange[,4])
+ci.res.agerange = ci.res.agerange %>%
+  mutate(est=est*100, lb=lb*100, ub=ub*100)
+ci.res.agerange$agecat.f=as.factor(ifelse(ci.res.agerange$agecat=="3 months","2 days-3 months",
+                                    ifelse(ci.res.agerange$agecat=="6 months","3-6 months",
+                                          ifelse(ci.res.agerange$agecat=="12 months","6-12 months",
+                                                 ifelse(ci.res.agerange$agecat=="18 months","12-18 months","18-24 months")))))
+ci.res.agerange$agecat.f=factor(ci.res.agerange$agecat.f,levels=c("2 days-3 months","3-6 months",
+                                                                  "6-12 months","12-18 months","18-24 months"))
+ci.res.agerange$ptest.f=sprintf("%0.0f",ci.res.agerange$est)
+
+ci.res.agerange
+
+# plot pooled cumulative incidence
+pdf("U:/Figures/stunting-incprop-pool.pdf",width=9,height=3.5,onefile=TRUE)
+ggplot(ci.res.agerange,aes(y=est,x=agecat.f))+
+  geom_point(size=3)+
+  geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05) +
+  scale_y_continuous(limits=c(0,40))+
+  xlab("Age category")+
+  ylab("Incidence proportion (95% CI)")+
+  annotate("text",x=ci.res.agerange$agecat.f,y=5,label=ci.res.agerange$nmeas.f,size=3)+
+  annotate("text",x=ci.res.agerange$agecat.f,y=1,label=ci.res.agerange$nstudy.f,size=3)+
+  annotate("text",label=ci.res.agerange$ptest.f,x=ci.res.agerange$agecat.f,
+           y=ci.res.agerange$est,hjust=-0.75,size=3)+
+  ggtitle("Pooled, age-stratified incidence proportion of stunting")
+dev.off()
+
+
+#--------------------------------------
+# cohort specific incidence proportion
+#--------------------------------------
+
+ip.cohort=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x) 
+  fit.escalc(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,meas="PR"))
+ip.cohort=as.data.frame(do.call(rbind, ip.cohort))
+ip.cohort=cohort.format(ip.cohort,y=ip.cohort$yi,
+                        lab=  c("3 months","6 months","12 months","18 months","24 months"))
+
+
+pdf("U:/Figures/stunting-incprop-africa.pdf",width=11,height=5,onefile=TRUE)
+ggplot(ip.cohort[ip.cohort$region=="Africa",],
+       aes(y=y,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Percent stunted (95% CI)")+
+  ggtitle("Cohort-specific incidence proportion of stunting within age ranges - Africa")
+
+dev.off()
+
+pdf("U:/Figures/stunting-incprop-latamer-eur.pdf",width=11,height=5,onefile=TRUE)
+ggplot(ip.cohort[ip.cohort$region=="Latin America"|
+                   ip.cohort$region=="Europe",],
+       aes(y=y,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Percent stunted (95% CI)")+
+  ggtitle("Cohort-specific incidence proportion of stunting within age ranges - Latin America & Europe")
+dev.off()
+
+pdf("U:/Figures/stunting-incprop-asia.pdf",width=17,height=7,onefile=TRUE)
+ggplot(ip.cohort[ip.cohort$region=="Asia",],
+       aes(y=y,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Percent stunted (95% CI)")+
+  ggtitle("Cohort-specific incidence proportion of stunting within age ranges - Asia")
+dev.off()
+
+
+
+
+
+#--------------------------------------
 # export data 
+#--------------------------------------
+
 cuminc=evs %>% select(studyid,country,subjid,agecat,ever_stunted) 
 
 save(cuminc,file="U:/Data/Stunting/st_cuminc.RData")
-save(cuminc,file="U:/ucb-superlearner/Stunting rallies/st_cuminc.RData")
+
+
 
 
