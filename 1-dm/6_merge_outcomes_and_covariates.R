@@ -54,6 +54,7 @@ d <- left_join(cuminc, cov, by=c("studyid", "subjid", "country"))
 head(d)
 
 
+
 #Vector of outcome names
 Y<-c("ever_stunted")
 
@@ -137,7 +138,7 @@ head(d)
 
 
 #Vector of outcome names
-Y<-c("y_rate")
+Y<-c("y_rate_haz")
 
 
 #Vector of covariate names
@@ -161,7 +162,7 @@ head(d)
 
 
 #Vector of outcome names
-Y<-c("y_rate")
+Y<-c("y_rate_len")
 
 
 #Vector of covariate names
@@ -185,6 +186,19 @@ save(d, Y, A,V, id, file="st_len_vel_rf.Rdata")
 load("st_int_prev.RData")
 load("st_int_cuminc.RData")
 
+int_cov <- readRDS("U:/data/intervention_cov_dataset.rds")
+
+#create outcome dataframes for secondary contrasts
+int_prev2 <- int_prev %>% filter(studyid=="ki1112895-iLiNS-Zinc" | studyid=="ki1148112-iLiNS-DYAD-M")
+int_cuminc2 <- int_cuminc %>% filter(studyid=="ki1112895-iLiNS-Zinc" | studyid=="ki1148112-iLiNS-DYAD-M")
+
+int_prev2$studyid[int_prev2$studyid=="ki1112895-iLiNS-Zinc"] <- "iLiNS-Zinc_ZvLNS"
+int_prev2$studyid[int_prev2$studyid=="ki1148112-iLiNS-DYAD-M"] <- "iLiNS_DYADM_LNS"
+
+int_cuminc2$studyid[int_cuminc2$studyid=="ki1112895-iLiNS-Zinc"] <- "iLiNS-Zinc_ZvLNS"
+int_cuminc2$studyid[int_cuminc2$studyid=="ki1148112-iLiNS-DYAD-M"] <- "iLiNS_DYADM_LNS"
+
+
 
 #-------------------------------------
 # Prevalence
@@ -192,10 +206,17 @@ load("st_int_cuminc.RData")
 
 
 #merge in covariates
-d <- left_join(int_prev, cov, by=c("studyid", "subjid", "country"))
+d <- left_join(int_prev, int_cov, by=c("studyid", "subjid", "country"))
 head(d)
 
+#merge in secondary intervention contrasts
+d2 <- left_join(int_prev2, int_cov, by=c("studyid", "subjid", "country"))
+d2 <- d2 %>% filter(!is.na(stunted) & !is.na(tr))
+
+d <- bind_rows(d, d2)
 d <- droplevels(d)
+
+
 
 
 #Vector of outcome names
@@ -262,11 +283,17 @@ save(d, Y, A,V, id, file="st_prev_int.Rdata")
 
 
 int_cuminc <- int_cuminc %>% subset(., select = -c(tr))
+int_cuminc2 <- int_cuminc2 %>% subset(., select = -c(tr))
 
 #merge in covariates
-d <- left_join(int_cuminc, cov, by=c("studyid", "subjid", "country"))
+d <- left_join(int_cuminc, int_cov, by=c("studyid", "subjid", "country"))
 head(d)
 
+#merge in secondary intervention contrasts
+d2 <- left_join(int_cuminc2, int_cov, by=c("studyid", "subjid", "country"))
+d2 <- d2 %>% filter(!is.na(ever_stunted) & !is.na(tr))
+
+d <- bind_rows(d, d2)
 d <- droplevels(d)
 
 
@@ -335,314 +362,245 @@ save(d, Y, A,V, id, file="st_cuminc_int.Rdata")
 # Create list of adjustment variables
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-
 adjustment_sets <- list( 
-  sex=c( "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-         "mhtcm","mwtkg","mbmi", "fhtcm",
-         "vagbrth","hdlvry",
-         "gagebrth","birthwt","birthlen",
-         "single",
-         "nrooms","nhh","nchldlt5",
-         "month","brthmon","parity",
-         "trth2o","cleanck","impfloor","impsan","safeh20"),   
   
-  gagebrth=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
-             "vagbrth","hdlvry",
+  gagebrth=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+             #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
+             "W_nrooms","W_nhh","W_nchldlt5",
+             "brthmon","W_parity",
              "trth2o","cleanck","impfloor","impsan","safeh20"),         
   
-  birthwt=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
+  birthwt=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+            #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
             "vagbrth","hdlvry",
             "single",
-            "nrooms","nhh","nchldlt5",
-            "month","brthmon","parity",
+            "W_nrooms","W_nhh","W_nchldlt5",
+            "brthmon","W_parity",
             "trth2o","cleanck","impfloor","impsan","safeh20"),   
   
-  birthlen=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
+  birthlen=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+             #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
              "vagbrth","hdlvry",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
+             "W_nrooms","W_nhh","W_nchldlt5",
+             "brthmon","W_parity",
              "trth2o","cleanck","impfloor","impsan","safeh20"),   
   
-  enstunt=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
+  enstunt=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+            #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
             "vagbrth","hdlvry",
             "single",
-            "nrooms","nhh","nchldlt5",
-            "month","brthmon","parity",
-            "trth2o","cleanck","impfloor","impsan","safeh20"),      
-  
-  vagbrth=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
-            "hdlvry",
-            "single",
-            "nrooms","nhh","nchldlt5",
-            "month","brthmon","parity",
+            "W_nrooms","W_nhh","W_nchldlt5",
+            "brthmon","W_parity",
             "trth2o","cleanck","impfloor","impsan","safeh20"),     
   
-  hdlvry=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
+  enwast=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+           "vagbrth","hdlvry",
            "single",
-           "nrooms","nhh","nchldlt5",
-           "month","brthmon","parity",
+           "W_nrooms","W_nhh","W_nchldlt5",
+           "brthmon","W_parity",
+           "trth2o","cleanck","impfloor","impsan","safeh20"),  
+  
+  vagbrth=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+            "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+            "hdlvry",
+            "single",
+            "W_nrooms","W_nhh","W_nchldlt5",
+            "brthmon","W_parity",
+            "trth2o","cleanck","impfloor","impsan","safeh20"),     
+  
+  hdlvry=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+           "single",
+           "W_nrooms","W_nhh","W_nchldlt5",
+           "brthmon","W_parity",
            "trth2o","cleanck","impfloor","impsan","safeh20"),      
   
-  mage=c("sex", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-         "mhtcm","mwtkg","mbmi", "fhtcm",
-         "gagebrth","birthwt","birthlen",
+  mage=c("arm","W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+         "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
          "single",
-         "nrooms","nhh","nchldlt5",
-         "month","brthmon",
-         "trth2o","cleanck","impfloor","impsan","safeh20"),     
-  
-  mhtcm=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-          "fhtcm",
-          "vagbrth","hdlvry",
-          "gagebrth",
-          "single",
-          "nrooms","nhh","nchldlt5",
-          "month","brthmon","parity",
-          "trth2o","cleanck","impfloor","impsan","safeh20"),    
-  
-  mwtkg=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-          "fhtcm",
-          "vagbrth","hdlvry",
-          "single",
-          "nrooms","nhh","nchldlt5",
-          "month","brthmon","parity",
-          "trth2o","cleanck","impfloor","impsan","safeh20"),
-  
-  mbmi=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-         "fhtcm",
-         "vagbrth","hdlvry",
-         "single",
-         "nrooms","nhh","nchldlt5",
-         "month","brthmon","parity",
-         "trth2o","cleanck","impfloor","impsan","safeh20"),      
-  
-  single=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
-           "vagbrth","hdlvry",
-           "gagebrth","birthwt","birthlen",
-           "nrooms","nhh","nchldlt5",
-           "month","brthmon","parity",
-           "trth2o","cleanck","impfloor","impsan","safeh20"),    
-  
-  fage=c("sex", "mage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-         "mhtcm","mwtkg","mbmi", "fhtcm",
-         "vagbrth","hdlvry",
-         "gagebrth",
-         "single",
-         "nrooms","nhh","nchldlt5",
-         "month","brthmon",
+         "W_nrooms","W_nhh","W_nchldlt5",
          "trth2o","cleanck","impfloor","impsan","safeh20"),   
   
-  fhtcm=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-          "mhtcm","mwtkg","mbmi",
-          "vagbrth","hdlvry",
-          "gagebrth","birthwt","birthlen",
+  fage=c("arm","W_mage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+         "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+         "single",
+         "W_nrooms","W_nhh","W_nchldlt5",
+         "brthmon",
+         "trth2o","cleanck","impfloor","impsan","safeh20"),     
+  
+  mhtcm=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+          "W_fhtcm",
           "single",
-          "nrooms","nhh","nchldlt5",
-          "month","brthmon","parity",
+          "W_nrooms",
+          "trth2o","cleanck","impfloor","impsan","safeh20"),    
+  
+  mwtkg=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+          "W_fhtcm",
+          "single",
+          "W_nrooms","W_nhh","W_nchldlt5",
+          "brthmon","W_parity",
+          "trth2o","cleanck","impfloor","impsan","safeh20"),
+  
+  mbmi=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+         "W_fhtcm",
+         "single",
+         "W_nrooms","W_nhh","W_nchldlt5",
+         "brthmon","W_parity",
+         "trth2o","cleanck","impfloor","impsan","safeh20"),      
+  
+  single=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+           "W_nrooms","W_nhh","W_nchldlt5",
+           "trth2o","cleanck","impfloor","impsan","safeh20"),    
+  
+  fhtcm=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+          "W_mhtcm","W_mwtkg","W_bmi",
+          "single",
+          "W_nrooms",
           "trth2o","cleanck","impfloor","impsan","safeh20"),     
   
-  nrooms=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
-           "vagbrth","hdlvry",
-           "gagebrth","birthwt","birthlen",
+  nrooms=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
            "single",
-           "nhh","nchldlt5",
-           "month","brthmon","parity",
-           "trth2o","cleanck","impfloor","impsan","safeh20", "earlybf"),    
+           "W_nhh","W_nchldlt5",
+           "W_parity",
+           "trth2o","cleanck","impfloor","impsan","safeh20"),    
   
-  nhh=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-        "mhtcm","mwtkg","mbmi", "fhtcm",
-        "vagbrth","hdlvry",
-        "gagebrth","birthwt","birthlen",
+  nhh=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+        "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
         "single",
-        "nrooms",
-        "month","brthmon","parity",
-        "trth2o","cleanck","impfloor","impsan","safeh20", "earlybf"),    
+        "W_nrooms",
+        "W_parity",
+        "trth2o","cleanck","impfloor","impsan","safeh20"),    
   
-  nchldlt5=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
-             "vagbrth","hdlvry",
-             "gagebrth","birthwt","birthlen",
+  nchldlt5=c("arm", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+             "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
              "single",
-             "nrooms",
-             "month","brthmon","parity",
-             "trth2o","cleanck","impfloor","impsan","safeh20", "earlybf"),
+             "W_nrooms",
+             "W_parity",
+             "trth2o","cleanck","impfloor","impsan","safeh20"),
   
-  hhwealth_quart=c("sex", "mage", "fage", "meducyrs", "feducyrs",  "hfoodsec",
-                   "vagbrth","hdlvry",
-                   "gagebrth","birthwt","birthlen",
-                   "single",
-                   "nrooms","nhh","nchldlt5",
-                   "month","brthmon","parity",
-                   "trth2o","cleanck","impfloor","impsan","safeh20"), 
+  hhwealth_quart=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", 
+                   "W_gagebrth","W_birthwt","W_birthlen",
+                   "single","W_nhh","W_nchldlt5",
+                   "W_parity"), 
   
-  month=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-          "mhtcm","mwtkg","mbmi", "fhtcm",
-          "vagbrth","hdlvry",
-          "gagebrth","birthwt","birthlen",
-          "single",
-          "nrooms","nhh","nchldlt5",
-          "brthmon","parity",
-          "trth2o","cleanck","impfloor","impsan","safeh20",
-          "enstunt","enwast","anywast06","pers_wast",
-          "perdiar6","perdiar24","predexfd6", "earlybf"), 
-  
-  brthmon=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
-            "vagbrth","hdlvry",
-            "single",
-            "nrooms","nhh","nchldlt5",
-            "month","parity",
-            "trth2o","cleanck","impfloor","impsan","safeh20"), 
-  
-  parity=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
+  parity=c("arm","W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
            "vagbrth","hdlvry",
-           "gagebrth","birthwt","birthlen",
            "single",
-           "nrooms",
-           "month","brthmon",
+           "W_nrooms",
            "trth2o","cleanck","impfloor","impsan","safeh20"),   
   
-  meducyrs=c("sex", "mage", "fage", "feducyrs", "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
-             "vagbrth","hdlvry",
-             "gagebrth","birthwt","birthlen",
+  meducyrs=c("arm", "W_mage", "W_fage", "feducyrs", "hhwealth_quart",
+             "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+             "W_gagebrth","W_birthwt","W_birthlen",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
+             "W_nrooms","W_nhh","W_nchldlt5",
              "trth2o","cleanck","impfloor","impsan","safeh20"),
   
-  feducyrs=c("sex", "mage", "fage", "meducyrs",  "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
-             "vagbrth","hdlvry",
-             "gagebrth","birthwt","birthlen",
+  feducyrs=c("arm", "W_mage", "W_fage", "meducyrs",  "hhwealth_quart", 
+             "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
+             "W_gagebrth","W_birthwt","W_birthlen",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
+             "W_nrooms","W_nhh","W_nchldlt5",
              "trth2o","cleanck","impfloor","impsan","safeh20"), 
   
-  hfoodsec=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart",
+  hfoodsec=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart",
              "vagbrth","hdlvry",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
+             "W_nrooms","W_nhh","W_nchldlt5",
+             "brthmon","W_parity",
              "trth2o","cleanck","impfloor","impsan","safeh20"),
   
-  enwast=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
-           "vagbrth","hdlvry",
-           "single",
-           "nrooms","nhh","nchldlt5",
-           "month","brthmon","parity",
-           "trth2o","cleanck","impfloor","impsan","safeh20"), 
-  
-  anywast06=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-              "mhtcm","mwtkg","mbmi", "fhtcm",
+  anywast06=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+              #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
               "vagbrth","hdlvry",
               "single",
-              "nrooms","nhh","nchldlt5",
-              "month","brthmon","parity",
+              "W_nrooms","W_nhh","W_nchldlt5",
+              "month","brthmon","W_parity",
               "trth2o","cleanck","impfloor","impsan","safeh20"),
   
-  pers_wast=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-              "mhtcm","mwtkg","mbmi", "fhtcm",
+  pers_wast=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+              #"W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
               "vagbrth","hdlvry",
               "single",
-              "nrooms","nhh","nchldlt5",
-              "month","brthmon","parity",
+              "W_nrooms","W_nhh","W_nchldlt5",
+              "month","brthmon","W_parity",
               "trth2o","cleanck","impfloor","impsan","safeh20"),
   
-  trth2o=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
-           "vagbrth","hdlvry",
-           "gagebrth","birthwt","birthlen",
+  trth2o=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
            "single",
-           "nrooms","nhh","nchldlt5",
-           "month","brthmon","parity",
-           "cleanck","impfloor","impsan","safeh20", "earlybf"), 
+           "W_nrooms","W_nhh","W_nchldlt5",
+           "brthmon","W_parity",
+           "cleanck","impfloor","impsan","safeh20"), 
   
-  cleanck=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
-            "vagbrth","hdlvry",
-            "gagebrth","birthwt","birthlen",
+  cleanck=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+            "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
             "single",
-            "nrooms","nhh","nchldlt5",
-            "month","brthmon","parity",
-            "trth2o","impfloor","impsan","safeh20", "earlybf"), 
+            "W_nrooms","W_nhh","W_nchldlt5",
+            "W_parity",
+            "trth2o","impfloor","impsan","safeh20"), 
   
-  impfloor=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
-             "vagbrth","hdlvry",
-             "gagebrth","birthwt","birthlen",
+  impfloor=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+             "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
-             "trth2o","cleanck","impsan","safeh20", "earlybf"),  
+             "W_nrooms","W_nhh","W_nchldlt5",
+             "W_parity",
+             "trth2o","cleanck","impsan","safeh20"),  
   
-  impsan=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-           "mhtcm","mwtkg","mbmi", "fhtcm",
-           "vagbrth","hdlvry",
-           "gagebrth","birthwt","birthlen",
+  impsan=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+           "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
            "single",
-           "nrooms","nhh","nchldlt5",
-           "month","brthmon","parity",
-           "trth2o","cleanck","impfloor","safeh20", "earlybf"), 
+           "W_nrooms","W_nhh","W_nchldlt5",
+           "W_parity",
+           "trth2o","cleanck","impfloor","safeh20"), 
   
-  safeh20=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
-            "vagbrth","hdlvry",
-            "gagebrth","birthwt","birthlen",
+  safeh20=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+            "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
             "single",
-            "nrooms","nhh","nchldlt5",
-            "month","brthmon","parity",
-            "trth2o","cleanck","impfloor","impsan","earlybf"),
+            "W_nrooms","W_nhh","W_nchldlt5",
+            "W_parity",
+            "trth2o","cleanck","impfloor","impsan"),
   
-  perdiar6=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-             "mhtcm","mwtkg","mbmi", "fhtcm",
+  perdiar6=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+             "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
              "vagbrth","hdlvry",
-             "gagebrth","birthwt","birthlen",
+             "W_gagebrth","W_birthwt","W_birthlen",
              "single",
-             "nrooms","nhh","nchldlt5",
-             "month","brthmon","parity",
+             "W_nrooms","W_nhh","W_nchldlt5",
+             "month","brthmon","W_parity",
              "trth2o","cleanck","impfloor","impsan","safeh20"), 
   
-  perdiar24=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-              "mhtcm","mwtkg","mbmi", "fhtcm",
+  perdiar24=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+              "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
               "vagbrth","hdlvry",
-              "gagebrth","birthwt","birthlen",
+              "W_gagebrth","W_birthwt","W_birthlen",
               "single",
-              "nrooms","nhh","nchldlt5",
-              "month","brthmon","parity",
+              "W_nrooms","W_nhh","W_nchldlt5",
+              "month","brthmon","W_parity",
               "trth2o","cleanck","impfloor","impsan","safeh20"), 
   
-  predexfd6=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-              "mhtcm","mwtkg","mbmi", "fhtcm",
+  predexfd6=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+              "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
               "vagbrth","hdlvry",
-              "gagebrth","birthwt","birthlen",
+              "W_gagebrth","W_birthwt","W_birthlen",
               "single",
-              "nrooms","nhh","nchldlt5",
-              "month","brthmon","parity",
+              "W_nrooms","W_nhh","W_nchldlt5",
+              "month","brthmon","W_parity",
               "trth2o","cleanck","impfloor","impsan","safeh20"),
   
-  earlybf=c("sex", "mage", "fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
-            "mhtcm","mwtkg","mbmi", "fhtcm",
+  earlybf=c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+            "W_mhtcm","W_mwtkg","W_bmi", "W_fhtcm",
             "vagbrth","hdlvry",
-            "gagebrth","birthwt","birthlen",
+            "W_gagebrth","W_birthwt","W_birthlen",
             "single",
-            "nrooms","nhh","nchldlt5",
-            "month","brthmon","parity",
+            "W_nrooms","W_nhh","W_nchldlt5",
+            "brthmon","W_parity",
             "trth2o","cleanck","impfloor","impsan","safeh20")
 )
 save(adjustment_sets, file="adjustment_sets_list.Rdata")

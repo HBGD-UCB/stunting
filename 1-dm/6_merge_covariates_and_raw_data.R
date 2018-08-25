@@ -58,7 +58,7 @@ setwd("U:/ucb-superlearner/Stunting rallies/")
 
 #load covariates
 d<-readRDS("FINAL_temp_clean_covariates.rds")
-
+d$arm<-factor(d$arm)
 
 load("U:/data/Raw Data Cleaning/BF_dataset.Rdata")
 load("U:/data/Raw Data Cleaning/rawdiar_df.Rdata")
@@ -100,22 +100,88 @@ d <- left_join(d, diar, by=c("studyid", "subjid"))
 summary(d$perdiar6)
 summary(d$perdiar24)
 
-d$perdiar6 <- quantile_rf(d$perdiar6, labs=c("Q1","Q2","Q3","Q4"))
-d$perdiar24 <- quantile_rf(d$perdiar24, labs=c("Q1","Q2","Q3","Q4"))
+#Save continious version of variables for adjustment set
+d$W_perdiar6 <- d$perdiar6
+d$W_perdiar24 <- d$perdiar24
+
+summary(d$perdiar6)
+summary(d$perdiar24)
+
+# d$perdiar6 <- quantile_rf(d$perdiar6, labs=c("Q1","Q2","Q3","Q4"))
+# d$perdiar24 <- quantile_rf(d$perdiar24, labs=c("Q1","Q2","Q3","Q4"))
+
+#Cut diarrhea at standard points. Quartiling by overall distribution leads to sparsity
+d$perdiar6 <- as.character(cut(d$W_perdiar6, breaks=c(0, 0.05, 1), include.lowest=F, 
+                               labels = c("(0%, 5%]",">5%")))
+d$perdiar6[d$W_perdiar6==0] <-"0%"
+d$perdiar6 <- factor(d$perdiar6, levels = c("0%","(0%, 5%]",">5%"))
+table(d$perdiar6)
+table(paste0(d$studyid, " ", d$country), d$perdiar6)
+
+
+
+d$perdiar24 <- as.character(cut(d$W_perdiar24, breaks=c(0, 0.05, 1), include.lowest=F, 
+                               labels = c("(0%, 5%]",">5%")))
+d$perdiar24[d$W_perdiar24==0] <-"0%"
+d$perdiar6 <- factor(d$perdiar6, levels = c("(0%, 5%]","0%",">5%"))
+table(d$perdiar24)
+table(paste0(d$studyid, " ", d$country), d$perdiar24)
 
 #breastfeeding
 d <- left_join(d, bf_6mo, by=c("studyid", "country", "subjid"))
 
 
-#Convert all columns to factors
+#Convert all columns to factors exceot continious adjustment vars
 for(i in 3:ncol(d)){
-  if(class(d[,i])!="factor"){
+  if(class(d[,i])!="factor" & !grepl("W_",substr(colnames(d)[i],1,2))){
     d[,i] <- as.factor(d[,i])
   }
 }
 d$id <- as.numeric(d$id)
 
 saveRDS(d, "FINAL_clean_covariates.rds")
+
+
+
+
+
+
+#Merge final covariates into the secondary intervention contrast datasets
+setwd("U:/data")
+load("int_studies_secondary_contrasts.Rdata")
+
+d <- readRDS("U:/ucb-superlearner/Stunting rallies/FINAL_clean_covariates.rds")
+
+d <- d %>% filter(!is.na(tr))
+
+dfull <- d
+
+d <- d %>% filter(studyid=="ki1112895-iLiNS-Zinc" | studyid=="ki1148112-iLiNS-DYAD-M")
+d <- d %>% subset(., select = -c(tr))
+
+head(iLiNS_DYADM_df)
+head(iLiNS_Zinc_df)
+
+iLiNS_DYADM_df <- iLiNS_DYADM_df %>% subset(., select=c(studyid, subjid, tr))
+iLiNS_Zinc_df <- iLiNS_Zinc_df %>% subset(., select=c(studyid, subjid, tr))
+
+
+iLiNS_DYADM_df$studyid[1]
+iLiNS_Zinc_df$studyid[1]
+
+d$studyid[d$studyid=="ki1112895-iLiNS-Zinc"] <- "iLiNS-Zinc_ZvLNS"
+d$studyid[d$studyid=="ki1148112-iLiNS-DYAD-M"] <- "iLiNS_DYADM_LNS"
+
+#merge in covariates
+iLiNS_DYADM_df <- left_join(iLiNS_DYADM_df, d, by=c("studyid","subjid"))
+iLiNS_Zinc_df <- left_join(iLiNS_Zinc_df, d, by=c("studyid","subjid"))
+
+
+#Create overall intervention dataset
+d <- bind_rows(dfull, iLiNS_DYADM_df)
+d <- bind_rows(d, iLiNS_Zinc_df)
+
+saveRDS(d, file="U:/data/intervention_cov_dataset.rds")
 
 
 

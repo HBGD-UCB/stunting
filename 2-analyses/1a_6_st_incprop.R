@@ -225,8 +225,10 @@ df$agecat.f2 <- factor(df$agecat.f2, levels=unique(df$agecat.f2))
             p_comb
             dev.off()
             
-            
-
+            #png version          
+            png("U:/Figures/stunting-cuminc.png",width=9*72,height=7*72)
+            p_comb
+            dev.off()
             
             
             
@@ -238,7 +240,7 @@ df$agecat.f2 <- factor(df$agecat.f2, levels=unique(df$agecat.f2))
             # Objective 1a
             # Calculate cumulative incidence (ever stunted) at
             # 3, 6, 12, 18, and 24 mo of age
-            
+            # Exclude birth measurements
             # Cumulative incidence pooled using random effects
             #-----------------------------------
             library(dplyr)

@@ -234,7 +234,9 @@ desc_epi_metaplot <- function(d,
                               stat="Wasting\nincidence\nrate",
                               ylabel="Wasting incidence rate per 1000 days",
                               title="Wasting incidence rate",
-                              xlabel="Child age stratification"){
+                              xlabel="Child age stratification",
+                              text_adj=0.05,
+                              text_adj2=0){
   if(!is.null(stat)){
     p <- ggplot(d[d$statistic==stat,]) +
       geom_point(aes(x=strata, y=Mean, fill=stratacol, color=stratacol), size = 4) +
@@ -262,8 +264,8 @@ desc_epi_metaplot <- function(d,
   
   if(d$pooled[1]==1){
     p <- p +  
-      geom_text(aes(x=d$strata,y=min(d$Lower.95.CI)+0.05,label=d$nmeas.f), size=3) +
-      geom_text(aes(x=d$strata,y=min(d$Lower.95.CI),label=d$nstudy.f), size=3)
+      geom_text(aes(x=d$strata,y=min(d$Lower.95.CI)-text_adj2+text_adj,label=d$nmeas.f), size=3) +
+      geom_text(aes(x=d$strata,y=min(d$Lower.95.CI)-text_adj2,label=d$nstudy.f), size=3)
   }
   
   return(p)
@@ -283,7 +285,7 @@ setwd("U:/Figures")
 p1 <- desc_epi_metaplot(poolhaz[poolhaz$stratacol=="pooled",], stat="Velocity",
                         ylabel="Z-score change per month",
                         title="HAZ velocity per month")
-p1
+#p1
 ggsave("HAZvel_pooled_metaplot.pdf", p1, width = w, height = h, units = "in")
 
 #Cohort specific haz velocity
@@ -313,8 +315,8 @@ ggsave("WAZvel_metaplot.pdf", p4, width = w, height = h, units = "in")
 #Pooled height velocity
 p5 <- desc_epi_metaplot(poollencm[poollencm$stratacol=="pooled",], stat="Velocity",
                         ylabel="Height change in cm per month",
-                        title="Height velocity per month")
-p5
+                        title="Height velocity per month", text_adj=0.5, text_adj2=1)
+#p5
 ggsave("Heightvel_pooled_metaplot.pdf", p5, width = w, height = h, units = "in")
 
 #Cohort specific haz velocity
@@ -338,5 +340,28 @@ p8 <- desc_epi_metaplot(poolwtkg[poolwtkg$stratacol!="pooled",], stat="Velocity"
                         title="Weight velocity per month")
 p8
 ggsave("Weightvel_metaplot.pdf", p8, width = w, height = h, units = "in")
+
+
+
+
+
+#PNG versions
+
+ggsave("HAZvel_pooled_metaplot.png", p1, width = w, height = h)
+
+ggsave("HAZvel_metaplot.png", p2, width = w, height = h)
+
+ggsave("WAZvel_pooled_metaplot.png", p3, width = w, height = h)
+
+ggsave("WAZvel_metaplot.png", p4, width = w, height = h)
+
+ggsave("Heightvel_pooled_metaplot.png", p5, width = w, height = h)
+
+ggsave("Heightvel_metaplot.png", p6, width = w, height = h)
+
+ggsave("Weightvel_pooled_metaplot.png", p7, width = w, height = h)
+
+ggsave("Weightvel_metaplot.png", p8, width = w, height = h)
+
 
 

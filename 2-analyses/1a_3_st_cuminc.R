@@ -475,6 +475,45 @@ ggplot(ip.cohort[ip.cohort$region=="Asia",],
 dev.off()
 
 
+png("U:/Figures/stunting-incprop-africa.png",width=11*72,height=5*72)
+ggplot(ip.cohort[ip.cohort$region=="Africa",],
+       aes(y=y,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Percent stunted (95% CI)")+
+  ggtitle("Cohort-specific incidence proportion of stunting within age ranges - Africa")
+
+dev.off()
+
+png("U:/Figures/stunting-incprop-latamer-eur.png",width=11*72,height=5*72)
+ggplot(ip.cohort[ip.cohort$region=="Latin America"|
+                   ip.cohort$region=="Europe",],
+       aes(y=y,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Percent stunted (95% CI)")+
+  ggtitle("Cohort-specific incidence proportion of stunting within age ranges - Latin America & Europe")
+dev.off()
+
+png("U:/Figures/stunting-incprop-asia.png",width=17*72,height=7*72)
+ggplot(ip.cohort[ip.cohort$region=="Asia",],
+       aes(y=y,x=age.f))+
+  geom_point(size=2)+facet_wrap(~cohort)+
+  geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
+                 size=2,alpha=0.3) +
+  scale_y_continuous(limits=c(0,100))+
+  xlab("Age category")+
+  ylab("Percent stunted (95% CI)")+
+  ggtitle("Cohort-specific incidence proportion of stunting within age ranges - Asia")
+dev.off()
+
+
 
 
 
