@@ -49,35 +49,28 @@ stunt_ci_0_6 = d %>% ungroup() %>%
   ungroup() 
 
 #If the child was stunted at the start of the cumulative incidence age range, the child is not in the risk set and for 
-#stunted and there cannot be an incident of stunting unless the child recovers and then drops back below -2 during the age 
-#range.
+#stunted and there cannot be an incident of stunting 
 
 #calculate any stunting from 6-24
 stunt_ci_6_24 = d %>% ungroup() %>% 
+  group_by(studyid,country,subjid) %>%
   arrange(studyid,country,subjid, agedays) %>% 
-  filter(agecat!="6 months" & !is.na(agecat)) %>%
-  group_by(studyid,country,subjid) %>%
-  #mark if children started stunted. They need to recover to be included in the at-risk pool
-  mutate(start_stunt= as.numeric(first(haz) < -2), cumsum_notwasted=cumsum(as.numeric(haz >= -2)), anyrecovery=max(cumsum_notwasted)>0) %>%
-  filter((anyrecovery & cumsum_notwasted!=0 & start_stunt==1) | start_stunt==0) %>% #drop children never at risk (start stunted and never recovered) and drop obs prior to recovery
-  mutate(agecat="6-24 months", minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0), N=n()) %>% slice(1) %>%
+  mutate(anystunt06 = 1*(agecat=="6 months" & minhaz < -2),
+         anystunt06 = anystunt06[1]) %>% 
+  filter(agecat!="6 months" & !is.na(agecat) & anystunt06==0) %>%
+  mutate(agecat="6-24 months", minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0), Nobs=n()) %>% slice(1) %>%
+  mutate(N=n()) %>%
   ungroup() %>%
-  select(studyid,subjid, country,tr,agedays,haz, measurefreq, measid, agecat,minhaz, ever_stunted,N)
+  select(studyid,subjid, country,tr,agedays,haz, measurefreq, measid, agecat,minhaz, ever_stunted,Nobs, N, anystunt06)
 
-#calculate any stunting from 0-24
-stunt_ci_0_24 = d %>% ungroup() %>%
-  filter(!is.na(agecat)) %>%
-  group_by(studyid,country,subjid) %>%
-  mutate(agecat="0-24 months", minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0), N=n()) %>% slice(1) %>%
-  ungroup() 
 
 stunt_ci_0_6 <- stunt_ci_0_6 %>% subset(., select = -c(stunt, numstunt))
-stunt_ci_0_24 <- stunt_ci_0_24 %>% subset(., select = -c(stunt, numstunt))
 
-cuminc <- rbind(stunt_ci_0_6, stunt_ci_6_24, stunt_ci_0_24)
 
-table(cuminc$agecat)
-table(cuminc$agecat, cuminc$ever_stunted)
+
+cuminc <- bind_rows(stunt_ci_0_6, stunt_ci_6_24)
+
+
 
 #--------------------------------------
 # Calculate prevalence of
@@ -110,8 +103,8 @@ dmn <- d %>%
 # export
 prev = dmn %>% 
   filter(agecat=="Birth" | agecat=="6 months" | agecat=="24 months") %>%
-select(studyid,subjid,country,agecat,
-       stunted, sstunted)
+  select(studyid,subjid,country,agecat,
+         stunted, sstunted)
 
 
 

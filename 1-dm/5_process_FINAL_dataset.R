@@ -107,7 +107,8 @@ d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="BRAZIL"),] #Drop because ye
 d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop because yearly but not an RCT
 
 
-
+#Temp
+#d <- d[d$measurefreq!="yearly",]
 
 #--------------------------------------------------------
 # Calculate longitudinal prevalence of wasting and stunting
@@ -250,6 +251,8 @@ d$hfoodsec <- factor(d$hfoodsec, levels=c("Food Secure", "Mildly Food Insecure",
 #--------------------------------------------------------------------------
 
 
+# drop gestational age in studies with no variations (measured it at the month level)
+d$gagebrth[d$studyid=="ki1113344-GMS-Nepal"] <- NA
 
 #parity
 #Combine parity and birthorder
@@ -259,11 +262,13 @@ table(d$studyid, d$brthordr)
 d$parity[is.na(d$parity)] <- d$brthordr[is.na(d$parity)]
 
 
-#Fix 5 obs of 0 in ki1000304b-SAS-FoodSuppl
+#Fix 21 obs of 0 in ki1000304b-SAS-FoodSuppl
 d$parity[d$studyid=="ki1000304b-SAS-FoodSuppl" & d$parity==0] <- NA
+
+#Fix right shift of Tanzania child
+d$parity[d$studyid=="ki1066203-TanzaniaChild2" & d$parity==1] <- NA
+d$parity[d$studyid=="ki1066203-TanzaniaChild2"] <- d$parity[d$studyid=="ki1066203-TanzaniaChild2"] -1 
 table(d$studyid, d$parity)
-
-
 
 #Convert birth Zscore to absolute units
 table(d$studyid, is.na(d$birthlen))
@@ -511,7 +516,7 @@ d <- subset(d, select = -c(siteid, region,  clustid, brthweek,   brthordr, ses, 
 
 
 #quantiling functions
-quantile_rf <- function(A, labs=NULL, Acuts=NULL, units=NULL){
+quantile_rf <- function(data, A, labs=NULL, Acuts=NULL, units=NULL){
   A<-as.numeric(A)
   if(sum(is.na(A))!=length(A)){
     if(is.null(Acuts)){
@@ -555,6 +560,13 @@ quantile_rf <- function(A, labs=NULL, Acuts=NULL, units=NULL){
       A <- cut(A, include.lowest = T, right = FALSE, breaks=4,labels=c("Q1","Q2","Q3","Q4","Q5")[1:(length(Acuts)-1)])
     }
     A <- factor(A)
+    
+    printdf <- data.frame(id=paste0(data$studyid," ", data$country), A)
+    printdf <- printdf %>% filter(!is.na(A))
+    printdf <- droplevels(printdf) 
+    print(table(printdf$id, printdf$A))
+    
+    print(table( printdf$A))
     return(A)
   }
 }
@@ -610,21 +622,25 @@ d$W_parity <- d$parity
 
 
 #Overall a-priori quantiles
-d$gagebrth <- quantile_rf(d$gagebrth, Acuts=c(0,37*7,39*7,41*7,max(d$gagebrth, na.rm=T)), labs=c("Preterm", "Early term", "Full term", "Late term"))
-d$birthwt <- quantile_rf(d$birthwt, Acuts=c(0,2500,max(d$birthwt, na.rm=T)), labs=c("Low birth weight", "Normal or high birthweight"))
-d$birthlen <- quantile_rf(d$birthlen, Acuts=c(0,47, 49, 51,max(d$birthlen, na.rm=T)), units="cm")
-d$mage <- quantile_rf(d$mage, Acuts=c(0,20,25,30,max(d$mage, na.rm=T)))
-d$mhtcm <- quantile_rf(d$mhtcm, Acuts=c(0,145,150,155,160,max(d$mhtcm, na.rm=T)), units="cm")
-d$mwtkg <- quantile_rf(d$mwtkg, Acuts=c(0,42.5,50,57.5,max(d$mwtkg, na.rm=T)), units="kg")
-d$mbmi <- quantile_rf(d$mbmi, Acuts=c(0,18.5,25,30,max(d$mbmi, na.rm=T)), labs=c("Underweight", "Normal weight", "Overwight", "Obese"))
-d$fage <- quantile_rf(d$fage, Acuts=c(0,25,30,35,max(d$fage, na.rm=T)))
-d$fhtcm <- quantile_rf(d$fhtcm, Acuts=c(0,160,170,max(d$fhtcm, na.rm=T)), units="cm")
-
+d$gagebrth <- quantile_rf(d, d$W_gagebrth, Acuts=c(0,260,274,max(d$W_gagebrth, na.rm=T)), labs=c("Preterm", "Early term", "Full or late term"))
+d$birthwt <- quantile_rf(d, d$W_birthwt, Acuts=c(0,2500,max(d$W_birthwt, na.rm=T)), labs=c("Low birth weight", "Normal or high birthweight"))
+d$birthlen <- quantile_rf(d, d$W_birthlen, Acuts=c(0,48, 50, max(d$W_birthlen, na.rm=T)), units="cm")
+d$mage <- quantile_rf(d, d$W_mage, Acuts=c(0,25,30,max(d$W_mage, na.rm=T)))
+d$mhtcm <- quantile_rf(d, d$W_mhtcm, Acuts=c(0,151,155,max(d$W_mhtcm, na.rm=T)), units="cm")
+d$mwtkg <- quantile_rf(d, d$W_mwtkg, Acuts=c(0,52,58,max(d$W_mwtkg, na.rm=T)), units="kg")
+d$mbmi <- quantile_rf(d, d$W_mbmi, Acuts=c(0,18.5,25,max(d$W_mbmi, na.rm=T)), labs=c("Underweight", "Normal weight", "Overweight or Obese"))
+d$fage <- quantile_rf(d, d$W_fage, Acuts=c(0,32,38,max(d$W_fage, na.rm=T)))
+d$fhtcm <- quantile_rf(d, d$W_fhtcm, Acuts=c(0,162,167,max(d$W_fhtcm, na.rm=T)), units="cm")
 
 
 
 #Make education categorizing function that handles the irregular distribution across studies.
 #d<-dfull[dfull$studyid=="ki1000111-WASH-Kenya",]
+# d2 <- d
+# d <- d[d$studyid=="ki1066203-TanzaniaChild2",]
+#  d <- d[d$studyid=="ki0047075b-MAL-ED" & d$country=="BRAZIL",]
+# table(d$W_meducyrs[d$studyid=="ki1000109-EE" & d$country=="PAKISTAN"])
+
 quantile_rf_edu <- function(d, Avar="meducyrs"){
   dfull <-d
   
@@ -635,28 +651,42 @@ quantile_rf_edu <- function(d, Avar="meducyrs"){
 
           Acuts=c(0, as.numeric(quantile(d$A, probs = c(1/3, 2/3), na.rm=T)), max(d$A, na.rm=T))
           if(length(Acuts)==length(unique(Acuts))){
+            
             Alevels=c("Low","Medium","High")
-            A <- cut(d$A, include.lowest = T, right = T, breaks=Acuts,labels=Alevels)
+            A1 <- cut(d$A, include.lowest = T, right = T, breaks=Acuts,labels=Alevels)
+            A2 <- cut(d$A, include.lowest = T, right = F, breaks=Acuts,labels=Alevels)
+            rght=F
+            if(min(table(A1)) >= min(table(A2))) rght=T
+            A <- cut(d$A, include.lowest = T, right = rght, breaks=Acuts,labels=Alevels)
+            
           }else{
-            if(sum(d$A==0, na.rm=T)>0){
-            A0 <- d[d$A==0,]
-            A0 <- A0[!is.na(A0$A),]
-            A0$A <- "Low"
-          }
-          
-            A <- d[d$A!=0 | is.na(d$A),]
-            Acuts=c(0, as.numeric(quantile(A$A, probs = 0.5, na.rm=T)), max(A$A, na.rm=T))
-            Alevels=c("Medium","High")    
-            A$A <- cut(A$A, include.lowest = T, right = FALSE, breaks=Acuts,labels=Alevels)
-            if(!is.null(A0)){
-            df<-rbind(A,A0)
+            if(Acuts[2]==Acuts[3] & Acuts[2]!=0){
+              A<-rep(NA, nrow(d))
+              A[d$A < Acuts[2] & !is.na(d$A)] <- "Low"
+              A[d$A == Acuts[2] & !is.na(d$A)] <- "Medium"
+              A[d$A > Acuts[2] & !is.na(d$A)] <- "High"
+              A <- factor(A, levels = c("Low","Medium","High"))
             }else{
-              df<-A
-            }
+              
+              if(sum(d$A==0, na.rm=T)>0){
+              A0 <- d[d$A==0,]
+              A0 <- A0[!is.na(A0$A),]
+              A0$A <- "Low"
+                }
+            
+              A <- d[d$A!=0 | is.na(d$A),]
+              Acuts=c(0, as.numeric(quantile(A$A, probs = 0.5, na.rm=T)), max(A$A, na.rm=T))
+              Alevels=c("Medium","High")    
+              A$A <- cut(A$A, include.lowest = T, right = T, breaks=Acuts,labels=Alevels)
+              if(!is.null(A0)){
+              df<-rbind(A,A0)
+              }else{
+                df<-A
+              }
             
             df <- df %>% arrange(id)
             A <- factor(df$A, levels = c("Low","Medium","High"))
-            
+            }
            }
     dfull[,Avar] <- A
   }
@@ -670,14 +700,15 @@ d <- d %>% group_by(studyid, country) %>%
 table(d$meducyrs)
 table(d$feducyrs)
 
-
+table(paste0(d$studyid," ", d$country), d$meducyrs)
+table(paste0(d$studyid," ", d$country), d$feducyrs)
 
 
 
 
 #Categorize nrooms, nhh, nchild5
 table(d$nrooms)
-table(d$studyid, d$nrooms)
+table(paste0(d$studyid," ", d$country), d$nrooms)
 nroom<-NA
 nroom[d$nrooms<2] <- "1"
 nroom[d$nrooms==2] <- "2"
@@ -685,10 +716,11 @@ nroom[d$nrooms==3] <- "3"
 nroom[d$nrooms>3] <- "4+"
 d$nrooms <- as.factor(nroom)
 table(d$nrooms)
+table(paste0(d$studyid," ", d$country), d$nrooms)
 
 
 table(d$nhh)  
-table(d$studyid, d$nhh)
+table(paste0(d$studyid," ", d$country), d$nhh)
 
 nhh<-NA
 nhh[d$nhh<4] <- "3 or less"
@@ -697,24 +729,23 @@ nhh[d$nhh>5 & d$nhh<8] <- "6-7"
 nhh[d$nhh>7] <- "8+"
 d$nhh <- as.factor(nhh)
 table(d$nhh)
-table(d$studyid, d$nhh)
+table(paste0(d$studyid," ", d$country), d$nhh)
 
 
 table(d$nchldlt5)
-table(d$studyid, d$nchldlt5)
+table(paste0(d$studyid," ", d$country), d$nchldlt5)
 
 nchild5<-NA
 nchild5[d$nchldlt5==1] <- "1"
-nchild5[d$nchldlt5==2] <- "2"
-nchild5[d$nchldlt5>2] <- "3+"
+nchild5[d$nchldlt5>2] <- "2+"
 d$nchldlt5 <- as.factor(nchild5)
 table(d$nchldlt5)
-table(d$studyid, d$nchldlt5)
+table(paste0(d$studyid," ", d$country), d$nchldlt5)
 
 d$nchldlt5 <- relevel(d$nchldlt5, ref="1")
 
 table(d$parity)
-table(d$studyid, d$parity)
+table(paste0(d$studyid," ", d$country), d$parity)
 
 parity<-NA
 parity[d$parity==0] <- NA 
@@ -723,7 +754,9 @@ parity[d$parity==2] <- "2"
 parity[d$parity>2] <- "3+"
 d$parity <- as.factor(parity)
 table(d$parity)
-table(d$studyid, d$parity)
+table(paste0(d$studyid," ", d$country), d$parity)
+
+
 
 d$parity <- relevel(d$parity, ref="1")
 
@@ -745,11 +778,11 @@ d$birthwt <- relevel(d$birthwt, ref="Normal or high birthweight")
 #No WHO categories:
 #Based on quantiles
 
-d$birthlen <- relevel(d$birthlen, ref="[49-51) cm")
+d$birthlen <- relevel(d$birthlen, ref=">=50 cm")
 
 #wealth index: 
 #wealthiest quartile - Q4 is baseline
-
+table(paste0(d$studyid," ", d$country), d$hhwealth_quart)
 d$hhwealth_quart <- relevel(d$hhwealth_quart, ref="Wealth Q4")
 
 # children < 5 in HH
@@ -764,7 +797,7 @@ d$nchldlt5 <- relevel(d$nchldlt5, ref="1")
 #39-40 weeks = full term (baseline)
 #>=41 weeks = late/post term
 
-d$gagebrth <- relevel(d$gagebrth, ref="Full term")
+d$gagebrth <- relevel(d$gagebrth, ref="Full or late term")
 
 #maternal BMI (is this measured when pregnant or not? if pregnant, then we may need to change these categories)
 #<18.5 = underweight
@@ -781,10 +814,10 @@ d$mbmi <- relevel(d$mbmi, ref="Normal weight")
 #155–159.9 cm
 #160.0 cm or greater. (baseline)
 
-d$mhtcm <- relevel(d$mhtcm, ref=">=160 cm")
+d$mhtcm <- relevel(d$mhtcm, ref=">=155 cm")
 
 #maternal weight?
-d$mwtkg <- relevel(d$mwtkg, ref=">=57.5 kg")
+d$mwtkg <- relevel(d$mwtkg, ref=">=58 kg")
 
 #mother’s/father's education
 #lowest education level = baseline
@@ -793,10 +826,10 @@ d$feducyrs <- relevel(factor(d$feducyrs), ref="Low")
 
 #father age
 #oldest = baseline
-d$fage <- relevel(d$fage, ref=">=35")
+d$fage <- relevel(d$fage, ref=">=38")
 
 #father height?
-d$fhtcm <- relevel(d$fhtcm, ref="[160-170) cm")
+d$fhtcm <- relevel(d$fhtcm, ref=">=167 cm")
 
 
 
@@ -846,12 +879,12 @@ tabRF <- function(d, Avar){
 tabRF(d, "gagebrth")
 tabRF(d, "birthwt") #Check the added length/weight
 tabRF(d, "birthlen")
-tabRF(d, "parity")
+tabRF(d, "parity") #Check Tanzania child
 tabRF(d, "mage")
-tabRF(d, "mhtcm")
-tabRF(d, "mwtkg")
-tabRF(d, "mbmi")
-tabRF(d, "fage")
+tabRF(d, "mhtcm") #Collapse categories
+tabRF(d, "mwtkg") #Collapse?
+tabRF(d, "mbmi") #Add labels
+tabRF(d, "fage") #Collapse?
 tabRF(d, "fhtcm")
 tabRF(d, "feducyrs")
 tabRF(d, "nrooms")

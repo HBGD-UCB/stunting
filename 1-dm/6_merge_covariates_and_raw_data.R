@@ -128,7 +128,7 @@ table(d$perdiar24)
 table(paste0(d$studyid, " ", d$country), d$perdiar24)
 
 #breastfeeding
-d <- left_join(d, bf_6mo, by=c("studyid", "country", "subjid"))
+d <- left_join(d, bf, by=c("studyid", "country", "subjid"))
 
 
 #Convert all columns to factors exceot continious adjustment vars
