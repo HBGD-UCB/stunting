@@ -14,7 +14,7 @@ cov<-readRDS("FINAL_clean_covariates.rds")
 #load outcomes
 load("st_prev_rf_outcomes.rdata")
 load("st_cuminc_rf_outcomes.rdata")
-load("st_cuminc_rf_nobirth.rdata")
+load("st_cuminc_rf_outcomes_nobirth.rdata")
 load("st_rec_rf_outcomes.rdata")
 load("st_vel_rf_outcomes.rdata")
 
@@ -204,6 +204,8 @@ V <- c("agecat")
 #clusterid ID variable
 id <- c("id")
 
+#Change outcome name to differentiate from lencm velocity outcome
+d <- d %>% rename(y_rate_haz=y_rate)
 
 save(d, Y, A,V, id, file="st_haz_vel_rf.Rdata")
 
@@ -227,6 +229,8 @@ V <- c("agecat")
 
 #clusterid ID variable
 id <- c("id")
+
+d <- d %>% rename(y_rate_len=y_rate)
 
 
 save(d, Y, A,V, id, file="st_len_vel_rf.Rdata")

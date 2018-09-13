@@ -523,7 +523,7 @@ dev.off()
 
 cuminc=evs %>% select(studyid,country,subjid,agecat,ever_stunted) 
 
-save(cuminc,file="U:/Data/Stunting/st_cuminc.RData")
+save(cuminc,ci.res, ci.res.agerange, ip.cohort,file="U:/Data/Stunting/st_cuminc.RData")
 
 
 

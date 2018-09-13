@@ -200,6 +200,8 @@ df <- rbind(data.frame(ci.res, Measure="Cumulative incidence\nfrom birth"), data
 df$agecat.f2 <- paste0(c("0-","3-","6-","12-","18-"), df$agecat)
 df$agecat.f2 <- factor(df$agecat.f2, levels=unique(df$agecat.f2))
 
+save(df, file="U:/Data/Stunting/st_incprop.RData")
+
           p_comb <- ggplot(df, aes(y=est,x=agecat.f2, color=Measure))+
               geom_point(size=3, position=position_dodge(width=0.25))+
               geom_errorbar(aes(ymin=lb,ymax=ub),width=0.05, position=position_dodge(width=0.25)) +

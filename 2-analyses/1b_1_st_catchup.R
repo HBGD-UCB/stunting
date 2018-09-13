@@ -1,3 +1,5 @@
+
+
 #-----------------------------------
 # Stunting analysis
 # Objective 1b
@@ -77,60 +79,7 @@ d %>%
 
 d$agem=round(d$agem)
 
-# 
-# # create indicators for stunting
-# st <- d %>%
-#   filter(!is.na(agecat)) %>%
-#   mutate(measid=seq_along(subjid))  %>%
-#   group_by(studyid,country,subjid) %>%
-#   mutate(stunted=ifelse(haz< -2,1,0),
-#          lagstunted=lag(stunted),
-#          leadstunted=lead(stunted))  %>%
-#   # unique stunting episode
-#   mutate(sepisode=ifelse(lagstunted==0 & stunted==1 & leadstunted==1 |
-#                          stunted==1 & measid==1,1,0))
-#   # if last obs, then lead stunted is na, so can't be onset
-#   # because we don't know the subsequent measurement
-# 
-# 
-# #------------------------------------------
-# # create indicator recovery
-# #------------------------------------------
-# rev.ind <- st %>%
-#   group_by(studyid,country,subjid) %>%
-#   # indicator for whether haz in time t> haz in time t-1
-#   mutate(hazinc=ifelse(haz>lag(haz),1,0)) %>%
-#   # create recovery indicator
-#   # NA means that it was the age cat of first measurement 
-#   mutate(recrow=ifelse(stunted==0 & lagstunted==1 & lag(lagstunted)==1,
-#                        1,0)) %>%
-#   # cumulative sum of recovery indicator
-#   group_by(studyid,country,subjid,agecat) %>%
-#   mutate(notst=ifelse(stunted==0,1,0)) %>%
-#   mutate(recsum=cumsum(notst)) %>%
-#   # assess whether recsum is for contiguous rec indicators
-#   mutate(contig = ifelse(lag(recrow)==1,1,0)) %>%
-#   # count as recovery if at least two meas have haz>=-2
-#   mutate(rec=ifelse(recsum>=2 & contig==1 &
-#       notst==1,1,0))
-# 
-# # subset to stunted children in each age group
-# stunt.03 <- rev.ind %>%
-#   filter(agecat=="Birth"|agecat=="3 months") %>%
-#   group_by(studyid,country,subjid) %>%
-#   summarise(rec=max(rec),stunted=max(sepisode))
 
-# # test code
-# rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED", c("agecat","agem",
-#                                                      "haz","stunted","lagstunted","sepisode","hazinc","recrow",
-#                       "notst","recsum","contig","rec")][1:10,]
-# 
-# rev.ind[rev.ind$studyid=="ki0047075b-MAL-ED" &
-#         rev.ind$subjid=="9.88131291682493e-324", c("agecat","agem",
-#     "haz","stunted","lagstunted","sepisode","hazinc","recrow",
-#      "notst","recsum","contig","rec")][11:20,]
-# rev.agecat[rev.agecat$studyid=="ki0047075b-MAL-ED" &
-#              rev.agecat$subjid=="9.88131291682493e-324",]
 
 # stunted by age x, recovered by age y
 # children with recovery=NA didn't have 2 measurements
@@ -139,61 +88,62 @@ rec.03=rec.age(data=d,s.agem=1,r.agem=3)
 rec.36=rec.age(data=d,s.agem=3,r.agem=6)
 rec.69=rec.age(data=d,s.agem=6,r.agem=9)
 rec.912=rec.age(data=d,s.agem=9,r.agem=12)
+rec.1215=rec.age(data=d,s.agem=12,r.agem=15)
+rec.1518=rec.age(data=d,s.agem=15,r.agem=18)
+rec.1821=rec.age(data=d,s.agem=18,r.agem=21)
+rec.2124=rec.age(data=d,s.agem=21,r.agem=24)
+
+#Pooling function
+pool_df <- function(d, Age="0-3 months"){
+  res=d %>%
+    group_by(studyid,country) %>%
+    summarise(mn=mean(recovered,na.rm=TRUE),
+              n=sum(recovered,na.rm=TRUE),
+              N=sum(!is.na(recovered))) %>%
+    mutate(agecat=Age)
+  return(res)
+}
 
 # prepare data for pooling 
-rec.03.sum=rec.03 %>%
-  group_by(studyid,country) %>%
-  summarise(mn=mean(recovered,na.rm=TRUE),
-            n=sum(recovered,na.rm=TRUE),
-            N=sum(!is.na(recovered))) %>%
-  mutate(agecat="0-3 months")
-
-rec.36.sum=rec.36 %>%
-  group_by(studyid,country) %>%
-  summarise(mn=mean(recovered,na.rm=TRUE),
-            n=sum(recovered,na.rm=TRUE),
-            N=sum(!is.na(recovered)))%>%
-  mutate(agecat="3-6 months")
-
-rec.69.sum=rec.69 %>%
-  group_by(studyid,country) %>%
-  summarise(mn=mean(recovered,na.rm=TRUE),
-            n=sum(recovered,na.rm=TRUE),
-            N=sum(!is.na(recovered)))%>%
-  mutate(agecat="6-9 months")
-
-rec.912.sum=rec.912 %>%
-  group_by(studyid,country) %>%
-  summarise(mn=mean(recovered,na.rm=TRUE),
-            n=sum(recovered,na.rm=TRUE),
-            N=sum(!is.na(recovered)))%>%
-  mutate(agecat="9-12 months")
+rec.03.sum=pool_df(rec.03, Age="0-3 months")
+rec.36.sum=pool_df(rec.36, Age="3-6 months")
+rec.69.sum=pool_df(rec.69, Age="6-9 months")
+rec.912.sum=pool_df(rec.912, Age="9-12 months")
+rec.1215.sum=pool_df(rec.1215, Age="12-15 months")
+rec.1518.sum=pool_df(rec.1518, Age="15-18 months")
+rec.1821.sum=pool_df(rec.1821, Age="18-21 months")
+rec.2124.sum=pool_df(rec.2124, Age="21-24 months")
 
 rev.data=bind_rows(rec.03.sum,rec.36.sum,rec.69.sum,
-                   rec.912.sum) 
+                   rec.912.sum, rec.1215.sum, rec.1518.sum,
+                   rec.1821.sum, rec.2124.sum) 
 rev.data = rev.data %>%mutate(agecat=as.factor(agecat))
 
 # cohort specific results
 rec.cohort=lapply(list("0-3 months","3-6 months","6-9 months",
-                       "9-12 months"),function(x) 
-  fit.escalc(data=rev.data,ni="N", xi="n",age=x,meas="PR"))
+                       "9-12 months","12-15 months","15-18 months",
+                       "18-21 months", "21-24 months"),function(x) 
+                         fit.escalc(data=rev.data,ni="N", xi="n",age=x,meas="PR"))
 rec.cohort=as.data.frame(do.call(rbind, rec.cohort))
 rec.cohort=cohort.format(rec.cohort,y=rec.cohort$yi,
-    lab=  c("0-3 months","3-6 months","6-9 months",
-            "9-12 months"))
+                         lab=  c("0-3 months","3-6 months","6-9 months",
+                                 "9-12 months","12-15 months","15-18 months",
+                                 "18-21 months", "21-24 months"))
 
 
 # estimate random effects, format results
 rev.res=lapply(list("0-3 months","3-6 months","6-9 months",
-                    "9-12 months"),function(x) 
-      fit.rma(rev.data,ni="N", xi="n",age=x,measure="PR",
-              nlab="children"))
+                    "9-12 months","12-15 months","15-18 months",
+                    "18-21 months", "21-24 months"),function(x) 
+                      fit.rma(rev.data,ni="N", xi="n",age=x,measure="PR",
+                              nlab="children"))
 rev.res=as.data.frame(do.call(rbind, rev.res))
 rev.res[,4]=as.numeric(rev.res[,4])
 rev.res = rev.res %>%
   mutate(est=est*100,lb=lb*100,ub=ub*100)
 rev.res$agecat=factor(rev.res$agecat,levels=c("0-3 months","3-6 months","6-9 months",
-                                              "9-12 months"))
+                                              "9-12 months","12-15 months","15-18 months",
+                                              "18-21 months", "21-24 months"))
 
 rev.res$ptest.f=sprintf("%0.1f",rev.res$est)
 
@@ -268,5 +218,5 @@ ggplot(rev.res,aes(y=est,x=agecat))+
   ggtitle("Percentage of children who were stunted and recovered within age intervals")
 dev.off()
 
-save(rev, rev.ind, file="U:/Data/Stunting/st_rec_interim.RData")
+save(rev.res, file="U:/Data/Stunting/st_rec_interim.RData")
 

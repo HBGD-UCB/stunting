@@ -16,6 +16,7 @@ cov<-readRDS("FINAL_clean_covariates.rds")
 #load outcomes
 load("st_prev_rf_outcomes.rdata")
 load("st_cuminc_rf_outcomes.rdata")
+load("st_cuminc_rf_outcomes_nobirth.rdata")
 load("st_rec_rf_outcomes.rdata")
 load("st_vel_rf_outcomes.rdata")
 
@@ -41,6 +42,7 @@ head(vel_haz)
 cov$subjid <- as.character(cov$subjid)
 prev$subjid <- as.character(prev$subjid)
 cuminc$subjid <- as.character(cuminc$subjid)
+cuminc_nobirth$subjid <- as.character(cuminc_nobirth$subjid)
 rev$subjid <- as.character(rev$subjid)
 vel_haz$subjid <- as.character(vel_haz$subjid)
 vel_lencm$subjid <- as.character(vel_lencm$subjid)
@@ -58,7 +60,10 @@ A<-c( "sex", "gagebrth",      "birthwt",
       "feducyrs", "hfoodsec",  
       "enwast", "anywast06", "pers_wast", 
       "trth2o", "cleanck", "impfloor",  "impsan", "safeh20",
-      "perdiar6", "perdiar24", "predexfd6", "earlybf")  
+      "perdiar6", "perdiar24", "predexfd6", "earlybf",
+      "predfeed3","exclfeed3", 
+      "predfeed6","exclfeed6", 
+      "predfeed36", "exclfeed36" )  
 
 dfull <- d
 
@@ -70,7 +75,10 @@ RF_tab <- function(d, Yvar="ever_stunted", statistic="N", A=c( "sex",           
                                   "feducyrs", "hfoodsec",  
                                   "enwast", "anywast06", "pers_wast", 
                                   "trth2o", "cleanck", "impfloor",  "impsan", "safeh20",
-                                  "perdiar6", "perdiar24", "predexfd6", "earlybf")){
+                                  "perdiar6", "perdiar24", "predexfd6", "earlybf",
+                                  "predfeed3","exclfeed3", 
+                                  "predfeed6","exclfeed6", 
+                                  "predfeed36", "exclfeed36")){
   
   agecat <- d$agecat[1]    
 
@@ -132,6 +140,7 @@ RF_tab <- function(d, Yvar="ever_stunted", statistic="N", A=c( "sex",           
 #merge in covariates
 prev <- left_join(prev, cov, by=c("studyid", "subjid", "country"))
 cuminc <- left_join(cuminc, cov, by=c("studyid", "subjid", "country"))
+cuminc_nobirth <- left_join(cuminc_nobirth, cov, by=c("studyid", "subjid", "country"))
 rev <- left_join(rev, cov, by=c("studyid", "subjid", "country"))
 vel_haz <- left_join(vel_haz, cov, by=c("studyid", "subjid", "country"))
 vel_lencm <- left_join(vel_lencm, cov, by=c("studyid", "subjid", "country"))
@@ -171,6 +180,14 @@ vel_hazN_1224 <- RF_tab(vel_haz[vel_haz$agecat=="12-24 months",], Yvar="y_rate")
 vel_hazMean_1224 <- RF_tab(vel_haz[vel_haz$agecat=="12-24 months",], Yvar="y_rate", statistic="mean")
 
 
+table(cuminc_nobirth$agecat)
+cuminc_nobirthN_024 <- RF_tab(cuminc_nobirth[cuminc_nobirth$agecat=="0-24 months (no birth st.)",])
+cuminc_nobirthCase_024 <- RF_tab(cuminc_nobirth[cuminc_nobirth$agecat=="0-24 months (no birth st.)",], statistic="N_cases")
+cuminc_nobirthN_06 <- RF_tab(cuminc_nobirth[cuminc_nobirth$agecat=="0-6 months (no birth st.)",])
+cuminc_nobirthCase_06 <- RF_tab(cuminc_nobirth[cuminc_nobirth$agecat=="0-6 months (no birth st.)",], statistic="N_cases")
+
+
+
 #------------------------------------
 # Convert to long form
 #------------------------------------
@@ -198,9 +215,12 @@ save(cumincN_024,
      vel_hazN_612,
      vel_hazMean_612, 
      vel_hazN_1224,
-     vel_hazMean_1224, 
-     file="U:/ucb-superlearner/Stunting rallies/RiskFactor_Ns.Rdata")
-
+     vel_hazMean_1224,
+     cuminc_nobirthN_024,
+     cuminc_nobirthCase_024,
+     cuminc_nobirthN_06, 
+     cuminc_nobirthCase_06,
+     file="U:/UCB-superlearner/Stunting rallies/RiskFactor_Ns.Rdata")
 
 
 

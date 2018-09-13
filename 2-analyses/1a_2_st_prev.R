@@ -128,12 +128,15 @@ ggplot(prev.res,aes(y=est,x=agecat))+
 dev.off()
 
 
+
 # export
 prev = dmn %>% 
   select(studyid,subjid,country,agecat,
          stunted, sstunted)
 
 
-save(prev,file="U:/Data/Stunting/st_prev.RData")
+save(prev, prev.res, prev.cohort, file="U:/Data/Stunting/st_prev.RData")
+
+
 
 

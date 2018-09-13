@@ -280,6 +280,6 @@ vel_lencm <- vel %>% filter(ycat=="lencm") %>% subset(., select=c(studyid, count
 
 save(prev, file="U:/ucb-superlearner/Stunting rallies/st_prev_rf_outcomes.RData")
 save(cuminc, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_outcomes.rdata")
-save(cuminc_nobirth, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_nobirth.rdata")
+save(cuminc_nobirth, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_outcomes_nobirth.rdata")
 save(rev, file="U:/ucb-superlearner/Stunting rallies/st_rec_rf_outcomes.RData")
 save(vel_haz, vel_lencm, file="U:/ucb-superlearner/Stunting rallies/st_vel_rf_outcomes.RData")

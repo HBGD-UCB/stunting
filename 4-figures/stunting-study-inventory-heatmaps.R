@@ -153,18 +153,21 @@ sum(dd$nmeas)
 #-----------------------------------
 
 # shorten the description for a few studies
-dd$short_description[dd$study_id=='CONTENT'] <- 'Eval & Control of Negl. Mucosal Enteric Inf'
+dd$short_description[dd$study_id=='CONTENT'] <- 'Eval of Negl. Enteric Inf'
 dd$short_description[dd$study_id=='LCNI-5'] <- 'Lungwena Child Nutr Int Study'
 dd$short_description[dd$study_id=='Burkina Faso Zn'] <- 'Zinc Int Trial'
-dd$short_description[dd$study_id=='AgaKhanUniv'] <- 'Aga Khan Evidence Based Nutr Int Study'
+dd$short_description[dd$study_id=='AgaKhanUniv'] <- 'Aga Khan Nutr Int Study'
 dd$short_description[dd$study_id=='SAS-FoodSuppl'] <- 'Food Suppl Trial'
 dd$short_description[dd$study_id=="MAL-ED"] <- 'MAL-ED Study'
-dd$short_description[dd$study_id=='CMIN'] <- 'Child Malnutrition and Inf Network'
+dd$short_description[dd$study_id=='CMIN'] <- 'Child Malnutr and Inf Network'
 dd$short_description[dd$study_id=='Guatemala BSC'] <- 'Longitudinal study of BSC'
 dd$short_description[dd$study_id=='Peru Huascar'] <- 'Infant growth in Huascar'
-dd$short_description[dd$study_id=='EE'] <- 'Study of Biomarkers for EE'
+dd$short_description[dd$study_id=='EE'] <- 'Biomarkers for EE'
 dd$short_description[dd$study_id=='GMS-Nepal'] <- 'Growth Monitoring Study'
 dd$short_description[dd$study_id=='NIH-Crypto'] <- 'NIH Crypto study'
+dd$short_description[dd$short_description=='Vitamin A Supplementation in Serrinha, Brazil'] <- 'Vit. A Sup. in Serrinha'
+dd$short_description[dd$short_description=='Respiratory Pathogens Birth Cohort'] <- 'Resp. Pathogens Birth Cohort'
+
 
 # simplify Tanzania label
 dd$countrycohort[dd$countrycohort=='TANZANIA, UNITED REPUBLIC OF'] <- 'TANZANIA'
@@ -187,7 +190,7 @@ dd <- mutate(dd,
              )
 
 # categorize stunting prevalence
-dd$stpcat <- cut(dd$stuntprev,breaks=c(0,5,10,15,20,25,100),labels=c("<5","5-10","10-15","15-20","20-25",">25"))
+dd$stpcat <- cut(dd$stuntprev,breaks=c(0,5,10,20,30,40,50,60,100),labels=c("<5","5-10","10-20","20-30","30-40","40-50","50-60",">60"))
 dd$stpcat <- factor(dd$stpcat)
 
 
@@ -225,7 +228,8 @@ dp <- left_join(dnsubj,dstuntp,by=c('study_id','anonym','country','studycountry'
   
 
 # categorize stunting prevalence, set stunting prevalence category estimates to missing if n<50
-dp$stpcat <- cut(dp$stp,breaks=c(0,5,10,15,20,25,100),labels=c("<5","5-10","10-15","15-20","20-25",">25"))
+dp$stpcat <- cut(dp$stp,breaks=c(0,5,10,20,30,40,50,60,100),labels=c("<5","5-10","10-20","20-30","30-40","40-50","50-60",">60"))
+
 dp$stpcat <- factor(dp$stpcat)
 dp$stpcat[dp$nobs<50 | is.nan(dp$stp)] <- NA
 
@@ -514,4 +518,8 @@ dd %>%
   summarise(sum(nmeas))
 
 
+#-----------------------------------
+# save plot dataframe
+#-----------------------------------
+save(dp,dd, file="U:/Data/Stunting/st_heatmap.RData")
 
