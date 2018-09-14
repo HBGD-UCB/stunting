@@ -1,14 +1,17 @@
 
+
 rm(list=ls())
 library(tidyverse)
 library(metafor)
 
-load("C:/Users/andre/Downloads/sprint_7D_longbow-master (2)/sprint_7D_longbow-master/adjusted_binary/adjusted_binary_results.rdata")
-
-
-#load("C:/Users/andre/Downloads/sprint_7D_longbow-master (2)/sprint_7D_longbow-master/unadjusted_binary/unadjusted_binary_results.rdata")
+load("C:/Users/andre/Downloads/sprint_7D_longbow-master/sprint_7D_longbow-master/adjusted_binary/adjusted_binary_results.rdata")
+#load("C:/Users/andre/Downloads/sprint_7D_longbow-master/sprint_7D_longbow-master/unadjusted_binary/unadjusted_binary_results.rdata")
 
 d <- results
+unique(d$intervention_variable)
+
+#Grab mean WHZ RF dataset
+whz <- d %>% filter(intervention_variable=="lag_WHZ_quart")
 
 
 head(d)
@@ -19,22 +22,14 @@ d <- d %>% filter(type=="RR")
 
 #Subset to primary outcomes
 table(d$agecat)
+table(is.na(d$agecat))
 
-d <- d %>% filter(agecat=="0-6 months"| agecat=="6 months"| agecat=="6-24 months"| agecat=="24 months")
-
+#d <- d %>% filter(agecat=="0-6 months"| agecat=="6 months"| agecat=="6-24 months"| agecat=="24 months")
+d <- d %>% filter(!is.na(agecat) & agecat!="Birth")
 
 #Drop enrolled stunted as a RF for stunting
 d <- d %>% filter(intervention_variable!="enstunt")
 
-
-#Drop diarrhea under 6 months
-d <- d %>% filter(intervention_variable!="perdiar6")
-
-#Drop water treatment
-d <- d %>% filter(intervention_variable!="trth2o")
-
-#Drop Mal-ED Tanzania HHwealth 6-24mo (only has 2 levels)
-d <- d %>% filter(!(intervention_variable=="hhwealth_quart" & agecat=="6-24 months" & studyid=="ki0047075b-MAL-ED" & country=="TANZANIA, UNITED REPUBLIC OF"))
 
 
 head(d)
@@ -49,7 +44,9 @@ poolRR <- function(d){
     est <- data.frame(logRR.psi=1, logSE=0, RR=1, RR.CI1=1, RR.CI2=1, Nstudies= nstudies$N)
   }else{
   
-  fit<-rma(yi=untransformed_estimate, sei=untransformed_se, data=d, method="REML", measure="RR")
+  fit<-NULL
+  try(fit<-rma(yi=untransformed_estimate, sei=untransformed_se, data=d, method="REML", measure="RR"))
+  if(is.null(fit)){try(fit<-rma(yi=untransformed_estimate, sei=untransformed_se, data=d, method="ML", measure="RR"))}
 
   est<-data.frame(fit$b, fit$se)
   colnames(est)<-c("logRR.psi","logSE")
@@ -64,12 +61,14 @@ poolRR <- function(d){
   return(est)
 }
 
-RMAest <- d %>% group_by(intervention_variable, agecat, intervention_level) %>%
-              do(poolRR(.)) %>% as.data.frame()
+RMAest <- d %>% group_by(intervention_variable, agecat, intervention_level) %>% 
+              do(try(poolRR(.))) %>% as.data.frame()
 
 
 
+d <- d %>% group_by(intervention_variable, agecat, intervention_level)
 
+df <- d[d$intervention_variable]
 
 
 
@@ -84,54 +83,89 @@ head(RMAest)
 
 
 #Order factors for plotting
+table(RMAest$agecat)
+
 RMAest <- droplevels(RMAest)
 RMAest$agecat <- as.character(RMAest$agecat)
-RMAest$agecat[RMAest$agecat=="0-6 months"] <- "0-6 month\ncumulative incidence"
-RMAest$agecat[RMAest$agecat=="6 months"] <- "6 month prevalence"
-RMAest$agecat[RMAest$agecat=="6-24 months"] <- "6-24 month\ncumulative incidence"
-RMAest$agecat[RMAest$agecat=="24 months"] <- "24 month prevalence"
-RMAest$agecat <- factor(RMAest$agecat, levels = c("0-6 month\ncumulative incidence","6 month prevalence", "6-24 month\ncumulative incidence", "24 month prevalence"))
 
+RMAest$agecat[grepl("-",RMAest$agecat)] <- paste0(RMAest$agecat[grepl("-",RMAest$agecat)],"\ncumulative incidence")
+RMAest$agecat[!grepl("-",RMAest$agecat)] <- paste0(RMAest$agecat[!grepl("-",RMAest$agecat)]," prevalence")
+
+#RMAest$agecat[grepl(" \\(no birth st\\.\\)\\\ncumulative incidence",RMAest$agecat)] <- "cumulative incidence\n(no birth stunting)"
+
+
+#RMAest$agecat <- factor(RMAest$agecat, levels = c("0-6 month\ncumulative incidence","6 month prevalence", "6-24 month\ncumulative incidence", "24 month prevalence"))
+RMAest$agecat <- factor(RMAest$agecat, levels=c("3 months prevalence", "3-6 months\ncumulative incidence", "0-6 months (no birth st.)\ncumulative incidence","0-6 months\ncumulative incidence",
+  "6 months prevalence","6-9 months\ncumulative incidence","9 months prevalence","9-12 months\ncumulative incidence","12 months prevalence",
+  "12-15 months\ncumulative incidence","15 months prevalence","15-18 months\ncumulative incidence","18 months prevalence",
+  "0-24 months (no birth st.)","6-24 months\ncumulative incidence","0-24 months (no birth st.)\ncumulative incidence","0-24 months\ncumulative incidence","24 months prevalence"))
+
+
+#Fix WHZ quartile RF levels
+RMAest$RFlabel[RMAest$RFlabel=="1" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q1"
+RMAest$RFlabel[RMAest$RFlabel=="2" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q2"
+RMAest$RFlabel[RMAest$RFlabel=="3" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q3"
+RMAest$RFlabel[RMAest$RFlabel=="4" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q4"
+
+#Change binary variables into yes/no
+binvars <- c("hdlvry","vagbrth", "enwast","anywast06","pers_wast", "earlybf","predexfd6",
+               "predfeed3","predfeed36","predfeed6","exclfeed3","exclfeed36","exclfeed6",
+               "perdiar6","perdiar24","impsan","safeh20","trth2o","impfloor","cleanck")
+RMAest$intervention_level[RMAest$intervention_level=="0" & RMAest$intervention_variable %in% binvars] <- "No"
+RMAest$intervention_level[RMAest$intervention_level=="1" & RMAest$intervention_variable %in% binvars] <- "Yes"
+
+                                                
 unique(RMAest$intervention_level)
 RMAest$intervention_level <- factor(RMAest$intervention_level, 
-  levels=c("0","1",
-  "<259","[259-273)","[273-287)",">=287",
-  "<-3","[-3--2)","[-2--1)","[-1-0)",">=0",
-  "<18.5", "[18.5-25)",
-  "<20","<25","[20-25)","[25-30)",">=30","[30-35)",">=35",
-  "<145","[145-150)","[150-155)","[155-160)",">=160",
-  "<42.5","[42.5-50)","[50-57.5)",">=57.5",
-  "<160","[160-170)",">=170",
-  "3 or less", "4-5","6-7", "8+",
-  "2","3","4+",
-  "3+",
-  "Wealth Q1","Wealth Q2","Wealth Q3","Wealth Q4",
-  "Q1","Q2","Q3","Q4",
-  "Food Secure","Moderately Food Insecure","Mildly Food Insecure","Severely Food Insecure"))
+  levels=c("0","1", "No", "Yes",
+"<48 cm" , "[48-50) cm",  ">=50 cm",                                  
+"Low birth weight","Normal or high birthweight", 
+"2","3","4","5","6","7","8","9",  "10" , "11","12" ,
+"<32" , "[32-38)", ">=38",
+"Low", "Medium", "High",                    
+"<162 cm", "[162-167) cm" , ">=167 cm",
+"Preterm", "Early term", "Full or late term",           
+"Food Insecure", "Mildly Food Insecure", "Food Secure",               
+"Wealth Q1", "Wealth Q2", "Wealth Q3", "Wealth Q4",
+"<25","[25-30)",">=30",                      
+"Underweight", "Normal weight", "Overweight or Obese",
+"<151 cm", "[151-155) cm", ">=155 cm",
+"<52 kg", "[52-58) kg", ">=58 kg",
+"2+","3 or less","4-5","6-7","8+","3+","4+",                                                 
+"0%","(0%, 5%]",">5%","Female","Male",
+"WHZ Q1", "WHZ Q2", "WHZ Q3", "WHZ Q4"))
+
+
 
 unique(RMAest$intervention_variable)
 RMAest$intervention_variable <- factor(RMAest$intervention_variable,
-                                       levels=c("birthlen","birthwt", "gagebrth",
+                                       levels=c("sex","birthlen","birthwt", "gagebrth",
                                                 "hdlvry","vagbrth",
                                                 "enwast","anywast06","pers_wast",
-                                                "earlybf","predexfd6","perdiar24",
+                                                "earlybf","predexfd6",
+                                                "predfeed3","predfeed36","predfeed6",
+                                                "exclfeed3","exclfeed36","exclfeed6",
+                                                "perdiar6","perdiar24",
                                                 "mage","fage","mhtcm","fhtcm",
                                                 "mwtkg","mbmi","single",
                                                 "meducyrs","feducyrs",
                                                 "parity",
                                                 "nchldlt5","nhh","nrooms",
                                                 "hhwealth_quart","hfoodsec",
-                                                "impsan","safeh20",#"trth2o",
-                                                "impfloor","cleanck"))
+                                                "impsan","safeh20","trth2o",
+                                                "impfloor","cleanck",
+                                                "brthmon" ,"month",
+                                                "lag_WHZ_quart"))   
 
 
 #Add variable labels
 unique(RMAest$intervention_variable)
 
 RMAest$RFlabel <- NA
+RMAest$RFlabel[RMAest$intervention_variable=="sex"] <-  "Gender"
 RMAest$RFlabel[RMAest$intervention_variable=="enwast"] <-  "Enrolled wasted"
 RMAest$RFlabel[RMAest$intervention_variable=="gagebrth"] <-  "Gestational age at birth"
-RMAest$RFlabel[RMAest$intervention_variable=="predexfd6"] <-  "Exclusive or Predominant breastfeed under 6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="predexfd6"] <-  "Exclusive or Predominant breastfeeding under 6 months"
 RMAest$RFlabel[RMAest$intervention_variable=="mage"] <- "Mother's age" 
 RMAest$RFlabel[RMAest$intervention_variable=="mhtcm"] <- "Mother's height" 
 RMAest$RFlabel[RMAest$intervention_variable=="mwtkg"] <- "Mother's weight" 
@@ -143,8 +177,8 @@ RMAest$RFlabel[RMAest$intervention_variable=="nchldlt5"] <-   "Number of childre
 RMAest$RFlabel[RMAest$intervention_variable=="hhwealth_quart"] <-  "Household wealth" 
 RMAest$RFlabel[RMAest$intervention_variable=="fage"] <- "Father's age" 
 RMAest$RFlabel[RMAest$intervention_variable=="fhtcm"] <- "Father's height" 
-RMAest$RFlabel[RMAest$intervention_variable=="birthwt"] <- "Birthweight (Z-scored)" 
-RMAest$RFlabel[RMAest$intervention_variable=="birthlen"] <- "Birth length (Z-scored)" 
+RMAest$RFlabel[RMAest$intervention_variable=="birthwt"] <- "Birthweight (kg)" 
+RMAest$RFlabel[RMAest$intervention_variable=="birthlen"] <- "Birth length (cm)" 
 RMAest$RFlabel[RMAest$intervention_variable=="vagbrth"] <- "Vaginal birth" 
 RMAest$RFlabel[RMAest$intervention_variable=="hdlvry"] <- "Child delivered at home" 
 RMAest$RFlabel[RMAest$intervention_variable=="single"] <- "Single parent" 
@@ -162,10 +196,31 @@ RMAest$RFlabel[RMAest$intervention_variable=="safeh20"] <- "Safe water source"
 RMAest$RFlabel[RMAest$intervention_variable=="perdiar6"] <- "Quartile of diarrhea longitudinal\nprevalence under 6 months" 
 RMAest$RFlabel[RMAest$intervention_variable=="perdiar24"] <- "Quartile of diarrhea longitudinal\nprevalence under 24 months" 
 RMAest$RFlabel[RMAest$intervention_variable=="earlybf"] <- "Breastfeed within an hour of birth" 
+RMAest$RFlabel[RMAest$intervention_variable=="predfeed3"] <-  "Predominant breastfeeding under 3 months"
+RMAest$RFlabel[RMAest$intervention_variable=="predfeed36"] <-  "Predominant breastfeeding from 3-6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="predfeed6"] <-  "Predominant breastfeeding under 6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="exclfeed3"] <-  "Exclusive breastfeeding under 3 months"
+RMAest$RFlabel[RMAest$intervention_variable=="exclfeed36"] <-  "Exclusive breastfeeding from 3-6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="exclfeed6"] <-  "Exclusive breastfeeding under 6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="month"] <-  "Month of measurement"
+RMAest$RFlabel[RMAest$intervention_variable=="brthmon"] <-  "Birth month"
+RMAest$RFlabel[RMAest$intervention_variable=="lag_WHZ_quart"] <-  "Mean WHZ in the prior 3 months"
+
+
+# Split prevalence and incidence
+RMAprev <- RMAest[grepl("prevalence",RMAest$agecat),]
+RMAest <- RMAest[!grepl("prevalence",RMAest$agecat),]
+
 
 #Print plots across all intervention arms
 yticks <- c(0.125,0.25,0.5,1,2,4,8,16)
 scaleFUN <- function(x) sprintf("%.2f", x)
+
+label_wrap <- function(variable, value) {
+  lapply(strwrap(as.character(value), width=20, simplify=FALSE), 
+        paste, collapse="\n")
+}  
+
 
 #Plot themes
 theme_set(theme_bw())
@@ -176,7 +231,7 @@ tableau10 <- c("#1F77B4","#FF7F0E","#2CA02C","#D62728",
 
 
 setwd("C:/Users/andre/Dropbox/HBGDki figures/Risk Factor Analysis/Stunting/")
-pdf("Risk Factor Plots Stunting.pdf", height=8, width=12)
+pdf("CI only pooled/Risk Factor Plots Stunting.pdf", height=8, width=12)
 
 j<-0
 for(i in levels(RMAest$intervention_variable)){
@@ -197,27 +252,34 @@ for(i in levels(RMAest$intervention_variable)){
         scale_size_continuous(range = c(0.5, 1))+
         theme(strip.background = element_blank(),
           legend.position="none",
-          strip.text.x = element_text(size=12),
+          strip.text.x = element_text(size=10), axis.text.y = element_text(size=12),
           axis.text.x = element_text(size=12, angle = 45, hjust = 1)) +
-        facet_wrap(~agecat, nrow = 1) +
+        facet_wrap(~agecat, nrow = 1, labeller = label_wrap) +
         ggtitle(plotdf$RFlabel[1])
-  ggsave(p, file=paste0(j,"_",i,"_RFplot.png"), height=8, width=12)
-  ggsave(p, file=paste0("Powerpoint size/",j,"_",i,"_RFplot.png"), height=6.5, width=9.5)
+  ggsave(p, file=paste0("CI only pooled/",j,"_",i,"_RFplot.png"), height=8, width=12)
+  ggsave(p, file=paste0("CI only pooled/Powerpoint size/",j,"_",i,"_RFplot.png"), width=5.7, height=4.6)
   print(p)
 }
 
 dev.off()
 
 
+label_wrap <- function(variable, value) {
+  lapply(strwrap(as.character(value), width=10, simplify=FALSE), 
+        paste, collapse="\n")
+}  
 
-# Create plots with just the CI outcomes
 
-RMAestCI <- RMAest %>% filter(agecat!="6 month prevalence" & agecat!="24 month prevalence")
+
+setwd("C:/Users/andre/Dropbox/HBGDki figures/Risk Factor Analysis/Stunting/")
+pdf("Prev only pooled/Risk Factor Plots Stunting.pdf", height=8, width=12)
+
+RMAprev <- droplevels(RMAprev)
 
 j<-0
-for(i in levels(RMAestCI$intervention_variable)){
+for(i in levels(RMAprev$intervention_variable)){
   j<-j+1
-  plotdf <- RMAestCI[RMAestCI$intervention_variable==i,]  
+  plotdf <- RMAprev[RMAprev$intervention_variable==i,]  
     
   p <-  ggplot(plotdf, aes(x=intervention_level)) + 
         geom_point(aes(y=RR, fill=agecat, color=agecat), size = 4) +
@@ -228,51 +290,361 @@ for(i in levels(RMAestCI$intervention_variable)){
           geom_text(aes(x=0.75, y=ceiling(max(plotdf$RR.CI2)), label=Nstudies), size=3,  hjust=0) +
         #coord_cartesian(ylim=range(yticks)) +
         scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
-        scale_fill_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAest$agecat)) +
-        scale_colour_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAest$agecat)) +
+        scale_fill_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAprev$agecat)) +
+        scale_colour_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAprev$agecat)) +
         scale_size_continuous(range = c(0.5, 1))+
         theme(strip.background = element_blank(),
           legend.position="none",
           strip.text.x = element_text(size=12),
           axis.text.x = element_text(size=12, angle = 45, hjust = 1)) +
-        facet_wrap(~agecat, nrow = 1) +
+        facet_wrap(~agecat, nrow = 1, labeller = label_wrap) +
         ggtitle(plotdf$RFlabel[1])
-  ggsave(p, file=paste0("C:/Users/andre/Dropbox/HBGDki figures/Risk Factor Analysis/Stunting/CI only/",j,"_",i,"_RFplot.pdf"), height=8, width=12)
+  ggsave(p, file=paste0("Prev only pooled/",j,"_",i,"_RFplot.png"), height=8, width=12)
+  ggsave(p, file=paste0("Prev only pooled/Powerpoint size/",j,"_",i,"_RFplot.png"), width=5.7, height=4.6)
+  print(p)
 }
 
+dev.off()
+
+
+
+# 
+# #Create 1 summary plot with the largest RR
+# sumdf <- RMAest %>% ungroup() %>% 
+#   group_by(intervention_variable) %>% 
+#   mutate(maxRR=max(abs(1-RR))) %>% 
+#   filter(maxRR==abs(1-RR)) %>% ungroup() %>%
+#   arrange(RR) %>%
+#   mutate(order=row_number())
+# 
+# sumdf$intervention_variable <- as.character(sumdf$intervention_variable)
+# sumdf$intervention_variable <- factor(sumdf$intervention_variable, levels=unique(sumdf$intervention_variable))
+# 
+# yticks <- c(0.125,0.25,0.5,1,2,4,8,16,32,64)
+# 
+# 
+# p <- ggplot(sumdf, aes(x=intervention_variable)) + 
+#         geom_point(aes(y=RR, fill=agecat, color=agecat), size = 4) +
+#         geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=agecat),
+#                        alpha=0.5, size = 3) +
+#         labs(x = "Risk factor", y = "Relative risk") +
+#         geom_hline(yintercept = 1) +
+#           scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+#         scale_fill_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAest$agecat)) +
+#         scale_colour_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAest$agecat)) +
+#         theme(strip.background = element_blank(),
+#           legend.position="none",
+#           strip.text.x = element_text(size=12),
+#           axis.text.x = element_text(size=12, angle = 45, hjust = 1)) +
+#         ggtitle("")
+# 
+# print(p) 
+# 
 
 
 
 
+#Plot important prenatal characteristics
+save(RMAest, file="C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_rf_res.RData")
 
-#Create 1 summary plot with the largest RR
-sumdf <- RMAest %>% ungroup() %>% 
-  group_by(intervention_variable) %>% 
-  mutate(maxRR=max(abs(1-RR))) %>% 
-  filter(maxRR==abs(1-RR)) %>% ungroup() %>%
-  arrange(RR) %>%
-  mutate(order=row_number())
+# Mother’s height, weight, and BMI
+# Father’s height
+# Mother’s and father’s education
+# Household wealth
 
-sumdf$intervention_variable <- as.character(sumdf$intervention_variable)
-sumdf$intervention_variable <- factor(sumdf$intervention_variable, levels=unique(sumdf$intervention_variable))
+df <- RMAest %>%
+      filter(agecat=="0-24 months (no birth st.)\ncumulative incidence"|
+               agecat=="0-24 months\ncumulative incidence") %>%
+      filter(intervention_variable %in% c("mhtcm","mwtkg","mbmi",
+                                          "fhtcm","meducyrs","feducyrs",
+                                          "hhwealth_quart"))
+df <- droplevels(df)
 
-yticks <- c(0.125,0.25,0.5,1,2,4,8,16,32,64)
+df$intervention_variable <- factor(df$intervention_variable, levels=c("mhtcm","mwtkg","mbmi",
+                                          "fhtcm","meducyrs","feducyrs",
+                                          "hhwealth_quart"))
+df <- df %>% arrange(intervention_variable)
+df$RFlabel <- factor(df$RFlabel, levels=unique(df$RFlabel))
 
 
-p <- ggplot(sumdf, aes(x=intervention_variable)) + 
-        geom_point(aes(y=RR, fill=agecat, color=agecat), size = 4) +
-        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=agecat),
-                       alpha=0.5, size = 3) +
-        labs(x = "Risk factor", y = "Relative risk") +
+yticks <- c(2/3, 1, 3/2)
+
+
+setwd("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar")
+
+  p <-  ggplot(df, aes(x=intervention_level)) + 
+        geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 8) +
+        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                       alpha=0.5, size = 6) +
+        facet_wrap(~RFlabel, scales="free_x", ncol=4, labeller = labeller(groupwrap = label_wrap_gen(10))) +
+        labs(x = "Risk factor level", y = "Relative risk") +
         geom_hline(yintercept = 1) +
-          scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
-        scale_fill_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAest$agecat)) +
-        scale_colour_manual(values=rep(tableau10,4), drop=TRUE, limits = levels(RMAest$agecat)) +
+          geom_text(aes(x=2, y=(max(df$RR.CI2))-.1, label=Nstudies), size=6,  hjust=0) +
+        scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+        scale_fill_manual(values=rep(tableau10,4)) +
+        scale_colour_manual(values=rep(tableau10,4)) +
         theme(strip.background = element_blank(),
           legend.position="none",
-          strip.text.x = element_text(size=12),
-          axis.text.x = element_text(size=12, angle = 45, hjust = 1)) +
-        ggtitle("")
+          plot.title = element_text(size=30),
+          axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
+          axis.text.y = element_text(size=16),
+          strip.text.x = element_text(size=20),
+          axis.text.x = element_text(size=16, angle = 15, hjust = 1)) +
+        ggtitle("Prenatal characteristics associated with\nstunting from birth to 2 years")
+  p
+  
+  
+  
+  
+    p <-  ggplot(df, aes(x=intervention_level)) + 
+        geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 4) +
+        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                       alpha=0.5, size = 3) +
+        facet_wrap(~RFlabel, scales="free_x", ncol=4, labeller = labeller(groupwrap = label_wrap_gen(10))) +
+        labs(x = "Risk factor level", y = "Relative risk") +
+        geom_hline(yintercept = 1) +
+          geom_text(aes(x=2, y=(max(df$RR.CI2))-.1, label=Nstudies), size=2,  hjust=0) +
+        scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+        scale_fill_manual(values=rep(tableau10,4)) +
+        scale_colour_manual(values=rep(tableau10,4)) +
+        theme(strip.background = element_blank(),
+          legend.position="none")+
+          # plot.title = element_text(size=30),
+          # axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
+          # axis.text.y = element_text(size=16),
+          # strip.text.x = element_text(size=20),
+          # axis.text.x = element_text(size=16, angle = 15, hjust = 1)) +
+        ggtitle("Prenatal characteristics associated with\nstunting from birth to 2 years")
+  
+  
+  ggsave(p, file="prenatal_RFplot.png",  width=5.7, height=4.6)
+  
+  
+  
+  #   p <-  ggplot(df, aes(x=intervention_level)) + 
+  #       geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 4) +
+  #       geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+  #                      alpha=0.5, size = 4) +
+  #       facet_wrap(~RFlabel, scales="free_x", ncol=3) +
+  #       labs(x = "Risk factor level", y = "Relative risk") +
+  #       geom_hline(yintercept = 1) +
+  #         geom_text(aes(x=2.5, y=(max(df$RR.CI2))-.1, label=Nstudies), size=2,   hjust=0) +
+  #       scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+  #       scale_fill_manual(values=rep(tableau10,4)) +
+  #       scale_colour_manual(values=rep(tableau10,4)) +
+  #       theme(strip.background = element_blank(),
+  #         legend.position="none",
+  #         #plot.title = element_text(size=30),
+  #         #axis.title.x = element_text(size=12), axis.title.y = element_text(size=12),
+  #         axis.text.y = element_text(size=12),
+  #         strip.text.x = element_text(size=11),
+  #         axis.text.x = element_text(size=11, angle = 15, hjust = 1)) +
+  #       ggtitle("Prenatal characteristics associated with\nstunting from birth to 2 years")
+  # 
+  # ggsave(p, file="prenatal_RFplot.png", height=4.6, width=5.7)
+  
+  
+  
 
-print(p) 
 
+
+# Birth length, weight
+# Gestational age
+# Child delivered at home
+
+
+df <- RMAest %>%
+      filter(agecat=="0-24 months (no birth st.)\ncumulative incidence"|
+               agecat=="0-24 months\ncumulative incidence") %>%
+      filter(intervention_variable %in% c("sex","birthlen", "birthwt", "gagebrth", "hdlvry", "parity"))
+df <- droplevels(df)
+
+df$intervention_variable <- factor(df$intervention_variable, levels=
+                                     c("sex","gagebrth","birthlen", "birthwt",  "hdlvry", "parity"))
+df <- df %>% arrange(intervention_variable)
+df$RFlabel <- factor(df$RFlabel, levels=unique(df$RFlabel))
+
+
+
+yticks <- c(2/3, 1, 3/2,2,3,4)
+    
+  p <-  ggplot(df, aes(x=intervention_level)) + 
+        geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 8) +
+        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                       alpha=0.5, size = 6) +
+        facet_wrap(~RFlabel, scales="free_x", ncol=2, , labeller = labeller(groupwrap = label_wrap_gen(10))) +
+        labs(x = "Risk factor level", y = "Relative risk") +
+        geom_hline(yintercept = 1) +
+          geom_text(aes(x=2, y=(max(df$RR.CI2))-.1, label=Nstudies), size=6,  hjust=0) +
+        scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+        scale_fill_manual(values=rep(tableau10,4)) +
+        scale_colour_manual(values=rep(tableau10,4)) +
+        theme(strip.background = element_blank(),
+          legend.position="none",
+          plot.title = element_text(size=30),
+          axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
+          axis.text.y = element_text(size=16),
+          strip.text.x = element_text(size=20),
+          axis.text.x = element_text(size=16, angle = 15, hjust = 1)) +
+        ggtitle("Birth characteristics associated with\nstunting from birth to 2 years")
+  p
+
+    ggsave(p, file="prenatal_RFplot.png", width=5.7, height=4.6)
+
+  
+  
+# Household food security
+# Breastfeeding 0-3, 3-6
+# Diarrhea under 6 months
+# Improved sanitation
+# Improved floor
+
+
+
+
+df <- RMAest %>%
+      filter(agecat=="0-24 months (no birth st.)\ncumulative incidence"|
+               agecat=="0-24 months\ncumulative incidence") %>%
+      filter(intervention_variable %in% c("sex","birthlen", "birthwt", "gagebrth", "hdlvry", "parity"))
+df <- droplevels(df)
+
+df$intervention_variable <- factor(df$intervention_variable, levels=
+                                     c("sex","gagebrth","birthlen", "birthwt",  "hdlvry", "parity"))
+df <- df %>% arrange(intervention_variable)
+df$RFlabel <- factor(df$RFlabel, levels=unique(df$RFlabel))
+
+
+
+yticks <- c(2/3, 1, 3/2,2,3,4)
+    
+  p <-  ggplot(df, aes(x=intervention_level)) + 
+        geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 8) +
+        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                       alpha=0.5, size = 6) +
+        facet_wrap(~RFlabel, scales="free_x", ncol=4) +
+        labs(x = "Risk factor level", y = "Relative risk") +
+        geom_hline(yintercept = 1) +
+          geom_text(aes(x=1.2, y=(max(df$RR.CI2))-.1, label=Nstudies), size=6,  hjust=0) +
+        scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+        scale_fill_manual(values=rep(tableau10,4)) +
+        scale_colour_manual(values=rep(tableau10,4)) +
+        theme(strip.background = element_blank(),
+          legend.position="none",
+          plot.title = element_text(size=30),
+          axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
+          axis.text.y = element_text(size=16),
+          strip.text.x = element_text(size=20),
+          axis.text.x = element_text(size=16, angle = 15, hjust = 1)) +
+        ggtitle("Birth characteristics associated with\nstunting from birth to 2 years")
+  p
+
+    ggsave(p, file="atbirth_RFplot.png", height=14, width=16)
+
+  
+  
+
+# Household food security
+# Breastfeeding 0-3, 3-6
+# Diarrhea under 6 months
+# Improved sanitation
+# Improved floor
+
+  
+  
+
+df <- RMAest %>%
+      #filter(agecat=="6-24 months\ncumulative incidence") %>%
+        filter(agecat=="0-24 months (no birth st.)\ncumulative incidence"|
+               agecat=="0-24 months\ncumulative incidence") %>%
+      filter(intervention_variable %in% c("exclfeed3",
+                                          "exclfeed36","exclfeed6","impfloor","impsan",
+                                          "nhh","nrooms","perdiar6"))
+df <- droplevels(df)
+
+ df$intervention_variable <- factor(df$intervention_variable, levels=
+                                      c("exclfeed3","exclfeed36",
+                                          "exclfeed6","perdiar6",
+                                          "impfloor","impsan",
+                                          "nhh","nrooms"))
+df <- df %>% arrange(intervention_variable)
+df$RFlabel <- factor(df$RFlabel, levels=unique(df$RFlabel))
+
+
+
+yticks <- c(2/3, 1, 3/2,2,3,4)
+    
+  p <-  ggplot(df, aes(x=intervention_level)) + 
+        geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 8) +
+        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                       alpha=0.5, size = 6) +
+        facet_wrap(~RFlabel, scales="free_x", ncol=4) +
+        labs(x = "Risk factor level", y = "Relative risk") +
+        geom_hline(yintercept = 1) +
+          geom_text(aes(x=1, y=(max(df$RR.CI2))-.1, label=Nstudies), size=6,  hjust=0) +
+        coord_cartesian(ylim=c(2/3,2)) +
+        scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+        scale_fill_manual(values=rep(tableau10,4)) +
+        scale_colour_manual(values=rep(tableau10,4)) +
+        theme(strip.background = element_blank(),
+          legend.position="none",
+          plot.title = element_text(size=30),
+          axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
+          axis.text.y = element_text(size=16),
+          strip.text.x = element_text(size=14),
+          axis.text.x = element_text(size=16, angle = 15, hjust = 1)) +
+        ggtitle("Post-natal associated with\nstunting from 6 months to 2 years")
+  p
+
+    ggsave(p, file="postnatal_RFplot.png", height=14, width=16)
+  
+  
+  
+  
+  
+  
+  
+  
+  df <- RMAest %>%
+      filter(agecat=="6-24 months\ncumulative incidence") %>%
+      filter(intervention_variable %in% c("anywast06","enwast","pers_wast"))
+df <- droplevels(df)
+  
+  
+df <- droplevels(df)
+
+ df$intervention_variable <- factor(df$intervention_variable, levels=
+                                      c("anywast06","enwast","pers_wast"))
+df <- df %>% arrange(intervention_variable)
+df$RFlabel[df$intervention_variable=="pers_wast"] <- "Persistent wasting\nbefore 6 months age"
+df$RFlabel[df$intervention_variable=="anywast06"] <- "Any wasting\nbefore 6 months age"
+df$RFlabel <- factor(df$RFlabel, levels=unique(df$RFlabel))
+
+
+
+yticks <- c(2/3, 1, 3/2,2,3,4)
+    
+  p <-  ggplot(df, aes(x=intervention_level)) + 
+        geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 8) +
+        geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                       alpha=0.5, size = 6) +
+        facet_wrap(~RFlabel, scales="free_x", ncol=3) +
+        labs(x = "Risk factor level", y = "Relative risk") +
+        geom_hline(yintercept = 1) +
+          geom_text(aes(x=1.2, y=2, label=Nstudies), size=6,  hjust=0) +
+        coord_cartesian(ylim=c(2/3,2)) +
+        scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+        scale_fill_manual(values=rep(tableau10,4)) +
+        scale_colour_manual(values=rep(tableau10,4)) +
+        theme(strip.background = element_blank(),
+          legend.position="none",
+          plot.title = element_text(size=30),
+          axis.title.x = element_text(size=24), axis.title.y = element_text(size=24),
+          axis.text.y = element_text(size=16),
+          strip.text.x = element_text(size=24),
+          axis.text.x = element_text(size=16, angle = 15, hjust = 1)) +
+        ggtitle("Associations between wasting before 6 months\nand stunting from 6 months to 2 years")
+  p
+
+  ggsave(p, file=paste0("Presentation plots/Wasting_as_a_RF_plots.png"), height=14, width=16)
+  
+  
