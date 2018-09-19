@@ -3,7 +3,7 @@ rm(list=ls())
 library(tidyverse)
 library(metafor)
 
-load("C:/Users/andre/Downloads/sprint_7D_longbow-master (2)/sprint_7D_longbow-master/adjusted_velocity/adjusted_velocity_results.rdata")
+load("C:/Users/andre/Downloads/sprint_7D_longbow-master/sprint_7D_longbow-master/adjusted_velocity/adjusted_velocity_results.rdata")
 d <- results
 
 
@@ -20,14 +20,6 @@ d <- d %>% filter(outcome_variable=="y_rate_haz")
 d <- d %>% filter(intervention_variable!="enstunt")
 
 
-#Drop diarrhea under 6 months
-d <- d %>% filter(intervention_variable!="perdiar6")
-
-#Drop water treatment
-d <- d %>% filter(intervention_variable!="trth2o")
-
-#Drop Mal-ED Tanzania HHwealth 6-24mo (only has 2 levels)
-d <- d %>% filter(!(baseline_level=="Wealth Q1"))
 
 
 
@@ -91,53 +83,74 @@ head(RMAest)
 
 #Order factors for plotting
 RMAest <- droplevels(RMAest)
-# RMAest$agecat <- as.character(RMAest$agecat)
-# RMAest$agecat[RMAest$agecat=="0-6 months"] <- "0-6 month cumulative incidence"
-# RMAest$agecat[RMAest$agecat=="6 months"] <- "6 month prevalence"
-# RMAest$agecat[RMAest$agecat=="6-24 months"] <- "6-24 month cumulative incidence"
-# RMAest$agecat[RMAest$agecat=="24 months"] <- "24 month prevalence"
-# RMAest$agecat <- factor(RMAest$agecat, levels = c("0-6 month cumulative incidence","6 month prevalence", "6-24 month cumulative incidence", "24 month prevalence"))
+
+
+#Order factors for plotting
+table(RMAest$agecat)
+
+RMAest <- droplevels(RMAest)
+RMAest$agecat <- paste0(as.character(RMAest$agecat), " change")
+RMAest$agecat <- factor(RMAest$agecat, levels=unique(RMAest$agecat))
+
+#Fix WHZ quartile RF levels
+RMAest$RFlabel[RMAest$RFlabel=="1" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q1"
+RMAest$RFlabel[RMAest$RFlabel=="2" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q2"
+RMAest$RFlabel[RMAest$RFlabel=="3" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q3"
+RMAest$RFlabel[RMAest$RFlabel=="4" & RMAest$intervention_variable=="lag_WHZ_quart"] <- "WHZ Q4"
+
+
 
 unique(RMAest$intervention_level)
 RMAest$intervention_level <- factor(RMAest$intervention_level, 
   levels=c("0","1",
-  "<259","[259-273)","[273-287)",">=287",
-  "<-3","[-3--2)","[-2--1)","[-1-0)",">=0",
-  "<18.5", "[18.5-25)",
-  "<20","<25","[20-25)","[25-30)",">=30","[30-35)",">=35",
-  "<145","[145-150)","[150-155)","[155-160)",">=160",
-  "<42.5","[42.5-50)","[50-57.5)",">=57.5",
-  "<160","[160-170)",">=170",
-  "3 or less", "4-5","6-7", "8+",
-  "2","3","4+",
-  "3+",
-  "Wealth Q1","Wealth Q2","Wealth Q3","Wealth Q4",
-  "Q1","Q2","Q3","Q4",
-  "Food Secure","Moderately Food Insecure","Mildly Food Insecure","Severely Food Insecure"))
+"<48 cm" , "[48-50) cm",                                    
+"Low birth weight","Normal or high birthweight", 
+"2","3","4","5","6","7","8","9",  "10" , "11","12" ,
+"<32" , "[32-38)", ">=38",
+"Low", "Medium", "High",                    
+"<162 cm", "[162-167) cm" , ">=167 cm",
+"Preterm", "Early term", "Full or late term",           
+"Food Insecure", "Mildly Food Insecure", "Food Secure",               
+"Wealth Q1", "Wealth Q2", "Wealth Q3", "Wealth Q4",
+"<25","[25-30)",">=30",                      
+"Underweight", "Normal weight", "Overweight or Obese",
+"<151 cm", "[151-155) cm", ">=155 cm",
+"<52 kg", "[52-58) kg", ">=58 kg",
+"2+","3 or less","4-5","6-7","8+","3+","4+",                                                 
+"0%","(0%, 5%]",">5%","Female","Male",
+"WHZ Q1", "WHZ Q2", "WHZ Q3", "WHZ Q4"))
+
+
 
 unique(RMAest$intervention_variable)
 RMAest$intervention_variable <- factor(RMAest$intervention_variable,
-                                       levels=c("birthlen","birthwt", "gagebrth",
+                                       levels=c("sex","birthlen","birthwt", "gagebrth",
                                                 "hdlvry","vagbrth",
                                                 "enwast","anywast06","pers_wast",
-                                                "earlybf","predexfd6","perdiar24",
+                                                "earlybf","predexfd6",
+                                                "predfeed3","predfeed36","predfeed6",
+                                                "exclfeed3","exclfeed36","exclfeed6",
+                                                "perdiar6","perdiar24",
                                                 "mage","fage","mhtcm","fhtcm",
                                                 "mwtkg","mbmi","single",
                                                 "meducyrs","feducyrs",
                                                 "parity",
                                                 "nchldlt5","nhh","nrooms",
                                                 "hhwealth_quart","hfoodsec",
-                                                "impsan","safeh20",#"trth2o",
-                                                "impfloor","cleanck"))
+                                                "impsan","safeh20","trth2o",
+                                                "impfloor","cleanck",
+                                                "brthmon" ,"month",
+                                                "lag_WHZ_quart"))   
 
 
 #Add variable labels
 unique(RMAest$intervention_variable)
 
 RMAest$RFlabel <- NA
+RMAest$RFlabel[RMAest$intervention_variable=="sex"] <-  "Gender"
 RMAest$RFlabel[RMAest$intervention_variable=="enwast"] <-  "Enrolled wasted"
 RMAest$RFlabel[RMAest$intervention_variable=="gagebrth"] <-  "Gestational age at birth"
-RMAest$RFlabel[RMAest$intervention_variable=="predexfd6"] <-  "Exclusive or Predominant breastfeed under 6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="predexfd6"] <-  "Exclusive or Predominant breastfeeding under 6 months"
 RMAest$RFlabel[RMAest$intervention_variable=="mage"] <- "Mother's age" 
 RMAest$RFlabel[RMAest$intervention_variable=="mhtcm"] <- "Mother's height" 
 RMAest$RFlabel[RMAest$intervention_variable=="mwtkg"] <- "Mother's weight" 
@@ -149,8 +162,8 @@ RMAest$RFlabel[RMAest$intervention_variable=="nchldlt5"] <-   "Number of childre
 RMAest$RFlabel[RMAest$intervention_variable=="hhwealth_quart"] <-  "Household wealth" 
 RMAest$RFlabel[RMAest$intervention_variable=="fage"] <- "Father's age" 
 RMAest$RFlabel[RMAest$intervention_variable=="fhtcm"] <- "Father's height" 
-RMAest$RFlabel[RMAest$intervention_variable=="birthwt"] <- "Birthweight (Z-scored)" 
-RMAest$RFlabel[RMAest$intervention_variable=="birthlen"] <- "Birth length (Z-scored)" 
+RMAest$RFlabel[RMAest$intervention_variable=="birthwt"] <- "Birthweight (kg)" 
+RMAest$RFlabel[RMAest$intervention_variable=="birthlen"] <- "Birth length (cm)" 
 RMAest$RFlabel[RMAest$intervention_variable=="vagbrth"] <- "Vaginal birth" 
 RMAest$RFlabel[RMAest$intervention_variable=="hdlvry"] <- "Child delivered at home" 
 RMAest$RFlabel[RMAest$intervention_variable=="single"] <- "Single parent" 
@@ -168,6 +181,15 @@ RMAest$RFlabel[RMAest$intervention_variable=="safeh20"] <- "Safe water source"
 RMAest$RFlabel[RMAest$intervention_variable=="perdiar6"] <- "Quartile of diarrhea longitudinal\nprevalence under 6 months" 
 RMAest$RFlabel[RMAest$intervention_variable=="perdiar24"] <- "Quartile of diarrhea longitudinal\nprevalence under 24 months" 
 RMAest$RFlabel[RMAest$intervention_variable=="earlybf"] <- "Breastfeed within an hour of birth" 
+RMAest$RFlabel[RMAest$intervention_variable=="predfeed3"] <-  "Predominant breastfeeding under 3 months"
+RMAest$RFlabel[RMAest$intervention_variable=="predfeed36"] <-  "Predominant breastfeeding from 3-6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="predfeed6"] <-  "Predominant breastfeeding under 6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="exclfeed3"] <-  "Exclusive breastfeeding under 3 months"
+RMAest$RFlabel[RMAest$intervention_variable=="exclfeed36"] <-  "Exclusive breastfeeding from 3-6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="exclfeed6"] <-  "Exclusive breastfeeding under 6 months"
+RMAest$RFlabel[RMAest$intervention_variable=="month"] <-  "Month of measurement"
+RMAest$RFlabel[RMAest$intervention_variable=="brthmon"] <-  "Birth month"
+RMAest$RFlabel[RMAest$intervention_variable=="lag_WHZ_quart"] <-  "Mean WHZ in the prior 3 months"
 
 #Print plots across all intervention arms
 #yticks <- c(0.125,0.25,0.5,1,2,4,8,16)

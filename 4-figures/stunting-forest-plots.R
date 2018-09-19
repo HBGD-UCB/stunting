@@ -4,7 +4,7 @@ rm(list=ls())
 library(tidyverse)
 library(metafor)
 
-load("C:/Users/andre/Downloads/sprint_7D_longbow-master (2)/sprint_7D_longbow-master/adjusted_binary/adjusted_binary_results.rdata")
+load("C:/Users/andre/Downloads/sprint_7D_longbow-master/sprint_7D_longbow-master/adjusted_binary/adjusted_binary_results.rdata")
 load("C:/Users/andre/Downloads/RiskFactor_Ns.rdata")
 
 d <- results
@@ -26,21 +26,12 @@ d <- d %>% filter(type=="RR")
 #Subset to primary outcomes
 table(d$agecat)
 
-d <- d %>% filter(agecat=="0-6 months"| agecat=="6 months"| agecat=="6-24 months"| agecat=="24 months")
+#d <- d %>% filter(agecat=="0-6 months"| agecat=="6 months"| agecat=="6-24 months"| agecat=="24 months")
 
 
 #Drop enrolled stunted as a RF for stunting
 d <- d %>% filter(intervention_variable!="enstunt")
 
-
-#Drop diarrhea under 6 months
-d <- d %>% filter(intervention_variable!="perdiar6")
-
-#Drop water treatment
-d <- d %>% filter(intervention_variable!="trth2o")
-
-#Drop Mal-ED Tanzania HHwealth 6-24mo (only has 2 levels)
-d <- d %>% filter(!(intervention_variable=="hhwealth_quart" & agecat=="6-24 months" & studyid=="ki0047075b-MAL-ED" & country=="TANZANIA, UNITED REPUBLIC OF"))
 
 
 head(d)
