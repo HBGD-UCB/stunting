@@ -218,5 +218,5 @@ ggplot(rev.res,aes(y=est,x=agecat))+
   ggtitle("Percentage of children who were stunted and recovered within age intervals")
 dev.off()
 
-save(rev.res, file="U:/Data/Stunting/st_rec_interim.RData")
+save(rev, rev.ind, rev.res, rec.cohort, file="U:/Data/Stunting/st_rec_interim.RData")
 

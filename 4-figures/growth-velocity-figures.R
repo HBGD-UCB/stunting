@@ -10,6 +10,7 @@ source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
 # random effects function, save results nicely
 fit.cont.rma=function(data,age,yi,vi,ni,nlab){
+  
   data=filter(data,agecat==age)
   
   fit <- rma(yi=data[[yi]], vi=data[[vi]], method="REML")
@@ -63,7 +64,7 @@ d <- d %>% rename(agecat = diffcat) %>%
 
 # Drop yearly studies and non-control arms for the descriptive analysis
 #Drop studies Vishak added to data product that don't meet inclusion criteria
-d <- d[d$studyid!="ki1000301-DIVIDS" & d$studyid!="ki1055867-WomenFirst" & d$studyid!="ki1135782-INCAP"]
+d <- d[d$studyid!="ki1000301-DIVIDS" & d$studyid!="ki1055867-WomenFirst" & d$studyid!="ki1135782-INCAP",]
 
 #mark measure frequencies
 d$measurefreq <- NA
@@ -122,7 +123,7 @@ d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop beca
 d <- d %>% filter(measurefreq!="yearly")
 
 #Drop studies without estimates in all 4 age categories
-d <- d %>% group_by(country_cohort, ycat) %>% mutate(N=n()) %>% filter(N==4) %>% ungroup()
+#d <- d %>% group_by(country_cohort, ycat) %>% mutate(N=n()) %>% filter(N==4) %>% ungroup()
 
 #Create measure-specific datasets
 table(d$ycat)
@@ -134,21 +135,22 @@ dlencm <- d[d$ycat=="lencm",]
 dwtkg <- d[d$ycat=="wtkg",]
 
 
+#"0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"
 
 
 # age specific pooled results
 RE_pool <- function(df){
   
-  pooled.vel=lapply(list("0-3 months", "3-6 months",  "6-12 months","12-24 months"),function(x) 
+  pooled.vel=lapply(list("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"),function(x) 
     fit.cont.rma(data=df,yi="mean", vi="var", ni="n",age=x, nlab="children"))
   pooled.vel=as.data.frame(do.call(rbind, pooled.vel))
   
   # age and region specific pooled results
-  asia.vel=lapply(list("0-3 months", "3-6 months",  "6-12 months","12-24 months"),function(x) 
+  asia.vel=lapply(list("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"),function(x) 
     fit.cont.rma(data=df[df$region=="Asia",],yi="mean", vi="var", ni="n",age=x, nlab="children"))
-  LA.vel=lapply(list("0-3 months", "3-6 months",  "6-12 months","12-24 months"),function(x) 
+  LA.vel=lapply(list("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"),function(x) 
     fit.cont.rma(data=df[df$region=="Latin America",],yi="mean", vi="var", ni="n",age=x, nlab="children"))
-  africa.vel=lapply(list("0-3 months", "3-6 months",  "6-12 months","12-24 months"),function(x) 
+  africa.vel=lapply(list("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"),function(x) 
     fit.cont.rma(data=df[df$region=="Africa",],yi="mean", vi="var", ni="n",age=x, nlab="children"))
   
   asia.vel=as.data.frame(do.call(rbind, asia.vel))
@@ -208,7 +210,7 @@ poolwaz <- RE_pool(dwaz)
 poollencm <- RE_pool(dlencm)
 poolwtkg <- RE_pool(dwtkg)
 
-
+save(poolhaz, poolwaz, poollencm, poolwtkg, file="U:/data/Stunting/pool_vel.RData")
 
 
 

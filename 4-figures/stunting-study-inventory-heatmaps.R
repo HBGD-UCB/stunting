@@ -154,19 +154,30 @@ sum(dd$nmeas)
 
 # shorten the description for a few studies
 dd$short_description[dd$study_id=='CONTENT'] <- 'Eval of Negl. Enteric Inf'
-dd$short_description[dd$study_id=='LCNI-5'] <- 'Lungwena Child Nutr Int Study'
-dd$short_description[dd$study_id=='Burkina Faso Zn'] <- 'Zinc Int Trial'
-dd$short_description[dd$study_id=='AgaKhanUniv'] <- 'Aga Khan Nutr Int Study'
-dd$short_description[dd$study_id=='SAS-FoodSuppl'] <- 'Food Suppl Trial'
-dd$short_description[dd$study_id=="MAL-ED"] <- 'MAL-ED Study'
-dd$short_description[dd$study_id=='CMIN'] <- 'Child Malnutr and Inf Network'
-dd$short_description[dd$study_id=='Guatemala BSC'] <- 'Longitudinal study of BSC'
+dd$short_description[dd$study_id=='LCNI-5'] <- 'Lungwena Child Nutr RCT'
+dd$short_description[dd$study_id=='Burkina Faso Zn'] <- 'Zinc RCT'
+dd$short_description[dd$study_id=='AgaKhanUniv'] <- 'Aga Khan Nutr RCT'
+dd$short_description[dd$study_id=='SAS-FoodSuppl'] <- 'Food Suppl RCT'
+dd$short_description[dd$study_id=="MAL-ED"] <- 'MAL-ED'
+dd$short_description[dd$study_id=='CMIN'] <- 'CMIN'
+dd$short_description[dd$study_id=='Guatemala BSC'] <- 'Bovine Serum RCT'
 dd$short_description[dd$study_id=='Peru Huascar'] <- 'Infant growth in Huascar'
 dd$short_description[dd$study_id=='EE'] <- 'Biomarkers for EE'
 dd$short_description[dd$study_id=='GMS-Nepal'] <- 'Growth Monitoring Study'
-dd$short_description[dd$study_id=='NIH-Crypto'] <- 'NIH Crypto study'
-dd$short_description[dd$short_description=='Vitamin A Supplementation in Serrinha, Brazil'] <- 'Vit. A Sup. in Serrinha'
-dd$short_description[dd$short_description=='Respiratory Pathogens Birth Cohort'] <- 'Resp. Pathogens Birth Cohort'
+dd$short_description[dd$study_id=='NIH-Crypto'] <- 'NIH Crypto'
+dd$short_description[dd$study_id=='PROVIDE'] <- 'PROVIDE RCT'
+dd$short_description[dd$short_description=='Vitamin A Supplementation in Serrinha, Brazil'] <- 'Vit. A Sup., Serrinha'
+dd$short_description[dd$short_description=='Respiratory Pathogens Birth Cohort'] <- 'Resp. Pathogens'
+dd$short_description[dd$study_id=='CMC-V-BCS-2002'] <- 'CMC Birth, Vellore'
+dd$short_description[dd$study_id=='ZnMort'] <- 'PROVIDE RCT'
+dd$short_description[dd$study_id=='WASH-Bangladesh'] <- 'WASH Benefits RCT'
+dd$short_description[dd$study_id=='WASH-Kenya'] <- 'Zn Supp + Infant Mort.'
+dd$short_description[dd$study_id=='EU'] <- 'Zn Supp RCT'
+dd$short_description[dd$study_id=='JiVitA-3'] <- 'JiVitA-3'
+dd$short_description[dd$study_id=='JiVitA-4'] <- 'JiVitA-4'
+
+dd$short_description[dd$study_id=='SAS-CompFeed'] <- 'Optimal Infant Feeding'
+dd$short_description[dd$study_id=='NIH-Birth'] <- 'NIH Birth Cohort'
 
 
 # simplify Tanzania label
@@ -176,7 +187,12 @@ dd$countrycohort[dd$countrycohort=='TANZANIA, UNITED REPUBLIC OF'] <- 'TANZANIA'
 # including an anonymous label (temporary) for sharing with WHO
 dd <- mutate(dd,
              country=str_to_title(str_to_lower(countrycohort)), 
-             studycountry=paste(short_description,'-',country))
+             studycountry=paste0(short_description,', ',country))
+
+unique(dd$studycountry)
+unique(dd$study_id)
+
+dd$studycountry[dd$studycountry=="Tanzania Child 2, Tanzania"] <- "Tanzania Child 2" 
 
 dd <- mutate(dd,
              monthly=factor(monthly,levels=c(1,0),
@@ -234,9 +250,11 @@ dp$stpcat <- factor(dp$stpcat)
 dp$stpcat[dp$nobs<50 | is.nan(dp$stp)] <- NA
 
 # categorize number of observations
+
+N_breaks <- c(1,50, 100, 250, 500, 750, 1000, 1500, 2000, 100000)
 dp$ncat <- cut(dp$nobs,
-               breaks=c(1,50,seq(200,1400,by=200),100000),
-               labels=c('<50','50-200','200-400','400-600','600-800','800-1000','1000-1200','1200-1400','>1400'))
+               breaks=N_breaks,
+               labels=c('<50','50-100','100-250','250-500','500-750','750-1000','1000-1500','1500-2000','>2000'))
 dp$ncat <- factor(dp$ncat)
 
 

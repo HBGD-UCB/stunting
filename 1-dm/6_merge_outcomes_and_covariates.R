@@ -673,3 +673,31 @@ adjustment_sets <- list(
 )
 save(adjustment_sets, file="adjustment_sets_list.Rdata")
 
+
+
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# Create birthweight by EBF risk factor analysis dataset
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+#merge in covariates
+d <- bind_rows(cuminc, prev)
+
+d <- left_join(d, cov, by=c("studyid", "subjid", "country"))
+
+
+#Drop the early age categories
+table(d$agecat)
+d <- d %>% filter(agecat!="Birth" & agecat!="0-24 months" & agecat!="0-6 months")
+
+
+#Create interaction between 
+d$exclfeed6_2 <- ifelse(d$exclfeed6==1, "EBF", "No EBF")
+d$exclfeed6_2[is.na(d$exclfeed6)] <- NA
+d$birthwtXexclfeed6 <- interaction(d$birthwt, d$exclfeed6_2, drop = T, sep = " X ")
+
+table(d$birthwtXexclfeed6)
+
+save(d, file="st_BWxEBF_RF.Rdata")
+
+

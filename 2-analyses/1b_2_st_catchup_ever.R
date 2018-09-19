@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 #-----------------------------------
 # Stunting analysis
 # Objective 1b
@@ -27,6 +38,11 @@ load("U:/Data/Stunting/stunting_data.RData")
 d <- d %>% 
   ungroup() %>%
   mutate(subjid=as.character(subjid))
+
+#Clean country data
+d$country <- paste0(substring(as.character(d$country),1,1), tolower(substring(as.character(d$country),2)))
+d$country <- gsub("Tanzania, united republic of", "Tanzania", d$country)
+d$country <- gsub("africa", "Africa", d$country)
 
 # subset to monthly data
 d <- d %>% filter(measurefreq=="monthly")
@@ -91,11 +107,56 @@ rec.24 <- d %>%
   mutate(rec24=ifelse(maxrec==2,1,0)) %>%
   select(-c(maxrec))
 
+#recovered by 36 months
+rec.36 <- d %>%
+  filter(agem > 25 & agem<=37) %>%
+  # identify last two measurements prior to 24 months
+  group_by(studyid,country,subjid) %>%
+  mutate(rank=min_rank(-agedays)) %>%
+  # keep last two measurements 
+  filter(rank<= 2) %>%
+  # flag kids with 2 measurements not stunted
+  mutate(rec=ifelse(haz>= -2,1,0)) %>%
+  mutate(recsum=cumsum(rec)) %>%
+  # one row for each kid, indicator for recovered
+  summarise(maxrec=max(recsum)) %>%
+  mutate(rec36=ifelse(maxrec==2,1,0)) %>%
+  select(-c(maxrec))
+
+#recovered by 48 months
+rec.48 <- d %>%
+  filter(agem > 37 & agem<=49) %>%
+  # identify last two measurements prior to 24 months
+  group_by(studyid,country,subjid) %>%
+  mutate(rank=min_rank(-agedays)) %>%
+  # keep last two measurements 
+  filter(rank<= 2) %>%
+  # flag kids with 2 measurements not stunted
+  mutate(rec=ifelse(haz>= -2,1,0)) %>%
+  mutate(recsum=cumsum(rec)) %>%
+  # one row for each kid, indicator for recovered
+  summarise(maxrec=max(recsum)) %>%
+  mutate(rec48=ifelse(maxrec==2,1,0)) %>%
+  select(-c(maxrec))
+
+
 rev <- full_join(stunt.24, rec.24,by=c("studyid","country","subjid")) %>%
   # subset to kids who were stunted
   filter(stunted24==1) %>%
   mutate(srec24=ifelse(stunted24==1 & rec24==1,1,0)) %>%
   mutate(snorec24=ifelse(stunted24==1 & rec24==0,1,0)) 
+
+rev36 <- full_join(stunt.24, rec.36,by=c("studyid","country","subjid")) %>%
+  # subset to kids who were stunted
+  filter(stunted24==1) %>%
+  mutate(srec36=ifelse(stunted24==1 & rec36==1,1,0)) %>%
+  mutate(snorec36=ifelse(stunted24==1 & rec36==0,1,0)) 
+
+rev48 <- full_join(stunt.24, rec.48,by=c("studyid","country","subjid")) %>%
+  # subset to kids who were stunted
+  filter(stunted24==1) %>%
+  mutate(srec48=ifelse(stunted24==1 & rec48==1,1,0)) %>%
+  mutate(snorec48=ifelse(stunted24==1 & rec48==0,1,0)) 
 
 rev = rev %>% mutate(stunted24s=ifelse(stunted24==1,"Stunted","Not stunted"))
 rev = rev %>% mutate(rec24s=ifelse(rec24==1,"Recover","Not recover"))
@@ -110,57 +171,118 @@ rev.data <- rev %>%
             mn.s=mean(snorec24,na.rm=TRUE),
             n.s=sum(snorec24,na.rm=TRUE),
             N.s=sum(!is.na(snorec24))) %>%
-  mutate(agecat=as.factor("24 months"))
+  mutate(agecat=as.factor("24 months")) %>%
+  filter(n.r!=0 & N.r!=0)
+
+rev.data36 <- rev36 %>%
+  group_by(studyid,country) %>%
+  summarise(mn.r=mean(srec36,na.rm=TRUE),
+            n.r=sum(srec36,na.rm=TRUE),
+            N.r=sum(!is.na(srec36))) %>%
+  mutate(agecat=as.factor("36 months")) %>%
+  filter(n.r!=0 & N.r!=0)
+
+rev.data48 <- rev48 %>%
+  group_by(studyid,country) %>%
+  summarise(mn.r=mean(srec48,na.rm=TRUE),
+            n.r=sum(srec48,na.rm=TRUE),
+            N.r=sum(!is.na(srec48))) %>%
+  mutate(agecat=as.factor("48 months")) %>%
+  filter(n.r!=0 & N.r!=0)
 
 # estimate random effects, format results
-fit.r=rma(ni=rev.data$N.r, xi=rev.data$n.r, 
-            method="REML", measure="PR")
+fit.r=rma(ni=rev.data$N.r, xi=rev.data$n.r, method="REML", measure="PR")
+fit.r36=rma(ni=rev.data36$N.r, xi=rev.data36$n.r, method="REML", measure="PR")
+fit.r48=rma(ni=rev.data48$N.r, xi=rev.data48$n.r, method="REML", measure="PR")
+
+
 rev.res = rev.data %>%
   ungroup() %>%
   summarise(nstudies=length(unique(studyid)),
             nmeas=sum(rev.data$N.r)) %>%
-  mutate(agecat="24 months",est=fit.r$beta, se=fit.r$se, lb=fit.r$ci.lb, ub=fit$ci.ub,
+  mutate(agecat="24 months",est=fit.r$beta, se=fit.r$se, lb=fit.r$ci.lb, ub=fit.r$ci.ub,
          nmeas.f=paste0("N=",format(sum(rev.data$N.r),big.mark=",",scientific=FALSE),
                         " children"),
          nstudy.f=paste0("N=",nstudies," studies"))
+rev.res36 = rev.data36 %>%
+  ungroup() %>%
+  summarise(nstudies=length(unique(studyid)),
+            nmeas=sum(rev.data36$N.r)) %>%
+  mutate(agecat="36 months",est=fit.r36$beta, se=fit.r36$se, lb=fit.r36$ci.lb, ub=fit.r36$ci.ub,
+         nmeas.f=paste0("N=",format(sum(rev.data36$N.r),big.mark=",",scientific=FALSE),
+                        " children"),
+         nstudy.f=paste0("N=",nstudies," studies"))
+rev.res48 = rev.data48 %>%
+  ungroup() %>%
+  summarise(nstudies=length(unique(studyid)),
+            nmeas=sum(rev.data48$N.r)) %>%
+  mutate(agecat="48 months",est=fit.r48$beta, se=fit.r48$se, lb=fit.r48$ci.lb, ub=fit.r48$ci.ub,
+         nmeas.f=paste0("N=",format(sum(rev.data48$N.r),big.mark=",",scientific=FALSE),
+                        " children"),
+         nstudy.f=paste0("N=",nstudies," studies"))
 
+
+
+#Number still stunted
 fit.s=rma(ni=rev.data$N.s, xi=rev.data$n.s, 
           method="REML", measure="PR")
 s.res = rev.data %>%
   ungroup() %>%
   summarise(nstudies=length(unique(studyid)),
             nmeas=sum(rev.data$N.s)) %>%
-  mutate(agecat="24 months",est=fit.s$beta, se=fit.s$se, lb=fit.s$ci.lb, ub=fit$ci.ub,
+  mutate(agecat="24 months",est=fit.s$beta, se=fit.s$se, lb=fit.s$ci.lb, ub=fit.s$ci.ub,
          nmeas.f=paste0("N=",format(sum(rev.data$N.s),big.mark=",",scientific=FALSE),
                         " children"),
          nstudy.f=paste0("N=",nstudies," studies"))
 
-# number of cohorts
-nrow(rev.data)
-
-# number of children
-sum(rev.data$N.r)
 
 
-head(rev.data)
 
-rec.cohort=fit.escalc(data=rev.data,ni="N", xi="n",age="24 months",meas="PR")
-rec.cohort=cohort.format(rec.cohort, y=rec.cohort$yi,
-                         lab="24 months")
+
+rec.cohort=fit.escalc(data=rev.data,ni="N.r", xi="n.r",age="24 months",meas="PR")
+rec.cohort36=fit.escalc(data=rev.data36,ni="N.r", xi="n.r",age="36 months",meas="PR")
+rec.cohort48=fit.escalc(data=rev.data48,ni="N.r", xi="n.r",age="48 months",meas="PR")
+rec.cohort=cohort.format(rec.cohort, y=rec.cohort$yi,lab="24 months")
+rec.cohort36=cohort.format(rec.cohort36, y=rec.cohort36$yi,lab="36 months")
+rec.cohort48=cohort.format(rec.cohort48, y=rec.cohort48$yi,lab="48 months")
 
 # add the pooled result to the cohort plot
 pooled= rev.res %>% select(est,lb,ub) %>%
   rename(y=est, ci.lb=lb,ci.ub=ub) %>%
   mutate(cohort="Pooled") %>%
   select(cohort,y,ci.lb,ci.ub)
+pooled36= rev.res36 %>% select(est,lb,ub) %>%
+  rename(y=est, ci.lb=lb,ci.ub=ub) %>%
+  mutate(cohort="Pooled") %>%
+  select(cohort,y,ci.lb,ci.ub)
+pooled48= rev.res48 %>% select(est,lb,ub) %>%
+  rename(y=est, ci.lb=lb,ci.ub=ub) %>%
+  mutate(cohort="Pooled") %>%
+  select(cohort,y,ci.lb,ci.ub)
+
+
 cohort=rec.cohort %>%
   select(cohort,y,ci.lb,ci.ub) %>%
   mutate(cohort=as.character(cohort))
+cohort36=rec.cohort36 %>%
+  select(cohort,y,ci.lb,ci.ub) %>%
+  mutate(cohort=as.character(cohort))
+cohort48=rec.cohort48 %>%
+  select(cohort,y,ci.lb,ci.ub) %>%
+  mutate(cohort=as.character(cohort))
+
+
 
 plot.df=bind_rows(as.data.frame(pooled),cohort)
+plot.df36=bind_rows(as.data.frame(pooled36),cohort48)
+plot.df48=bind_rows(as.data.frame(pooled36),cohort48)
+
+save(plot.df, plot.df36, plot.df48, file="U:/Data/Stunting/st_rec24.RData")
+
+
 
 # sort by recovery %
-plot.df$cohort=factor(plot.df$cohort, 
+plot.df$cohort=factor(plot.df$cohort,
                       levels = plot.df$cohort[order(plot.df$y)])
 plot.df$y[plot.df$cohort=="Pooled"]=plot.df$y[plot.df$cohort=="Pooled"]*100
 plot.df$ci.lb[plot.df$cohort=="Pooled"]=plot.df$ci.lb[plot.df$cohort=="Pooled"]*100
@@ -173,9 +295,11 @@ ggplot(plot.df,aes(y=y,x=cohort))+
   geom_point(aes(shape=pooled),size=2)+coord_flip()+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
                  size=2,alpha=0.3) +
-  scale_y_continuous(limits=c(0,25))+
+  scale_y_continuous(limits=c(0,100))+
   scale_shape_manual("",values=c(16,15),guide=FALSE)+
   xlab("Cohort")+
   ylab("Percentage (95% CI)")+
-  ggtitle("Percentage of children who became stunted and\nrecovered within 24 months")
+  ggtitle("Percentage of children who became stunted and\nrecovered within 36 months")
 dev.off()
+
+

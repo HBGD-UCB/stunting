@@ -170,8 +170,8 @@ d[agedays>0, lencm := round(who_zscore2htcm(agedays-1, haz, sex = sex),1)]
 # when exact t is not available, impute:
 # take the closest available observations within (t1-/+tgap,t2-/+tgap)
 # where tgap is a preset window in days (14)
-t1vec = c(0,3,6,12)  ## 1st time-point in months
-t2vec = c(3,6,12,24) ## 2nd time-point in months
+t1vec = c(0,3,6,9,12,15,18,21)  ## 1st time-point in months
+t2vec = c(3,6,9,12,15,18,21,24) ## 2nd time-point in months
 outvec = c("haz","waz","lencm","wtkg")
 
 # t1mths   ## 1st time-point in months
@@ -258,134 +258,7 @@ dd_out_wide_RF <- data.table(dd_out_wide_RF)
 saveRDS(dd_out_wide_RF, file="U:/UCB-SuperLearner/Stunting rallies/velocity_widefmt_rf.rds")
 
 dd_out_RF[, list(Mean_rate = mean(y_rate), N = .N), by = list(sex, ycat, diffcat)]
-#        sex  ycat      diffcat    Mean_rate     N
-#  1: Female   haz   0-3 months -0.086065739 28472
-#  2:   Male   haz   0-3 months -0.146099363 29119
-#  3: Female   haz   3-6 months  0.004065326 25907
-#  4:   Male   haz   3-6 months -0.014515824 26319
-#  5: Female   haz  6-12 months -0.047025325 26695
-#  6:   Male   haz  6-12 months -0.034587049 27037
-#  7: Female   haz 12-24 months -0.032788457 12658
-#  8:   Male   haz 12-24 months -0.024167496 13267
-#  9: Female   waz   0-3 months  0.025372963 30198
-# 10:   Male   waz   0-3 months -0.036246121 31036
-# 11: Female   waz   3-6 months  0.052576208 26813
-# 12:   Male   waz   3-6 months  0.046247653 27532
-# 13: Female   waz  6-12 months -0.012407575 27324
-# 14:   Male   waz  6-12 months -0.008473672 27703
-# 15: Female   waz 12-24 months -0.026173729 12863
-# 16:   Male   waz 12-24 months -0.019970716 13466
-#        sex  ycat      diffcat    Mean_rate     N
+
 
 dat_countr = dd_out_RF[, list(Mean_rate = mean(y_rate), N = .N), by = list(sex, ycat, diffcat, country)]
 data.frame(dat_countr[N>500, ])
-#        sex  ycat      diffcat                      country    Mean_rate     N
-# 1   Female   haz   0-3 months                   BANGLADESH  0.071951729 11903
-# 2     Male   haz   0-3 months                   BANGLADESH  0.040419171 12156
-# 3   Female   haz   0-3 months                      BELARUS -0.347679271  6534
-# 4     Male   haz   0-3 months                      BELARUS -0.532176395  6211
-# 5     Male   haz   0-3 months                       GAMBIA -0.297327932   670
-# 6   Female   haz   0-3 months                       GAMBIA -0.271483442   606
-# 7   Female   haz   0-3 months                        INDIA -0.049612677  3948
-# 8     Male   haz   0-3 months                        INDIA -0.069188085  4350
-# 9   Female   haz   0-3 months                     ZIMBABWE -0.129356581  3833
-# 10    Male   haz   0-3 months                     ZIMBABWE -0.155617218  4031
-# 11  Female   haz   3-6 months                   BANGLADESH -0.003307988  8224
-# 12    Male   haz   3-6 months                   BANGLADESH -0.007536632  8404
-# 13  Female   haz   3-6 months                      BELARUS  0.068584128  6859
-# 14    Male   haz   3-6 months                      BELARUS  0.024208236  6450
-# 15    Male   haz   3-6 months                       GAMBIA -0.016001826   727
-# 16  Female   haz   3-6 months                       GAMBIA -0.017664970   670
-# 17  Female   haz   3-6 months                        INDIA -0.051696180  4119
-# 18    Male   haz   3-6 months                        INDIA -0.051789266  4459
-# 19  Female   haz   3-6 months TANZANIA, UNITED REPUBLIC OF -0.061568316   934
-# 20    Male   haz   3-6 months TANZANIA, UNITED REPUBLIC OF -0.103181188   965
-# 21  Female   haz   3-6 months                     ZIMBABWE  0.002652603  2894
-# 22    Male   haz   3-6 months                     ZIMBABWE -0.004465638  2995
-# 23  Female   haz  6-12 months                   BANGLADESH -0.067004770  7434
-# 24    Male   haz  6-12 months                   BANGLADESH -0.061532274  7652
-# 25  Female   haz  6-12 months                      BELARUS  0.014480308  6680
-# 26    Male   haz  6-12 months                      BELARUS  0.072169903  6216
-# 27    Male   haz  6-12 months                       GAMBIA -0.063362035   674
-# 28  Female   haz  6-12 months                       GAMBIA -0.059322112   632
-# 29    Male   haz  6-12 months                    GUATEMALA -0.104078217   544
-# 30  Female   haz  6-12 months                        INDIA -0.086574935  4660
-# 31    Male   haz  6-12 months                        INDIA -0.083188797  5095
-# 32    Male   haz  6-12 months                       MALAWI -0.033157460   995
-# 33  Female   haz  6-12 months                       MALAWI -0.031523664  1006
-# 34    Male   haz  6-12 months                  PHILIPPINES -0.096729256  1269
-# 35  Female   haz  6-12 months                  PHILIPPINES -0.103481135  1150
-# 36  Female   haz  6-12 months TANZANIA, UNITED REPUBLIC OF -0.074459576   636
-# 37    Male   haz  6-12 months TANZANIA, UNITED REPUBLIC OF -0.067352108   670
-# 38  Female   haz  6-12 months                     ZIMBABWE -0.043408664  2363
-# 39    Male   haz  6-12 months                     ZIMBABWE -0.055530816  2208
-# 40  Female   haz 12-24 months                   BANGLADESH -0.020896823  4888
-# 41    Male   haz 12-24 months                   BANGLADESH -0.013587152  5158
-# 42  Female   haz 12-24 months                      BELARUS -0.055884013  1303
-# 43    Male   haz 12-24 months                      BELARUS -0.029453687  1230
-# 44    Male   haz 12-24 months                       GAMBIA -0.018612885   614
-# 45  Female   haz 12-24 months                       GAMBIA -0.022658068   561
-# 46  Female   haz 12-24 months                        INDIA -0.036612764  2568
-# 47    Male   haz 12-24 months                        INDIA -0.031875619  2820
-# 48    Male   haz 12-24 months                       MALAWI -0.019612275   640
-# 49  Female   haz 12-24 months                       MALAWI -0.026604164   663
-# 50  Female   haz 12-24 months                  PHILIPPINES -0.064141887  1080
-# 51    Male   haz 12-24 months                  PHILIPPINES -0.051712122  1180
-
-# 52  Female   waz   0-3 months                   BANGLADESH  0.096768628 12084
-# 53    Male   waz   0-3 months                   BANGLADESH  0.082978026 12395
-# 54  Female   waz   0-3 months                      BELARUS -0.045636304  6543
-# 55    Male   waz   0-3 months                      BELARUS -0.271800259  6209
-# 56    Male   waz   0-3 months                       GAMBIA -0.676257514   672
-# 57  Female   waz   0-3 months                       GAMBIA -0.601020518   609
-# 58  Female   waz   0-3 months                        INDIA -0.065960193  4190
-# 59    Male   waz   0-3 months                        INDIA -0.073142961  4686
-# 60  Female   waz   0-3 months TANZANIA, UNITED REPUBLIC OF  0.022251786  1122
-# 61    Male   waz   0-3 months TANZANIA, UNITED REPUBLIC OF -0.008147379  1133
-# 62  Female   waz   0-3 months                     ZIMBABWE  0.115024378  3944
-# 63    Male   waz   0-3 months                     ZIMBABWE  0.076532152  4148
-# 64  Female   waz   3-6 months                   BANGLADESH  0.013053978  8298
-# 65    Male   waz   3-6 months                   BANGLADESH  0.001802759  8485
-# 66  Female   waz   3-6 months                      BELARUS  0.189813827  6865
-# 67    Male   waz   3-6 months                      BELARUS  0.202514025  6454
-# 68    Male   waz   3-6 months                       GAMBIA -0.067496728   728
-# 69  Female   waz   3-6 months                       GAMBIA -0.045612223   671
-# 70  Female   waz   3-6 months                        INDIA  0.028924684  4844
-# 71    Male   waz   3-6 months                        INDIA  0.031772329  5458
-# 72  Female   waz   3-6 months TANZANIA, UNITED REPUBLIC OF -0.075237119   934
-# 73    Male   waz   3-6 months TANZANIA, UNITED REPUBLIC OF -0.090622591   967
-# 74  Female   waz   3-6 months                     ZIMBABWE -0.005997897  2914
-# 75    Male   waz   3-6 months                     ZIMBABWE -0.015117097  3026
-# 76  Female   waz  6-12 months                   BANGLADESH -0.058193198  7579
-# 77    Male   waz  6-12 months                   BANGLADESH -0.059207514  7792
-# 78  Female   waz  6-12 months                      BELARUS  0.082574430  6685
-# 79    Male   waz  6-12 months                      BELARUS  0.130930444  6223
-# 80    Male   waz  6-12 months                       GAMBIA -0.088203680   674
-# 81  Female   waz  6-12 months                       GAMBIA -0.073601351   632
-# 82  Female   waz  6-12 months                    GUATEMALA -0.064375394   503
-# 83    Male   waz  6-12 months                    GUATEMALA -0.065675184   548
-# 84  Female   waz  6-12 months                        INDIA -0.014317484  5020
-# 85    Male   waz  6-12 months                        INDIA -0.019439252  5500
-# 86    Male   waz  6-12 months                       MALAWI -0.037532338  1095
-# 87  Female   waz  6-12 months                       MALAWI -0.020580310  1112
-# 88    Male   waz  6-12 months                  PHILIPPINES -0.081464487  1272
-# 89  Female   waz  6-12 months                  PHILIPPINES -0.084640128  1147
-# 90  Female   waz  6-12 months TANZANIA, UNITED REPUBLIC OF -0.033968940   638
-# 91    Male   waz  6-12 months TANZANIA, UNITED REPUBLIC OF -0.056832475   669
-# 92  Female   waz  6-12 months                     ZIMBABWE -0.036057933  2381
-# 93    Male   waz  6-12 months                     ZIMBABWE -0.056384095  2220
-# 94  Female   waz 12-24 months                   BANGLADESH -0.024816563  5059
-# 95    Male   waz 12-24 months                   BANGLADESH -0.019027208  5309
-# 96  Female   waz 12-24 months                      BELARUS -0.049765198  1300
-# 97    Male   waz 12-24 months                      BELARUS -0.037390738  1235
-# 98    Male   waz 12-24 months                       GAMBIA -0.002939979   616
-# 99  Female   waz 12-24 months                       GAMBIA -0.012951562   563
-# 100 Female   waz 12-24 months                        INDIA -0.020860321  2554
-# 101   Male   waz 12-24 months                        INDIA -0.021613525  2807
-# 102   Male   waz 12-24 months                       MALAWI -0.017644574   680
-# 103 Female   waz 12-24 months                       MALAWI -0.026440094   705
-# 104 Female   waz 12-24 months                  PHILIPPINES -0.028203970  1078
-# 105   Male   waz 12-24 months                  PHILIPPINES -0.017488925  1184
-
-
-

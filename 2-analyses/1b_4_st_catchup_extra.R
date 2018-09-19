@@ -18,6 +18,8 @@ library(metafor)
 theme_set(theme_bw())
 
 load("U:/Data/Stunting/st_rec_interim.RData")
+load("U:/Data/Stunting/st_rec.RData")
+
 
 #------------------------------------------
 # number of stunting episodes per child
@@ -42,13 +44,25 @@ ggplot(episode.child, aes(nrev))+geom_histogram(binwidth=0.5,
 dev.off()
 
 
+
+
+#Mean haz among onset
+rev %>% filter(sepisode==1) %>% summarize(mean(haz))
+
+#Mean haz at recovery
+rev <- rev %>% mutate(recrow=ifelse(stunted==0 & lagstunted==0 & leadstunted==1, 1, 0))
+rev %>% filter(recrow==1) %>% summarize(mn=mean(haz)) %>% ungroup() %>% summarize(mean(mn))
+
+
+
+
 #------------------------------------------
 # distribution of stunting among those who 
 # have recovered and those who have not 
 #------------------------------------------
 # plot dist among stunted
 pdf("U:/Figures/stunting-rec-onset-st-dist.pdf",width=8,height=4,onefile=TRUE)
-ggplot(rev.ind %>% filter(sepisode==1), aes(x=haz))+
+ggplot(re %>% filter(sepisode==1), aes(x=haz))+
   geom_histogram(binwidth=0.05,col="black",fill="gray",
                  position="dodge")+
   xlab("LAZ at stunting onset")+ylab("Number of children")+
@@ -57,9 +71,11 @@ dev.off()
 
 # plot dist among recovered
 pdf("U:/Figures/stunting-rec-onset-rec-dist.pdf",width=8,height=4,onefile=TRUE)
-ggplot(rev.ind %>% filter(recrow==1), aes(x=haz))+
+ggplot(rev %>% filter(recrow==1), aes(x=haz))+
   geom_histogram(binwidth=0.1,col="black",fill="gray")+
   xlab("LAZ at first measurement in which child is not stunted")+
   ylab("Number of children")+
   scale_x_continuous(breaks=seq(-2,6,1),labels=seq(-2,6,1))
 dev.off()
+
+

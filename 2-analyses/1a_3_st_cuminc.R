@@ -22,10 +22,13 @@ d = d %>%
   #filter(agedays>1) %>%
   mutate(agecat=ifelse(agedays<=3*30.4167,"3 months",
        ifelse(agedays>3*30.4167 & agedays<=6*30.4167,"6 months",
-           ifelse(agedays>6*30.4167 & agedays<=12*30.4167,"12 months",
-                ifelse(agedays>12*30.4167 & agedays<=18*30.4167,"18 months",
-                       ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months","")))))) %>%
-  mutate(agecat=factor(agecat,levels=c("3 months","6 months","12 months","18 months","24 months")))
+              ifelse(agedays>6*30.4167 & agedays<=9*30.4167,"9 months",
+                  ifelse(agedays>9*30.4167 & agedays<=12*30.4167,"12 months",
+                  ifelse(agedays>12*30.4167 & agedays<=15*30.4167,"15 months",
+                         ifelse(agedays>15*30.4167 & agedays<=18*30.4167,"18 months",
+                                ifelse(agedays>18*30.4167 & agedays<=21*30.4167,"21 months",
+                                       ifelse(agedays>21*30.4167& agedays<=24*30.4167,"24 months",""))))))))) %>%
+  mutate(agecat=factor(agecat,levels=c("3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months")))
 
 # check age categories
 d %>%
@@ -36,16 +39,20 @@ d %>%
             max=max(agedays/30.4167))
 
 # identify ever stunted children
-  evs = d %>%
-    filter(!is.na(agecat)) %>%
-    group_by(studyid,country,subjid) %>%
-    arrange(studyid,subjid) %>%
-    #create variable with minhaz by age category, cumulatively
-    mutate(minhaz=ifelse(agecat=="3 months",min(haz[agecat=="3 months"]),
-      ifelse(agecat=="6 months",min(haz[agecat=="3 months" | agecat=="6 months"]),
-        ifelse(agecat=="12 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="12 months"]),
-               ifelse(agecat=="18 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="12 months"|agecat=="18 months"]),
-          min(haz)))))) %>%
+evs = d %>%
+  filter(!is.na(agecat)) %>%
+  group_by(studyid,country,subjid) %>%
+  arrange(studyid,subjid) %>%
+  #create variable with minhaz by age category, cumulatively
+  mutate(minhaz=ifelse(agecat=="3 months",min(haz[agecat=="3 months"]),
+                       ifelse(agecat=="6 months",min(haz[agecat=="3 months" | agecat=="6 months"]),
+                              ifelse(agecat=="9 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="9 months"]),
+                                     ifelse(agecat=="12 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="9 months"|agecat=="12 months"]),
+                                            ifelse(agecat=="15 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="9 months"|agecat=="12 months"|agecat=="15 months"]),
+                                                   ifelse(agecat=="18 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="9 months"|agecat=="12 months"|agecat=="15 months"|agecat=="18 months"]),
+                                                          ifelse(agecat=="21 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="9 months"|agecat=="12 months"|agecat=="15 months"|agecat=="18 months"|agecat=="21 months"]),
+                                                                 ifelse(agecat=="24 months",min(haz[agecat=="3 months" | agecat=="6 months"|agecat=="9 months"|agecat=="12 months"|agecat=="15 months"|agecat=="18 months"|agecat=="21 months"|agecat=="24 months"]),
+                                                                        min(haz)))))))))) %>%
     # create indicator for whether the child was ever stunted
     # by age category
     group_by(studyid,country,agecat,subjid) %>%
@@ -69,14 +76,14 @@ cuminc.data= evs%>%
 cuminc.data
 
 # cohort specific results
-ci.cohort=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x) 
+ci.cohort=lapply(list("3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months"),function(x) 
   fit.escalc(data=cuminc.data,ni="N", xi="ncases",age=x,meas="PR"))
 ci.cohort=as.data.frame(do.call(rbind, ci.cohort))
 ci.cohort=cohort.format(ci.cohort,y=ci.cohort$yi,
-   lab=  c("3 months","6 months","12 months","18 months","24 months"))
+   lab=  c("3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months"))
   
 # estimate random effects, format results
-ci.res=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
+ci.res=lapply(list("3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months"),function(x)
     fit.rma(data=cuminc.data,ni="N", xi="ncases",age=x,measure="PR",nlab=" measurements"))
 ci.res=as.data.frame(do.call(rbind, ci.res))
 ci.res[,4]=as.numeric(ci.res[,4])
@@ -84,10 +91,13 @@ ci.res = ci.res %>%
   mutate(est=est*100, lb=lb*100, ub=ub*100)
 ci.res$agecat.f=as.factor(ifelse(ci.res$agecat=="3 months","0-3 months",
                           ifelse(ci.res$agecat=="6 months","4-6 months",
-                                 ifelse(ci.res$agecat=="12 months","7-12 months",
-                                        ifelse(ci.res$agecat=="18 months","13-18 months","19-24 months")))))
-ci.res$agecat.f=factor(ci.res$agecat.f,levels=c("0-3 months","4-6 months",
-      "7-12 months","13-18 months","19-24 months"))
+                          ifelse(ci.res$agecat=="9 months","7-9 months",
+                          ifelse(ci.res$agecat=="12 months","10-12 months",
+                          ifelse(ci.res$agecat=="15 months","13-15 months",
+                          ifelse(ci.res$agecat=="18 months","16-18 months",
+                          ifelse(ci.res$agecat=="21 months","19-21 months","22-24 months"))))))))
+ci.res$agecat.f=factor(ci.res$agecat.f,levels=c("0-3 months","4-6 months", "7-9 months",
+      "10-12 months","13-15 months","16-18 months","19-21 months", "22-24 months"))
 ci.res$ptest.f=sprintf("%0.0f",ci.res$est)
 
 ci.res
@@ -328,6 +338,8 @@ ci.res.agerange$agecat.f=factor(ci.res.agerange$agecat.f,levels=c("0-6 months",
 ci.res.agerange$ptest.f=sprintf("%0.0f",ci.res.agerange$est)
 
 ci.res.agerange
+ip.pool <- ci.res.agerange
+
 
 # plot pooled cumulative incidence
 pdf("U:/Figures/stunting-cuminc-pool-agerange.pdf",width=9,height=3.5,onefile=TRUE)
@@ -356,8 +368,7 @@ dev.off()
 
 
 stunt_ci = d %>% ungroup() %>%
-  #filter(!is.na(agecat) ) %>%
-  filter(!is.na(agecat) & agedays>1) %>%
+  filter(!is.na(agecat) ) %>%
   group_by(studyid,country,subjid) %>%
   arrange(studyid,country,subjid,agedays) %>%
   mutate(stunt = as.numeric(haz < -2), stunt_nmeas=cumsum(stunt), stunt_onset= as.numeric(stunt==1 & stunt_nmeas==1)) %>%
@@ -393,18 +404,22 @@ cuminc.data.agerange %>% group_by(agecat) %>% summarize(sum(ncases), sum(N), one
 
 # estimate random effects, format results
 gc()
-ci.res.agerange=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x)
+ci.res.agerange=lapply(list("3 months", "6 months",  "9 months","12 months","15 months","18 months","21 months","24 months"),function(x)
   fit.rma(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,measure="PR",nlab=" at-risk"))
 ci.res.agerange=as.data.frame(do.call(rbind, ci.res.agerange))
 ci.res.agerange[,4]=as.numeric(ci.res.agerange[,4])
 ci.res.agerange = ci.res.agerange %>%
   mutate(est=est*100, lb=lb*100, ub=ub*100)
-ci.res.agerange$agecat.f=as.factor(ifelse(ci.res.agerange$agecat=="3 months","2 days-3 months",
-                                    ifelse(ci.res.agerange$agecat=="6 months","3-6 months",
-                                          ifelse(ci.res.agerange$agecat=="12 months","6-12 months",
-                                                 ifelse(ci.res.agerange$agecat=="18 months","12-18 months","18-24 months")))))
-ci.res.agerange$agecat.f=factor(ci.res.agerange$agecat.f,levels=c("2 days-3 months","3-6 months",
-                                                                  "6-12 months","12-18 months","18-24 months"))
+ci.res.agerange$agecat.f=as.factor(ifelse(ci.res$agecat=="3 months","0-3 months",
+                                          ifelse(ci.res$agecat=="6 months","3-6 months",
+                                                 ifelse(ci.res$agecat=="9 months","6-9 months",
+                                                        ifelse(ci.res$agecat=="12 months","9-12 months",
+                                                               ifelse(ci.res$agecat=="15 months","12-15 months",
+                                                                      ifelse(ci.res$agecat=="18 months","15-18 months",
+                                                                             ifelse(ci.res$agecat=="21 months","18-21 months","21-24 months"))))))))
+ci.res.agerange$agecat.f=factor(ci.res.agerange$agecat.f,levels=c("0-3 months","3-6 months","6-9 months",
+                                                                  "9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"))
+
 ci.res.agerange$ptest.f=sprintf("%0.0f",ci.res.agerange$est)
 
 ci.res.agerange
@@ -429,11 +444,11 @@ dev.off()
 # cohort specific incidence proportion
 #--------------------------------------
 
-ip.cohort=lapply(list("3 months","6 months","12 months","18 months","24 months"),function(x) 
+ip.cohort=lapply(list("3 months", "6 months",  "9 months","12 months","15 months","18 months","21 months","24 months"),function(x) 
   fit.escalc(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,meas="PR"))
 ip.cohort=as.data.frame(do.call(rbind, ip.cohort))
 ip.cohort=cohort.format(ip.cohort,y=ip.cohort$yi,
-                        lab=  c("3 months","6 months","12 months","18 months","24 months"))
+                        lab=  c("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"))
 
 
 pdf("U:/Figures/stunting-incprop-africa.pdf",width=11,height=5,onefile=TRUE)
@@ -518,12 +533,108 @@ dev.off()
 
 
 #--------------------------------------
+# Calculate cumulative incidence of
+# Stunting in certain age ranges only
+# including children who had not yet
+# become stunted in prior age ranges
+# -dropping children stunted at birth 
+#--------------------------------------
+
+
+#Drop children stunted at birth
+dim(d)
+d <-d %>%
+  group_by(studyid, country, subjid) %>%
+  arrange(studyid, country, subjid, agedays) %>%
+  #mark if children were born stunted and drop
+  mutate(start_stunt = as.numeric(first(haz) < -2)) %>%
+  filter(start_stunt ==
+           0) #drop children born wasted
+dim(d)
+
+
+
+stunt_ci = d %>% ungroup() %>%
+  filter(!is.na(agecat) ) %>%
+  group_by(studyid,country,subjid) %>%
+  arrange(studyid,country,subjid,agedays) %>%
+  mutate(stunt = as.numeric(haz < -2), stunt_nmeas=cumsum(stunt), stunt_onset= as.numeric(stunt==1 & stunt_nmeas==1)) %>%
+  filter(stunt_nmeas<2) %>%
+  ungroup() %>% group_by(studyid,country, agecat) %>% mutate(N=n()) %>%
+  ungroup() %>% group_by(studyid,country,subjid, agecat) %>% arrange(desc(stunt_onset)) %>% slice(1) %>% 
+  ungroup() 
+
+
+# count incident cases per study by age
+# exclude time points if number of measurements per age
+# in a study is <50  
+cuminc.data.agerange <- stunt_ci%>%
+  group_by(studyid,country,agecat) %>%
+  summarise(
+    nchild=length(unique(subjid)),
+    nstudy=length(unique(studyid)),
+    ncases=sum(stunt_onset),
+    N=sum(length(stunt_onset))) %>%
+  filter(N>=50)
+
+
+
+# manually calculate incident cases, person-time at risk at each time point
+stunt_ci %>% group_by(studyid,country,agecat) %>% filter(N>=50) %>%
+  group_by(agecat) %>%
+  summarise(inc.case=sum(stunt_onset),N= n())
+
+
+#cuminc.data %>% group_by(agecat) %>% summarise(mean(ncases/nchild))
+cuminc.data.agerange %>% group_by(agecat) %>% summarize(sum(ncases), sum(N), one=mean(ncases/N), two=sum(ncases)/sum(N))
+
+
+# estimate random effects, format results
+gc()
+ci.res.agerange=lapply(list("3 months", "6 months",  "9 months","12 months","15 months","18 months","21 months","24 months"),function(x)
+  fit.rma(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,measure="PR",nlab=" at-risk"))
+ci.res.agerange=as.data.frame(do.call(rbind, ci.res.agerange))
+ci.res.agerange[,4]=as.numeric(ci.res.agerange[,4])
+ci.res.agerange = ci.res.agerange %>%
+  mutate(est=est*100, lb=lb*100, ub=ub*100)
+ci.res.agerange$agecat.f=as.factor(ifelse(ci.res$agecat=="3 months","0-3 months",
+                                          ifelse(ci.res$agecat=="6 months","3-6 months",
+                                                 ifelse(ci.res$agecat=="9 months","6-9 months",
+                                                        ifelse(ci.res$agecat=="12 months","9-12 months",
+                                                               ifelse(ci.res$agecat=="15 months","12-15 months",
+                                                                      ifelse(ci.res$agecat=="18 months","15-18 months",
+                                                                             ifelse(ci.res$agecat=="21 months","18-21 months","21-24 months"))))))))
+ci.res.agerange$agecat.f=factor(ci.res.agerange$agecat.f,levels=c("0-3 months","3-6 months","6-9 months",
+                                                                  "9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"))
+
+ci.res.agerange$ptest.f=sprintf("%0.0f",ci.res.agerange$est)
+
+ci.res.agerange
+
+
+
+#--------------------------------------
+# cohort specific incidence proportion
+#--------------------------------------
+
+ip.cohort_nobirth=lapply(list("3 months", "6 months",  "9 months","12 months","15 months","18 months","21 months","24 months"),function(x) 
+  fit.escalc(data=cuminc.data.agerange,ni="N", xi="ncases",age=x,meas="PR"))
+ip.cohort_nobirth=as.data.frame(do.call(rbind, ip.cohort_nobirth))
+ip.cohort_nobirth=cohort.format(ip.cohort_nobirth,y=ip.cohort_nobirth$yi,
+                                lab=  c("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"))
+
+
+
+
+
+
+#--------------------------------------
 # export data 
 #--------------------------------------
 
 cuminc=evs %>% select(studyid,country,subjid,agecat,ever_stunted) 
 
-save(cuminc,ci.res, ci.res.agerange, ip.cohort,file="U:/Data/Stunting/st_cuminc.RData")
+save(ci.res, ip.pool, ci.cohort, ip.cohort, ip.cohort_nobirth, file="U:/Data/Stunting/st_cuminc.RData")
 
 
 

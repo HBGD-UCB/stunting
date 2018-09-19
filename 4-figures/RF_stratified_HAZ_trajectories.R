@@ -13,6 +13,8 @@ tableau10 <- c("#1F77B4","#FF7F0E","#2CA02C","#D62728",
 load("U:/Data/Stunting/rf_stunting_data.RData")
 d <- d %>% subset(., select=-c(tr))
 
+#subset to monthly outcomes
+d <- d %>% filter(measurefreq=="monthly")
 
 #merge HAZ outcomes with covariates
 
@@ -113,7 +115,9 @@ for(i in 11:ncol(d)){
   df <- d[!is.na(d[,i]),]
   Aname <- colnames(df)[i]
   colnames(df)[i] <- "Avar"
-  p<-ggplot(df, aes(x=agedays, y=haz, group=Avar, color=Avar)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  p<-ggplot(df, aes(x=agedays, y=haz, group=Avar, color=Avar)) + 
+    #geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+    geom_smooth(method = 'gam') +
     scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of ", Aname))+
     facet_wrap(~studyid) +
     xlab(Aname) + ylab("HAZ") + 
@@ -125,23 +129,6 @@ for(i in 11:ncol(d)){
 dev.off()
 
 
-
-df <- d %>% ungroup() %>% select(studyid, agedays, haz, 
-                   `Mother's height`,
-                   `Mother's weight`,
-                   `Mother's BMI`,
-                   `Father's height`)
-
-df2<-melt(df, id=c("studyid","agedays", "haz"))
-head(df2)
-
-p<-ggplot(df, aes(x=agedays, y=haz, group=value, color=value)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
-  scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of ", Aname))+
-  facet_wrap(~variable ) +
-  xlab(Aname) + ylab("HAZ") + 
-  ggtitle(paste0("Spline curves of HAZ, stratified by levels of "))
-
-print(p)
 
 
 
@@ -206,6 +193,13 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL, title
 }
 
 
+df <- d %>% ungroup() %>% select(studyid, agedays, haz, 
+                                 `Mother's height`,
+                                 `Mother's weight`,
+                                 `Mother's BMI`,
+                                 `Father's height`)
+
+
 levels(df$`Mother's BMI`)
 levels(df$`Mother's height`)
 levels(df$`Mother's weight`)
@@ -217,28 +211,107 @@ df$`Mother's weight`<-factor(as.character(df$`Mother's weight`), levels=c(">=58 
 df$`Father's height`<-factor(as.character(df$`Father's height`), levels=c(">=167 cm", "[162-167) cm", "<162 cm"))
 
 colnames(df)
-p1<-ggplot(df[!is.na(df$`Mother's height`),], aes(x=agedays, y=haz, group=`Mother's height`, color=`Mother's height`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+p1<-ggplot(df[!is.na(df$`Mother's height`),], aes(x=agedays, y=haz, group=`Mother's height`, color=`Mother's height`)) + geom_smooth(method = 'gam') +
   scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of\nMother's height"))+
   xlab("") + ylab("HAZ") + 
   ggtitle("Mother's height") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
-p2<-ggplot(df[!is.na(df$`Mother's weight`),], aes(x=agedays, y=haz, group=`Mother's weight`, color=`Mother's weight`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+p2<-ggplot(df[!is.na(df$`Mother's weight`),], aes(x=agedays, y=haz, group=`Mother's weight`, color=`Mother's weight`)) + geom_smooth(method = 'gam') +
   scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of\nMother's weight"))+
   xlab("Age in days") + ylab("HAZ") + 
   ggtitle("Mother's weight") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
-p3<-ggplot(df[!is.na(df$`Mother's BMI`),], aes(x=agedays, y=haz, group=`Mother's BMI`, color=`Mother's BMI`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+p3<-ggplot(df[!is.na(df$`Mother's BMI`),], aes(x=agedays, y=haz, group=`Mother's BMI`, color=`Mother's BMI`)) + geom_smooth(method = 'gam') +
   scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of\nMother's BMI"))+
   xlab("") + ylab("HAZ") + 
   ggtitle("Mother's BMI") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
-p4<-ggplot(df[!is.na(df$`Father's height`),], aes(x=agedays, y=haz, group=`Father's height`, color=`Father's height`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+p4<-ggplot(df[!is.na(df$`Father's height`),], aes(x=agedays, y=haz, group=`Father's height`, color=`Father's height`)) + geom_smooth(method = 'gam') +
   scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of\nFather's height"))+
   xlab("Age in days") + ylab("HAZ") + 
   ggtitle("Father's height") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
 
 jpeg("U:/Figures/Stunting Webinar/HAZ_trajectories.jpeg", width = 9, height = 4, units = 'in', res = 400)
 #png("U:/Figures/Stunting Webinar/HAZ_trajectories.png", width=11*72, height=6*72)
-multiplot(p1,p2,p3,p4, cols=2, title="Spline curves of HAZ stratified by levels of parental anthropometry")
+multiplot(p1,p2,p3,p4, cols=2, title="Spline curves of LAZ stratified by levels of parental anthropometry")
 dev.off()
 
 
 
 
+
+
+#Child birth anthropometry
+colnames(d)
+df <- d %>% ungroup() %>% select(studyid, agedays, haz, 
+                                 `Birthweight (kg)`,
+                                 `Birth length (cm)`,
+                                 `Gestational age at birth`,
+                                 `Gender`)
+
+
+p1<-ggplot(df[!is.na(df$`Birthweight (kg)`),], aes(x=agedays, y=haz, group=`Birthweight (kg)`, color=`Birthweight (kg)`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of birthweight"))+
+  xlab("") + ylab("LAZ") + 
+  ggtitle("Birthweight (kg)") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
+p2<-ggplot(df[!is.na(df$`Birth length (cm)`),], aes(x=agedays, y=haz, group=`Birth length (cm)`, color=`Birth length (cm)`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of birth length"))+
+  xlab("") + ylab("LAZ") + 
+  ggtitle("Birth length (cm)") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
+p3<-ggplot(df[!is.na(df$`Gestational age at birth`),], aes(x=agedays, y=haz, group=`Gestational age at birth`, color=`Gestational age at birth`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of gestational age"))+
+  xlab("") + ylab("LAZ") + 
+  ggtitle("Gestational age at birth") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
+p4<-ggplot(df[!is.na(df$`Gender`),], aes(x=agedays, y=haz, group=`Gender`, color=`Gender`)) + geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  scale_color_manual(values=rep(tableau10,2), name = paste0("Levels of gender"))+
+  xlab("") + ylab("LAZ") + 
+  ggtitle("Gender") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
+
+
+
+jpeg("U:/Figures/Stunting Webinar/birth_anthro_HAZ_trajectories.jpeg", width = 9, height = 4, units = 'in', res = 400)
+multiplot(p1,p3,p2,p4, cols=2, title="Spline curves of LAZ stratified by levels of birth characteristics")
+dev.off()
+
+
+
+
+colnames(d)
+df <- d %>% ungroup() %>% select(studyid, agedays, haz, country)
+
+
+# region stratified
+df <- df %>% mutate(region = case_when(
+  country=="BANGLADESH" | country=="INDIA"|
+    country=="NEPAL" | country=="PAKISTAN"|
+    country=="PHILIPPINES"                   ~ "Asia", 
+  country=="KENYA"|
+    country=="GHANA"|
+    country=="BURKINA FASO"|
+    country=="GUINEA-BISSAU"|
+    country=="MALAWI"|
+    country=="SOUTH AFRICA"|
+    country=="TANZANIA, UNITED REPUBLIC OF"|
+    country=="ZIMBABWE"|
+    country=="GAMBIA"                       ~ "Africa",
+  country=="BELARUS"                      ~ "Europe",
+  country=="BRAZIL" | country=="GUATEMALA" |
+    country=="PERU"                         ~ "Latin America",
+  TRUE                                    ~ "Other"
+))
+
+df <- df %>% filter(region!="Europe")
+
+df$region <- factor(df$region , levels=c( "Asia","Africa","Latin America"))
+
+p<-ggplot(df[!is.na(df$region),], aes(x=agedays, y=haz, group=region, color=region)) + 
+  geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  #geom_smooth(method = 'gam') +
+  scale_color_manual(values=rep(tableau10,2), name = paste0("Region"))+
+  xlab("Child age in days") + ylab("LAZ") + 
+  ggtitle("Region") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
+
+ggsave(p, file="U:/Figures/Stunting Webinar/region_HAZ_trajectories.png", width = 9, height = 3.5)
+
+
+
+
+#Breastfeeding
+#df <- df %>% filter(agedays < 6*30.4167)
