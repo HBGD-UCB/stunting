@@ -253,7 +253,13 @@ adjustment_sets <- list(
             "single",
             "W_nrooms","W_nhh","W_nchldlt5",
             "brthmon","W_parity",
-            "trth2o","cleanck","impfloor","impsan","safeh20")
+            "trth2o","cleanck","impfloor","impsan","safeh20"),
+  birthwtXexclfeed6 = c("arm","sex", "W_mage", "W_fage", "meducyrs", "feducyrs", "hhwealth_quart", "hfoodsec",
+    "vagbrth","hdlvry",
+    "single",
+    "W_nrooms","W_nhh","W_nchldlt5",
+    "brthmon","W_parity",
+    "trth2o","cleanck","impfloor","impsan","safeh20")
 )
 
 
@@ -322,6 +328,11 @@ WHZ_quart_cuminc <- specify_rf_analysis(A="lag_WHZ_quart", Y="ever_stunted", W=c
     "month","brthmon","W_parity",
     "trth2o","cleanck","impfloor","impsan","safeh20"),
     file="stuntCI_whz_rf.Rdata")
+
+#Just WHZ risk factor analysis
+analyses <- rbind(WHZ_quart_prev, WHZ_quart_cuminc)
+setwd("C:/Users/andre/Documents/HBGDki/Results/")
+save(analyses, file="adjusted_whzRF_analyses.rdata")
 
 
 #bind together datasets
@@ -427,3 +438,18 @@ int_prev <- specify_int_analysis(A="tr", Y=c("stunted", "sstunted"),
 analyses <- rbind(int_cuminc, int_prev)
 
 save(analyses, file="intervention_analyses_specification.rdata")
+
+
+
+#---------------------------------------------
+# Specify the BWxEBF analyses
+#---------------------------------------------
+
+analyses <- specify_rf_analysis(A="birthwtXexclfeed6",
+                              Y=c("stunted","ever_stunted"), file="st_BWxEBF_RF.Rdata")
+
+save(analyses, file="EBFxBW_analyses_specification.rdata")
+
+
+
+
