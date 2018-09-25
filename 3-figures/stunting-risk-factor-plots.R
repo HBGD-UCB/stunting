@@ -33,8 +33,13 @@ whz <- d %>% filter(intervention_variable=="lag_WHZ_quart")
 
 head(d)
 
+#Look at top PAF's
+df <- d %>% filter(type=="PAF") %>% arrange(rev(abs(estimate))) %>% slice(1:10)
+  
+
 #Subset to relative risks
 d <- d %>% filter(type=="RR")
+
 
 
 #Subset to primary outcomes

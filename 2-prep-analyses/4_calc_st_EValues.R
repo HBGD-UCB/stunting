@@ -55,16 +55,47 @@ d <- d %>% filter(intervention_variable!="enstunt")
 
 head(d)
 
-evalues.RRvec <- function(d){
+evalues.RRvec <- function(d, pointest=T){
   vec<-NULL
-  for(i in 1:nrow(d)){
-    suppressMessages(res <- evalues.RR( d$estimate[i], d$ci_lower[i], d$ci_upper[i]))
-    vec<-c(vec,res[2,1])
+  
+  if(pointest){
+    for(i in 1:nrow(d)){
+      if(d$intervention_level[i]== d$baseline_level[i]){
+        res<-NA
+      }else{
+      suppressMessages(res <- evalues.RR( d$estimate[i], d$ci_lower[i], d$ci_upper[i]))
+      res<-res[2,1]
+      }
+    vec<-c(vec,res)
+    }
+  }else{
+    for(i in 1:nrow(d)){
+      if(d$ci_lower[i] <= 1  & d$ci_upper[i] >= 1){
+        res<-NA
+      }else{
+        ci <- d$ci_lower[i]
+        if(1/d$ci_lower[i]>1/d$ci_upper[i]){ ci <- d$ci_upper[i]}
+        suppressMessages(res <- evalues.RR(ci))
+        res<-res[2,1]
+      }
+      vec<-c(vec,res)}
   }
   return(vec)
 }
 
 d$EVals<-evalues.RRvec(d)
+d$EVals_lb<-evalues.RRvec(d, pointest=F)
+
+mean(d$EVals, na.rm=T)
+mean(d$EVals_lb, na.rm=T)
+
+summary(d$EVals, na.rm=T)
+summary(d$EVals_lb, na.rm=T)
+
+mean(d$estimate[!(d$ci_lower <= 1  & d$ci_upper >= 1)])
+
+2.2/1.52 #Need on average 50% stronger unmeasured confounding than point estimate to move estimates to null
+3.997/1.92 #Need on average 160% stronger unmeasured confounding than point estimate to make significant estimates insignificant
 
 #Flip RR
 d$estimate <- ifelse(d$estimate>1, d$estimate, 1/d$estimate )
@@ -82,8 +113,8 @@ p <- ggplot(d, aes(x=estimate, y=EVals)) + geom_point(alpha=0.1) + #geom_smooth(
     axis.text.x = element_text(size=12)) 
 p
 
-ggplot(data=d) +  geom_density(aes(x=EVals - estimate)) + coord_equal(xlim = c(0, 5))
+ggplot(data=d) +  geom_density(aes(x=EVals - estimate)) + coord_equal(xlim = c(0, 3))
 
 
 
-
+fivenum(d$EVals)

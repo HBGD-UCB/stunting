@@ -19,7 +19,7 @@ tableau10 <- c("#1F77B4","#FF7F0E","#2CA02C","#D62728",
   "#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF")
 
 # load base functions
-source("C:/Users/andre/Documents/HBGDki/Stunting/2-analyses/0_st_basefunctions.R")
+source("C:/Users/andre/Documents/HBGDki/Stunting/1-outcomes/0_st_basefunctions.R")
 
 load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_cuminc.RData")
 load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_incprop.RData")
@@ -28,10 +28,10 @@ load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_rec_in
 load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/pool_vel.RData")
 load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_rf_res.RData")
 load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_rec24.RData")
-
-
+load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_laz.RData")
 
 setwd("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/")
+
 
 #-------------------------------------------------------------------------------------------
 #Prevalence
@@ -283,6 +283,52 @@ p7 <- ggplot(vel, aes(y=Mean,x=strata))+
 ggsave(p7, file="pooled_velocity.png", width=10, height=4)
 
 
+
+
+#-------------------------------------------------------------------------------------------
+# Mean LAZ
+#-------------------------------------------------------------------------------------------
+
+clean_nmeans<-function(nmeas){
+  nmeas <- round(nmeas/1000)
+  nmeas.f <- paste0("N=",nmeas,"K children")
+  return(nmeas.f)
+}
+
+clean_agecat<-function(agecat){
+  agecat <- as.character(agecat)
+  agecat <- gsub("months","mo.", agecat)
+  agecat <- factor(agecat, levels=unique(agecat))
+  return(agecat)
+}
+
+laz.res$nmeas.f <- clean_nmeans(laz.res$nmeas)
+laz.res$agecat <- clean_agecat(laz.res$agecat)
+
+
+p8 <- ggplot(laz.res,aes(y=est,x=agecat)) +
+  geom_point(aes(fill=agecat, color=agecat), size = 4) +
+  geom_linerange(aes(ymin=lb, ymax=ub, color=agecat),
+                 alpha=0.5, size = 3) +
+  geom_hline(yintercept=0) +
+  # scale_fill_tableau(drop=TRUE, limits = levels(laz.res$agecat)) +
+  # scale_colour_tableau(drop=TRUE, limits = levels(laz.res$agecat)) +
+  scale_color_manual(values=rep(tableau10[9],20))+  scale_fill_manual(values=rep(tableau10[9],20))+
+  xlab("Age category")+
+  ylab("Mean Z-score")+
+  scale_y_continuous(limits=c(-3,0.5))+
+  annotate("text",x=laz.res$agecat,y=-2.8, label=laz.res$nmeas.f,size=3)+
+  annotate("text",x=laz.res$agecat,y=-3, label=laz.res$nstudy.f,size=3)+
+  annotate("text",label=round(laz.res$est,2),x=laz.res$agecat,
+           y=laz.res$est,hjust=-0.75,size=3)+
+  ggtitle("Pooled mean LAZ") +
+  theme(strip.background = element_blank(),
+        legend.position="none",
+        strip.text.x = element_text(size=12),
+        axis.text.x = element_text(size=12)) 
+p8
+
+ggsave(p8, file="pooled_laz.png", width=10, height=4)
 
 
 
