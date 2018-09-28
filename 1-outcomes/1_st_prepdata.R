@@ -156,6 +156,27 @@ table(d$studyid,d$country)
 d$subjid <- as.character(d$subjid)
 
 
+#Add regions
+d <- d %>% mutate(region = case_when(
+  country=="BANGLADESH" | country=="INDIA"|
+    country=="NEPAL" | country=="PAKISTAN"|
+    country=="PHILIPPINES"                   ~ "Asia", 
+  country=="KENYA"|
+    country=="GHANA"|
+    country=="BURKINA FASO"|
+    country=="GUINEA-BISSAU"|
+    country=="MALAWI"|
+    country=="SOUTH AFRICA"|
+    country=="TANZANIA, UNITED REPUBLIC OF"|
+    country=="ZIMBABWE"|
+    country=="GAMBIA"                       ~ "Africa",
+  country=="BELARUS"                      ~ "Europe",
+  country=="BRAZIL" | country=="GUATEMALA" |
+    country=="PERU"                         ~ "Latin America",
+  TRUE                                    ~ "Other"
+))
+
+
 #--------------------------------------------
 # Save intervention effects dataset
 #--------------------------------------------

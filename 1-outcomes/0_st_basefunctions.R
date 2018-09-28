@@ -284,3 +284,40 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 
 
 
+
+
+
+
+calc.prev.agecat <- function(d){
+  d = d %>% 
+    arrange(studyid,subjid,agedays) %>%
+    mutate(agecat=ifelse(agedays==1,"Birth",
+                         ifelse(agedays>2*30.4167 & agedays<4*30.4167,"3 months",
+                                ifelse(agedays>5*30.4167 & agedays<7*30.4167,"6 months",
+                                       ifelse(agedays>8*30.4167 & agedays<10*30.4167,"9 months",
+                                              ifelse(agedays>11*30.4167 & agedays<13*30.4167,"12 months",
+                                                     ifelse(agedays>14*30.4167 & agedays<16*30.4167,"15 months",
+                                                            ifelse(agedays>17*30.4167 & agedays<19*30.4167,"18 months",
+                                                                   ifelse(agedays>20*30.4167 & agedays<22*30.4167,"21 months",
+                                                                          ifelse(agedays>23*30.4167& agedays<25*30.4167,"24 months","")))))))))) %>%
+    mutate(agecat=factor(agecat,levels=c("Birth","3 months","6 months","9 months",
+                                         "12 months","15 months","18 months","21 months","24 months"))) 
+}
+
+calc.ci.agecat <- function(d){
+  d = d %>% 
+    #filter(agedays>1) %>%
+    mutate(agecat=ifelse(agedays<=3*30.4167,"0-3 months",
+                         ifelse(agedays>3*30.4167 & agedays<=6*30.4167,"3-6 months",
+                                ifelse(agedays>6*30.4167 & agedays<=9*30.4167,"6-9 months",
+                                       ifelse(agedays>9*30.4167 & agedays<=12*30.4167,"9-12 months",
+                                              ifelse(agedays>12*30.4167 & agedays<=15*30.4167,"12-15 months",
+                                                     ifelse(agedays>15*30.4167 & agedays<=18*30.4167,"15-18 months",
+                                                            ifelse(agedays>18*30.4167 & agedays<=21*30.4167,"18-21 months",
+                                                                   ifelse(agedays>21*30.4167& agedays<=24*30.4167,"21-24 months",""))))))))) %>%
+    mutate(agecat=factor(agecat,levels=c("0-3 months","3-6 months","6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months")))
+}
+
+
+
+
