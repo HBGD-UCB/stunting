@@ -54,13 +54,12 @@ cgrey <- "#777777"
 #-----------------------------------
 # load the meta-data table from Andrew (GHAP_metadata)
 #-----------------------------------
-
-setwd("C:/Users/andre/Dropbox/")
-md <- readRDS('HBGDki documentation/GHAP_metadata_stunting.rds')
+setwd("C:/Users/andre/Dropbox/HBGDki documentation")
+md <- readRDS('GHAP_metadata_stunting.RDS')
 
 
 # subset studies to those that meet stunting inclusion criteria
-load("HBGDki documentation/stunting_studies.RData")
+load("stunting_studies.RData")
 elig=as.character(ss$short_id)
 md <- md %>% filter(md$short_id %in% elig)
 
@@ -83,6 +82,29 @@ md$nmeas <- rowSums(md[,paste('n',1:24,sep='')],na.rm=TRUE)
 
 
 dd <- md
+
+
+#Add regions
+dd <- dd %>% mutate(region = case_when(
+  countrycohort=="BANGLADESH" | countrycohort=="INDIA"|
+    countrycohort=="NEPAL" | countrycohort=="PAKISTAN"|
+    countrycohort=="PHILIPPINES"                   ~ "Asia", 
+  countrycohort=="KENYA"|
+    countrycohort=="GHANA"|
+    countrycohort=="BURKINA FASO"|
+    countrycohort=="GUINEA-BISSAU"|
+    countrycohort=="MALAWI"|
+    countrycohort=="SOUTH AFRICA"|
+    countrycohort=="TANZANIA, UNITED REPUBLIC OF"|
+    countrycohort=="ZIMBABWE"|
+    countrycohort=="GAMBIA"                       ~ "Africa",
+  countrycohort=="BELARUS"                      ~ "Europe",
+  countrycohort=="BRAZIL" | countrycohort=="GUATEMALA" |
+    countrycohort=="PERU"                         ~ "Latin America",
+  TRUE                                    ~ "Other"
+))
+
+
 # 
 # #-----------------------------------
 # # 1 restrict to data that is QCd
@@ -193,6 +215,7 @@ monthly <- c('gms_nepal','respak','irc','divids','ee','cmc_v_bcs_2002','mal_ed',
 dd$monthly<-0
 dd$monthly[dd$median_length_between_measures<=35] <- 1
 
+
 # Two of the CMIN cohorts (Brazil and Guinea-Bissau)  do not have monthly measurments
 # Two of the COHORTS (Brazil and South Africa) have yearly measurments
 
@@ -251,19 +274,31 @@ sum(dd$nmeas)
 #-----------------------------------
 
 # shorten the description for a few studies
-dd$short_description[dd$study_id=='CONTENT'] <- 'Eval & Control of Negl. Mucosal Enteric Inf'
-dd$short_description[dd$study_id=='LCNI-5'] <- 'Lungwena Child Nutr Int Study'
-dd$short_description[dd$study_id=='Burkina Faso Zn'] <- 'Zinc Int Trial'
-dd$short_description[dd$study_id=='AgaKhanUniv'] <- 'Aga Khan Evidence Based Nutr Int Study'
-dd$short_description[dd$study_id=='SAS-FoodSuppl'] <- 'Food Suppl Trial'
-dd$short_description[dd$study_id=="MAL-ED"] <- 'MAL-ED Study'
-dd$short_description[dd$study_id=='CMIN'] <- 'Child Malnutrition and Inf Network'
-dd$short_description[dd$study_id=='Guatemala BSC'] <- 'Longitudinal study of BSC'
+dd$short_description[dd$study_id=='CONTENT'] <- 'Eval of Negl. Enteric Inf'
+dd$short_description[dd$study_id=='LCNI-5'] <- 'Lungwena Child Nutr RCT'
+dd$short_description[dd$study_id=='Burkina Faso Zn'] <- 'Zinc RCT'
+dd$short_description[dd$study_id=='AgaKhanUniv'] <- 'Aga Khan Nutr RCT'
+dd$short_description[dd$study_id=='SAS-FoodSuppl'] <- 'Food Suppl RCT'
+dd$short_description[dd$study_id=="MAL-ED"] <- 'MAL-ED'
+dd$short_description[dd$study_id=='CMIN'] <- 'CMIN'
+dd$short_description[dd$study_id=='Guatemala BSC'] <- 'Bovine Serum RCT'
 dd$short_description[dd$study_id=='Peru Huascar'] <- 'Infant growth in Huascar'
-dd$short_description[dd$study_id=='EE'] <- 'Study of Biomarkers for EE'
+dd$short_description[dd$study_id=='EE'] <- 'Biomarkers for EE'
 dd$short_description[dd$study_id=='GMS-Nepal'] <- 'Growth Monitoring Study'
-dd$short_description[dd$study_id=='NIH-Crypto'] <- 'NIH Crypto study'
-dd$short_description[dd$study_id=='ZVITAMBO'] <- 'Zvitambo Vitamin-A Trial'
+dd$short_description[dd$study_id=='NIH-Crypto'] <- 'NIH Crypto'
+dd$short_description[dd$study_id=='PROVIDE'] <- 'PROVIDE RCT'
+dd$short_description[dd$short_description=='Vitamin A Supplementation in Serrinha, Brazil'] <- 'Vit. A Sup., Serrinha'
+dd$short_description[dd$short_description=='Respiratory Pathogens Birth Cohort'] <- 'Resp. Pathogens'
+dd$short_description[dd$study_id=='CMC-V-BCS-2002'] <- 'CMC Birth, Vellore'
+dd$short_description[dd$study_id=='ZnMort'] <- 'PROVIDE RCT'
+dd$short_description[dd$study_id=='WASH-Bangladesh'] <- 'WASH Benefits RCT'
+dd$short_description[dd$study_id=='WASH-Kenya'] <- 'Zn Supp + Infant Mort.'
+dd$short_description[dd$study_id=='EU'] <- 'Zn Supp RCT'
+dd$short_description[dd$study_id=='JiVitA-3'] <- 'JiVitA-3'
+dd$short_description[dd$study_id=='JiVitA-4'] <- 'JiVitA-4'
+
+dd$short_description[dd$study_id=='SAS-CompFeed'] <- 'Optimal Infant Feeding'
+dd$short_description[dd$study_id=='NIH-Birth'] <- 'NIH Birth Cohort'
 
 # simplify Tanzania label
 dd$countrycohort[dd$countrycohort=='TANZANIA, UNITED REPUBLIC OF'] <- 'TANZANIA'
@@ -298,23 +333,23 @@ dd$stcat <- factor(dd$stcat)
 colnames(dd)
 
 # gather N measurements by month data into long format
-dnsubj <- select(dd,study_id,anonym,country,studycountry,measure_freq,stuntprev,starts_with('n')) %>%
+dnsubj <- select(dd,study_id,anonym,country,studycountry,region,measure_freq,stuntprev,starts_with('n')) %>%
   select(-neurocog_data,-nutrition,-notes,-num_countries,-numcountry,-numsubj,-numobs,-nmeas) %>%
-  gather(age,nobs,-study_id,-anonym,-country,-studycountry,-measure_freq,-stuntprev) %>%
+  gather(age,nobs,-study_id,-anonym,-country,-studycountry,-region,-measure_freq,-stuntprev) %>%
   mutate(age=as.integer(str_sub(age,2,-1)),nobs=as.integer(nobs)) %>%
   select(study_id,anonym,country,studycountry,measure_freq,stuntprev,age,nobs) %>%
   filter(age>=1 & age <=24 ) %>%
   arrange(measure_freq,stuntprev)
 
 # gather stunting prev by month data into long format
-dstuntp <- select(dd,study_id,anonym,country,studycountry,starts_with('stuntprev_m')) %>%
-  gather(age,wp,-study_id,-anonym,-country,-studycountry) %>%
+dstuntp <- select(dd,study_id,anonym,country,studycountry,region, starts_with('stuntprev_m')) %>%
+  gather(age,wp,-study_id,-anonym,-country,-studycountry,-region) %>%
   mutate(age=as.integer(str_sub(age,12,-1)),wp=as.numeric(wp)) %>%
   select(study_id,anonym,country,studycountry,age,wp) %>%
   filter(age>=1 & age <=24 )
 
 # join the long tables together and sort countries by measure_freq and stunting prev
-dp <- left_join(dnsubj,dstuntp,by=c('study_id','anonym','country','studycountry','age'))
+dp <- left_join(dnsubj,dstuntp,by=c('study_id','anonym','country','studycountry','region','age'))
   
 
 # categorize stunting prevalence, set stunting prevalence category estimates to missing if n<50
@@ -585,3 +620,8 @@ hm_quart <- ggplot(d_quart,aes(x=age,y=studycountry)) +
 hm_quart
 
 ggsave(filename="stunting-prev-heatmap-presentation-plot.pdf",plot = hm_quart, device='pdf',width=10,height=9)
+
+
+
+save(dd, dp, file="C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_heatmap.RData")
+

@@ -150,66 +150,25 @@ df$agecat.f2 <- as.character(df$agecat.f2)
 df$agecat.f2 <- gsub("months","mo.",df$agecat.f2)
 df$agecat.f2 <- factor(df$agecat.f2, levels=unique(df$agecat.f2))
 
+df <- df[df$Measure=="Incidence proportion\nwithin age ranges",]
 p4 <- ggplot(df, aes(y=est,x=agecat.f2, fill=Measure, color=Measure))+
-              geom_point( size = 4, position=position_dodge(width=0.25)) +
-              geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3, position=position_dodge(width=0.25)) +
-              scale_y_continuous(limits=c(-2,80))+
+              geom_point( size = 4) +
+              geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3) +
+              scale_y_continuous(limits=c(-2,30))+
               xlab("Age category")+
               ylab("Percent stunted (95% CI)") +
-              annotate("text",x=df$agecat.f2[1:8],y=74,label=df$nmeas.f[1:8],size=3) +
-              annotate("text",x=df$agecat.f2[9:16],y=1,label=df$nmeas.f[9:16],size=3) +
-              annotate("text",x=df$agecat.f2[1:8],y=71,label=df$nstudy.f[1:8],size=3) +
-              annotate("text",x=df$agecat.f2[9:16],y=-2,label=df$nstudy.f[9:16],size=3) +
-              annotate("text",x=df$agecat.f2[1],y=78,label="N's for cumulative incidence from birth",size=4, hjust = 0) +
-              annotate("text",x=df$agecat.f2[1],y=5,label="N's for incidence proportion within age ranges",size=4, hjust = 0) +
-              annotate("text",label=df$ptest.f[1:8],x=df$agecat.f2[1:8], y=df$est[1:8],hjust=2.5,size=3)+
-              annotate("text",label=df$ptest.f[9:16],x=df$agecat.f2[9:16], y=df$est[9:16],hjust=-2,size=3)+
+              annotate("text",x=df$agecat.f2,y=1,label=df$nmeas.f,size=3) +
+              annotate("text",x=df$agecat.f2,y=-2,label=df$nstudy.f,size=3) +
+              annotate("text",label=df$ptest.f,x=df$agecat.f2, y=df$est,hjust=-2,size=3)+
               theme(strip.background = element_blank(), strip.text.x = element_text(size=12)) +
-              scale_colour_manual(name = "Measure",values=tableau10[c(2,10)]) +
-              ggtitle("Pooled cumulative incidence of stunting")+
+              scale_colour_manual(name = "Measure",values=tableau10[2]) +
+              ggtitle("Pooled cumulative incidence of stunting within 3 month intervals")+
   theme(strip.background = element_blank(),
-        legend.position="right",
+        legend.position="none",
         strip.text.x = element_text(size=12),
         axis.text.x = element_text(size=12)) 
 p4
 ggsave(p4, file="pooled_incprop.png", width=10, height=4)
-
-#-------------------------------------------------------------------------------------------
-# Incidence proportion
-#-------------------------------------------------------------------------------------------
-
-df_nobirth$nmeas.f <- substr(df_nobirth$nmeas.f, 1, 4)
-df_nobirth$nmeas.f <- gsub(",","",df_nobirth$nmeas.f)
-df_nobirth$nmeas.f <- paste0(df_nobirth$nmeas.f, levels=c(rep("K children",8),rep("K at-risk",8)))
-
-df_nobirth$agecat.f2 <- as.character(df_nobirth$agecat.f2)
-df_nobirth$agecat.f2 <- gsub("months","mo.",df_nobirth$agecat.f2)
-df_nobirth$agecat.f2 <- factor(df_nobirth$agecat.f2, levels=unique(df_nobirth$agecat.f2))
-
-p5 <- ggplot(df_nobirth, aes(y=est,x=agecat.f2, fill=Measure, color=Measure))+
-  geom_point( size = 4, position=position_dodge(width=0.25)) +
-  geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3, position=position_dodge(width=0.25)) +
-  scale_y_continuous(limits=c(-2,80))+
-  xlab("Age category")+
-  ylab("Percent stunted (95% CI)") +
-  annotate("text",x=df_nobirth$agecat.f2[1:8],y=74,label=df_nobirth$nmeas.f[1:8],size=3) +
-  annotate("text",x=df_nobirth$agecat.f2[9:16],y=1,label=df_nobirth$nmeas.f[9:16],size=3) +
-  annotate("text",x=df_nobirth$agecat.f2[1:8],y=71,label=df_nobirth$nstudy.f[1:8],size=3) +
-  annotate("text",x=df_nobirth$agecat.f2[9:16],y=-2,label=df_nobirth$nstudy.f[9:16],size=3) +
-  annotate("text",x=df_nobirth$agecat.f2[1],y=78,label="N's for cumulative incidence from birth",size=4, hjust = 0) +
-  annotate("text",x=df_nobirth$agecat.f2[1],y=5,label="N's for incidence proportion within age ranges",size=4, hjust = 0) +
-  annotate("text",label=df_nobirth$ptest.f[1:8],x=df_nobirth$agecat.f2[1:8], y=df_nobirth$est[1:8],hjust=2.5,size=3)+
-  annotate("text",label=df_nobirth$ptest.f[9:16],x=df_nobirth$agecat.f2[9:16], y=df_nobirth$est[9:16],hjust=-2,size=3)+
-  theme(strip.background = element_blank(), strip.text.x = element_text(size=12)) +
-  scale_colour_manual(name = "Measure",values=tableau10[c(2,10)]) +
-  ggtitle("Pooled cumulative incidence of stunting")+
-  theme(strip.background = element_blank(),
-        legend.position="right",
-        strip.text.x = element_text(size=12),
-        axis.text.x = element_text(size=12)) 
-p5
-ggsave(p5, file="pooled_incprop_nobirth_stunt.png", width=10, height=4)
-
 
 
 
@@ -225,25 +184,21 @@ df_nobirthmeas$agecat.f2 <- as.character(df_nobirthmeas$agecat.f2)
 df_nobirthmeas$agecat.f2 <- gsub("months","mo.",df_nobirthmeas$agecat.f2)
 df_nobirthmeas$agecat.f2 <- factor(df_nobirthmeas$agecat.f2, levels=unique(df_nobirthmeas$agecat.f2))
 
+df_nobirthmeas <- df_nobirthmeas[df_nobirthmeas$Measure=="Incidence proportion\nwithin age ranges",]
 p6 <- ggplot(df_nobirthmeas, aes(y=est,x=agecat.f2, fill=Measure, color=Measure))+
-  geom_point( size = 4, position=position_dodge(width=0.25)) +
-  geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3, position=position_dodge(width=0.25)) +
-  scale_y_continuous(limits=c(-2,80))+
+  geom_point( size = 4) +
+  geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3) +
+  scale_y_continuous(limits=c(-2,30))+
   xlab("Age category")+
   ylab("Percent stunted (95% CI)") +
-  annotate("text",x=df_nobirthmeas$agecat.f2[1:8],y=74,label=df_nobirthmeas$nmeas.f[1:8],size=3) +
-  annotate("text",x=df_nobirthmeas$agecat.f2[9:16],y=1,label=df_nobirthmeas$nmeas.f[9:16],size=3) +
-  annotate("text",x=df_nobirthmeas$agecat.f2[1:8],y=71,label=df_nobirthmeas$nstudy.f[1:8],size=3) +
-  annotate("text",x=df_nobirthmeas$agecat.f2[9:16],y=-2,label=df_nobirthmeas$nstudy.f[9:16],size=3) +
-  annotate("text",x=df_nobirthmeas$agecat.f2[1],y=78,label="N's for cumulative incidence from birth",size=4, hjust = 0) +
-  annotate("text",x=df_nobirthmeas$agecat.f2[1],y=5,label="N's for incidence proportion within age ranges",size=4, hjust = 0) +
-  annotate("text",label=df_nobirthmeas$ptest.f[1:8],x=df_nobirthmeas$agecat.f2[1:8], y=df_nobirthmeas$est[1:8],hjust=2.5,size=3)+
-  annotate("text",label=df_nobirthmeas$ptest.f[9:16],x=df_nobirthmeas$agecat.f2[9:16], y=df_nobirthmeas$est[9:16],hjust=-2,size=3)+
+  annotate("text",x=df_nobirthmeas$agecat.f2,y=1,label=df_nobirthmeas$nmeas.f,size=3) +
+  annotate("text",x=df_nobirthmeas$agecat.f2,y=-2,label=df_nobirthmeas$nstudy.f,size=3) +
+  annotate("text",label=df_nobirthmeas$ptest.f,x=df_nobirthmeas$agecat.f2, y=df_nobirthmeas$est,hjust=-2,size=3)+
   theme(strip.background = element_blank(), strip.text.x = element_text(size=12)) +
-  scale_colour_manual(name = "Measure",values=tableau10[c(2,10)]) +
-  ggtitle("Pooled cumulative incidence of stunting")+
+  scale_colour_manual(name = "Measure",values=tableau10[2]) +
+  ggtitle("Pooled cumulative incidence of stunting within 3 month intervals - no birth stunting")+
   theme(strip.background = element_blank(),
-        legend.position="right",
+        legend.position="none",
         strip.text.x = element_text(size=12),
         axis.text.x = element_text(size=12)) 
 p6
@@ -497,6 +452,50 @@ yticks <- c(2/3, 1, 3/2,2,3,4)
   
   
   
+    
+    
+#-------------------------------------------------------------------------------------------
+# diarrhea 0-6 on CI of stunting 6-24
+#-------------------------------------------------------------------------------------------    
+    
+    df <- RMAest %>%
+      #filter(agecat=="6-24 months\ncumulative incidence") %>%unique(RMAest)
+      filter(agecat=="6-24 months (no birth st.)\ncumulative incidence"|
+               agecat=="6-24 months\ncumulative incidence") %>%
+      filter(intervention_variable %in% c("perdiar6"))
+    df <- droplevels(df)
+    
+
+    df <- df %>% arrange(intervention_variable)
+    df$RFlabel <- factor(df$RFlabel, levels=unique(df$RFlabel))
+    
+    
+    
+    yticks <- c(2/3, 3/4, 1/1.1, 1, 1.1, 4/3, 3/2,2,3,4)
+    
+    
+    p <-  ggplot(df, aes(x=intervention_level)) + 
+      geom_point(aes(y=RR, fill=intervention_variable, color=intervention_variable), size = 4) +
+      geom_linerange(aes(ymin=RR.CI1, ymax=RR.CI2, color=intervention_variable),
+                     alpha=0.5, size = 3) +
+      labs(x = "Longitudinal prevalence of diarrhea under 6 months\nReference level: (0%, 5%]", y = "Cumulative incidence ratio") +
+      geom_hline(yintercept = 1) +
+      geom_text(aes(x=1.7, y=1.15, label=Nstudies), size=4,  hjust=0) +
+      scale_y_continuous(breaks=yticks, trans='log10', labels=scaleFUN) +
+      scale_fill_manual(values=rep(tableau10[4],4)) +
+      scale_colour_manual(values=rep(tableau10[4],4)) +
+      theme(strip.background = element_blank(), 
+            legend.position="none",
+            axis.text.y = element_text(size=12),
+            strip.text.x = element_text(size=10),
+            axis.text.x = element_text(size=10, angle = 20, hjust = 1),
+            panel.spacing = unit(0, "lines")) +
+      ggtitle("Outcome: any stunting from 6 months to 2 years")
+    p
+    
+    ggsave(p, file="diarrhea_RFplot.png",  width=6, height=5.2)
+    
+    
   
   
 #-------------------------------------------------------------------------------------------
@@ -785,3 +784,92 @@ ggplot(plot.df36,aes(y=y,x=cohort), color=tableau10[3])+
 
 
 ggsave(prec, file="pooled_rec24.png", width=10, height=4)
+
+
+
+
+
+
+
+
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# Older plots
+#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+
+# #-------------------------------------------------------------------------------------------
+# # Incidence proportion - with CI from birth
+# #-------------------------------------------------------------------------------------------
+# 
+# df$nmeas.f <- substr(df$nmeas.f, 1, 4)
+# df$nmeas.f <- gsub(",","",df$nmeas.f)
+# df$nmeas.f <- paste0(df$nmeas.f, c(rep("K children",8),rep("K at-risk",8)))
+# 
+# df$agecat.f2 <- as.character(df$agecat.f2)
+# df$agecat.f2 <- gsub("months","mo.",df$agecat.f2)
+# df$agecat.f2 <- factor(df$agecat.f2, levels=unique(df$agecat.f2))
+# 
+# p4 <- ggplot(df, aes(y=est,x=agecat.f2, fill=Measure, color=Measure))+
+#   geom_point( size = 4, position=position_dodge(width=0.25)) +
+#   geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3, position=position_dodge(width=0.25)) +
+#   scale_y_continuous(limits=c(-2,80))+
+#   xlab("Age category")+
+#   ylab("Percent stunted (95% CI)") +
+#   annotate("text",x=df$agecat.f2[1:8],y=74,label=df$nmeas.f[1:8],size=3) +
+#   annotate("text",x=df$agecat.f2[9:16],y=1,label=df$nmeas.f[9:16],size=3) +
+#   annotate("text",x=df$agecat.f2[1:8],y=71,label=df$nstudy.f[1:8],size=3) +
+#   annotate("text",x=df$agecat.f2[9:16],y=-2,label=df$nstudy.f[9:16],size=3) +
+#   annotate("text",x=df$agecat.f2[1],y=78,label="N's for cumulative incidence from birth",size=4, hjust = 0) +
+#   annotate("text",x=df$agecat.f2[1],y=5,label="N's for incidence proportion within age ranges",size=4, hjust = 0) +
+#   annotate("text",label=df$ptest.f[1:8],x=df$agecat.f2[1:8], y=df$est[1:8],hjust=2.5,size=3)+
+#   annotate("text",label=df$ptest.f[9:16],x=df$agecat.f2[9:16], y=df$est[9:16],hjust=-2,size=3)+
+#   theme(strip.background = element_blank(), strip.text.x = element_text(size=12)) +
+#   scale_colour_manual(name = "Measure",values=tableau10[c(2,10)]) +
+#   ggtitle("Pooled cumulative incidence of stunting")+
+#   theme(strip.background = element_blank(),
+#         legend.position="right",
+#         strip.text.x = element_text(size=12),
+#         axis.text.x = element_text(size=12)) 
+# p4
+# ggsave(p4, file="pooled_incprop.png", width=10, height=4)
+# 
+# 
+# 
+# #-------------------------------------------------------------------------------------------
+# # Incidence proportion - no birth measurement
+# #-------------------------------------------------------------------------------------------
+# 
+# df_nobirthmeas$nmeas.f <- substr(df_nobirthmeas$nmeas.f, 1, 4)
+# df_nobirthmeas$nmeas.f <- gsub(",","",df_nobirthmeas$nmeas.f)
+# df_nobirthmeas$nmeas.f <- paste0(df_nobirthmeas$nmeas.f, levels=c(rep("K children",8),rep("K at-risk",8)))
+# 
+# df_nobirthmeas$agecat.f2 <- as.character(df_nobirthmeas$agecat.f2)
+# df_nobirthmeas$agecat.f2 <- gsub("months","mo.",df_nobirthmeas$agecat.f2)
+# df_nobirthmeas$agecat.f2 <- factor(df_nobirthmeas$agecat.f2, levels=unique(df_nobirthmeas$agecat.f2))
+# 
+# p6 <- ggplot(df_nobirthmeas, aes(y=est,x=agecat.f2, fill=Measure, color=Measure))+
+#   geom_point( size = 4, position=position_dodge(width=0.25)) +
+#   geom_linerange(aes(ymin=lb, ymax=ub), alpha=0.5, size = 3, position=position_dodge(width=0.25)) +
+#   scale_y_continuous(limits=c(-2,80))+
+#   xlab("Age category")+
+#   ylab("Percent stunted (95% CI)") +
+#   annotate("text",x=df_nobirthmeas$agecat.f2[1:8],y=74,label=df_nobirthmeas$nmeas.f[1:8],size=3) +
+#   annotate("text",x=df_nobirthmeas$agecat.f2[9:16],y=1,label=df_nobirthmeas$nmeas.f[9:16],size=3) +
+#   annotate("text",x=df_nobirthmeas$agecat.f2[1:8],y=71,label=df_nobirthmeas$nstudy.f[1:8],size=3) +
+#   annotate("text",x=df_nobirthmeas$agecat.f2[9:16],y=-2,label=df_nobirthmeas$nstudy.f[9:16],size=3) +
+#   annotate("text",x=df_nobirthmeas$agecat.f2[1],y=78,label="N's for cumulative incidence from birth",size=4, hjust = 0) +
+#   annotate("text",x=df_nobirthmeas$agecat.f2[1],y=5,label="N's for incidence proportion within age ranges",size=4, hjust = 0) +
+#   annotate("text",label=df_nobirthmeas$ptest.f[1:8],x=df_nobirthmeas$agecat.f2[1:8], y=df_nobirthmeas$est[1:8],hjust=2.5,size=3)+
+#   annotate("text",label=df_nobirthmeas$ptest.f[9:16],x=df_nobirthmeas$agecat.f2[9:16], y=df_nobirthmeas$est[9:16],hjust=-2,size=3)+
+#   theme(strip.background = element_blank(), strip.text.x = element_text(size=12)) +
+#   scale_colour_manual(name = "Measure",values=tableau10[c(2,10)]) +
+#   ggtitle("Pooled cumulative incidence of stunting")+
+#   theme(strip.background = element_blank(),
+#         legend.position="right",
+#         strip.text.x = element_text(size=12),
+#         axis.text.x = element_text(size=12)) 
+# p6
+# ggsave(p6, file="pooled_incprop_nobirth_meas.png", width=10, height=4)

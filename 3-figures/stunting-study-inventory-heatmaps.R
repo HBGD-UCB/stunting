@@ -536,8 +536,4 @@ dd %>%
   summarise(sum(nmeas))
 
 
-#-----------------------------------
-# save plot dataframe
-#-----------------------------------
-save(dp,dd, file="U:/Data/Stunting/st_heatmap.RData")
 

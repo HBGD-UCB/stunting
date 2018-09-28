@@ -18,12 +18,113 @@ textcol <- "grey20"
 
 load("C:/Users/andre/Dropbox/HBGDki figures/Stunting Webinar/Plot data/st_heatmap.RData")
 
+#Switch erroneously classified studies from the heatmap data
+# dd$measure_freq[dd$short_id=="jvt3"] <- "Quarterly Measurements"
+# dp$measure_freq[dp$study_id=="jvt3"] <- "Quarterly Measurements"
+# dd$measure_freq[dd$short_id=="akup" | dd$short_id=="bfzn"] <- "Yearly"
+# dp$measure_freq[dp$study_id=="AgaKhanUniv" | dp$study_id=="Burkina Faso Zn"] <- "Yearly"
+# table(dd$short_id,dd$measure_freq)
+# 
+# #Drop Mal-ED Pakistan
+# dd <- dd %>% filter(!(short_id=="mled" & country=="Pakistan"))
+# dp <- dp %>% filter(!(study_id=="MAL-ED" & country=="Pakistan"))
 
-dp <- dp %>% filter(measure_freq!="Yearly")
+#Drop yearly
 dd <- dd %>% filter(measure_freq!="Yearly")
 
-dp$age <- dp$age - 1
-dd$age <- dd$age - 1
+#dd$age <- dd$age - 1
+
+
+
+# make a study-country label, and make the monthly variable into a factor
+# including an anonymous label (temporary) for sharing with WHO
+dd <- mutate(dd,
+             country=str_to_title(str_to_lower(countrycohort)), 
+             studycountry=paste0(short_description,', ',country))
+
+unique(dd$studycountry)
+unique(dd$study_id)
+
+dd$studycountry[dd$studycountry=="Tanzania Child 2, Tanzania"] <- "Tanzania Child 2" 
+
+dd <- mutate(dd,
+             monthly=factor(monthly,levels=c(1,0),
+                            labels=c('Monthly Measurements','Quarterly Measurements')),
+             studycountry = factor(studycountry,
+                                   levels=unique(studycountry[order(monthly,stuntprev)]), 
+                                   ordered=TRUE),
+             anonym = factor(paste("Cohort",1:nrow(dd),dd$country)),
+             anonym = factor(anonym,levels=unique(anonym[order(monthly,stuntprev)]),
+                             ordered=TRUE)
+)
+
+# categorize stunting prevalence
+dd$stpcat <- cut(dd$stuntprev,breaks=c(0,5,10,20,30,40,50,60,100),labels=c("<5","5-10","10-20","20-30","30-40","40-50","50-60",">60"))
+dd$stpcat <- factor(dd$stpcat)
+
+
+#Create dataset of studies we are using
+colnames(dd)
+
+studylist <- dd[,c(1:10,29:38)] %>% distinct()
+library(xlsx)
+write.xlsx(studylist, "U:/Data/Stunting/UCBerkeley_stunting_studylist.xlsx")
+saveRDS(studylist, "U:/Data/Stunting/UCBerkeley_stunting_studylist.rds")
+
+#-----------------------------------
+# Create a long format dataset
+# for ggplot2
+#-----------------------------------
+
+# gather N measurements by month data into long format
+dnsubj <- select(dd,study_id,anonym,country,studycountry,region,measure_freq,stuntprev,starts_with('n')) %>%
+  select(-neurocog_data,-nutrition,-notes,-num_countries,-numcountry,-numsubj,-numobs,-nmeas) %>%
+  gather(age,nobs,-study_id,-anonym,-country,-studycountry,-region,-measure_freq,-stuntprev) %>%
+  mutate(age=as.integer(str_sub(age,2,-1)),nobs=as.integer(nobs)) %>%
+  select(study_id,anonym,country,studycountry,measure_freq,stuntprev,region,age,nobs) %>%
+  filter(age>=1 & age <=24 ) %>%
+  arrange(measure_freq,stuntprev)
+
+# gather stunting prev by month data into long format
+dstuntp <- select(dd,study_id,anonym,country,studycountry,region,starts_with('stuntprev_m')) %>%
+  gather(age,stp,-study_id,-anonym,-country,-studycountry,-region) %>%
+  mutate(age=as.integer(str_sub(age,12,-1))) %>%
+  select(study_id,anonym,country,studycountry, region,age,stp) %>%
+  filter(age>=1 & age <=24 )
+
+# join the long tables together and sort countries by measure_freq and stunting prev
+dp <- left_join(dnsubj,dstuntp,by=c('study_id','anonym','country','studycountry','region','age'))
+
+
+# categorize stunting prevalence, set stunting prevalence category estimates to missing if n<50
+dp$stpcat <- cut(dp$stp,breaks=c(0,5,10,20,30,40,50,60,100),labels=c("<5","5-10","10-20","20-30","30-40","40-50","50-60",">60"))
+
+dp$stpcat <- factor(dp$stpcat)
+dp$stpcat[dp$nobs<50 | is.nan(dp$stp)] <- NA
+
+# categorize number of observations
+
+N_breaks <- c(1,50, 100, 250, 500, 750, 1000, 1500, 2000, 100000)
+dp$ncat <- cut(dp$nobs,
+               breaks=N_breaks,
+               labels=c('<50','50-100','100-250','250-500','500-750','750-1000','1000-1500','1500-2000','>2000'))
+dp$ncat <- factor(dp$ncat)
+
+
+
+
+
+
+#Arrange plot data by region
+dp$region <- factor(dp$region, levels=c("Europe","Latin America", "Africa", "Asia"))
+dp <- dp %>% arrange(measure_freq, region, country)
+dp$studycountry <- factor(as.character(dp$studycountry), levels=unique(dp$studycountry))
+
+
+
+
+
+
 
 # heat map plot scheme
 hm <- ggplot(dp,aes(x=age,y=studycountry)) +
@@ -53,35 +154,6 @@ hm <- ggplot(dp,aes(x=age,y=studycountry)) +
     panel.border=element_blank())
 
 
-# side bar plot scheme
-# sidebar <- ggplot(data = dd, aes(x = studycountry)) + 
-#   geom_bar(stat = "identity") +
-#   coord_flip() + 
-#   facet_grid(measure_freq~.,scales='free_y',space='free_y') +
-#   scale_x_discrete(expand=c(0,0)) +
-#   scale_fill_manual(values=rep('gray70',6),na.value="grey90",
-#                     guide=guide_legend(title="",title.hjust = 0.5,
-#                                        label.position="bottom",label.hjust=0.5,nrow=1,
-#                                        override.aes = list(color = "white", fill="white"))) +
-#   theme_grey(base_size=12) +
-#   theme(
-#     legend.title=element_text(color=textcol,size=8),
-#     legend.margin = margin(grid::unit(0.1,"cm")),
-#     legend.text=element_text(colour=NA,size=7,face="bold"),
-#     legend.key.height=grid::unit(0.2,"cm"),
-#     legend.key.width=grid::unit(0.2,"cm"),
-#     legend.position = "bottom",
-#     axis.title.y = element_blank(), 
-#     axis.text.y = element_blank(),
-#     axis.ticks.y = element_blank(),
-#     strip.text.x = element_blank(),
-#     strip.text.y = element_blank(),
-#     axis.title.x = element_text(size=12),
-#     plot.title=element_text(colour=textcol,hjust=0,size=12,face="bold"),
-#     panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#     panel.background = element_blank())
-
-
 
 #-----------------------------------
 # STUNTING PREVALENCE HEAT MAP
@@ -100,20 +172,6 @@ wphm <- hm +
 ggsave(wphm, file="stuntprev_heatmap.png", width=8, height=6)
 
 
-# # stunting prevalence side bar plot
-# wpbar <- sidebar +
-#   aes(y=stuntprev) +
-#   labs(x = "",y="Overall Prevalence (%)",title="Stunting (%)") +
-#   scale_y_continuous(expand=c(0,0),limits=c(0,70),
-#                      breaks=seq(0,80,by=20),labels=seq(0,80,by=20)) +
-#   geom_hline(yintercept = seq(0,80,by=20),color='white',size=0.3)
-#   
-#   
-# # combined plot
-# wpgrid <- grid.arrange(wphm, wpbar, nrow = 1, ncol = 2, widths=c(100,20))
-
-
-
 #-----------------------------------
 # measurement heat map
 #-----------------------------------
@@ -125,20 +183,6 @@ nhm <- hm +
                     guide=guide_legend(title="Number of\nMeasurements",title.vjust = 1,
                                        label.position="bottom",nrow=2))
 ggsave(nhm, file="N_heatmap.png", width=9, height=6)
-
-# nbar <- sidebar +
-#   aes(y=nmeas/1000) +
-#   labs(x = "",y="Child-Months (x1000)",title="Sample size") +
-#   scale_y_continuous(expand=c(0,0),limits=c(0,125),
-#                      breaks=seq(0,120,by=20),labels=seq(0,120,by=20)) +
-#   geom_hline(yintercept = seq(0,120,by=20),color='white',size=0.3) 
-# 
-# 
-# ngrid <- grid.arrange(nhm, nbar, nrow = 1, ncol = 2, widths=c(100,20))
-# 
-# ggsave(filename="stunting-study-N-heatmap.pdf",plot = ngrid,device='png', width=7, height=6)
-
-
 
 
 
