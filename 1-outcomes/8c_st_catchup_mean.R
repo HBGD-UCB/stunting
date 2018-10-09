@@ -18,7 +18,7 @@ library(metafor)
 theme_set(theme_bw())
 
 # load base functions
-source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
+source("U:/Scripts/Stunting/1-outcomes/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -76,14 +76,17 @@ rev <- d %>%
                            stunted==1 & measid==1,1,0))
 
 # make indicator for max measurement
-rev2 <- full_join(rev, maxid, by=c("studyid","country","subjid"))  %>%
+episodes <- full_join(rev, maxid, by=c("studyid","country","subjid"))  %>%
+  arrange(studyid, country, subjid, agedays) %>%
   # determine the start and end of each stunting episode
   mutate(start=ifelse(stunted==1 & lag(stunted)==0,1,0),
          end=case_when(
            stunted==1 & maxid==measid   ~ 1,
            stunted==0 & lag(stunted)==1 ~ 1,
            TRUE                         ~ 0
-         )) %>%
+         )) 
+
+rev2 <- episodes %>%
   # keep starting and ending ages
   filter(start==1 | end==1) %>%
   # round age in months
@@ -93,8 +96,7 @@ rev2 <- full_join(rev, maxid, by=c("studyid","country","subjid"))  %>%
          agediff=agem-agemlag)  %>%
   filter(!is.na(agediff))
 
-# plot distribution of stunting duration prior to 24 months
-labs=paste0(sprintf("%0.1f",prop.table(table(rev2$agediff))*100),"%")[1:6]
+
 
 pdf("U:/Figures/stunting-duration.pdf",width=8,height=4,onefile=TRUE)
 ggplot(rev2, aes(x=agediff))+

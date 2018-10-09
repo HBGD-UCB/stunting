@@ -275,9 +275,11 @@ dev.off()
 
 
 
+#Calculate age in months
+d$agemonth <- d$agedays/30.4167
 
 colnames(d)
-df <- d %>% ungroup() %>% select(studyid, agedays, haz, country)
+df <- d %>% ungroup() %>% select(studyid, agedays, agemonth, haz, country)
 
 
 # region stratified
@@ -304,11 +306,11 @@ df <- df %>% filter(region!="Europe")
 
 df$region <- factor(df$region , levels=c( "Asia","Africa","Latin America"))
 
-p<-ggplot(df[!is.na(df$region),], aes(x=agedays, y=haz, group=region, color=region)) + 
-  geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
-  #geom_smooth(method = 'gam') +
+p<-ggplot(df[!is.na(df$region),], aes(x=agemonth, y=haz, group=region, color=region)) + 
+  #geom_smooth(method = 'gam', formula= y ~ s(x, bs = "cs")) +
+  geom_smooth(method = 'loess', se=FALSE, size=2) +
   scale_color_manual(values=rep(tableau10,2), name = paste0("Region"))+
-  xlab("Child age in days") + ylab("LAZ") + 
+  xlab("Child age in months") + ylab("LAZ") + 
   ggtitle("Region") + theme(axis.text.y = element_text(size=12), axis.text.x = element_text(size=12))
 
 ggsave(p, file="U:/Figures/Stunting Webinar/region_HAZ_trajectories.png", width = 9, height = 3.5)

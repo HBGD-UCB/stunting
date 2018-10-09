@@ -14,7 +14,7 @@ library(metafor)
 theme_set(theme_bw())
 
 # load base functions
-source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
+source("U:/Scripts/Stunting/1-outcomes/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -56,7 +56,9 @@ prev.data = dmn %>%
   group_by(studyid,country,agecat) %>%
   summarise(nmeas=sum(!is.na(haz)),
             prev=mean(stunted),
-            nxprev=sum(stunted==1)) %>%
+            nxprev=sum(stunted==1),
+            sprev=mean(sstunted),
+            nxsprev=sum(sstunted==1)) %>%
   filter(nmeas>=50) 
   
 # cohort specific results
@@ -75,6 +77,22 @@ prev.res[,4]=as.numeric(prev.res[,4])
   mutate(est=est*100,lb=lb*100,ub=ub*100)
 prev.res$agecat=factor(prev.res$agecat,levels=c("Birth","3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months"))
 prev.res$ptest.f=sprintf("%0.0f",prev.res$est)
+
+# Severe Stunting: estimate random effects, format results
+sev.prev.res=lapply(list("Birth","3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months"),function(x) 
+  fit.rma(data=prev.data,ni="nmeas", xi="nxsprev",age=x,measure="PR",nlab="children"))
+sev.prev.res=as.data.frame(do.call(rbind, sev.prev.res))
+sev.prev.res[,4]=as.numeric(sev.prev.res[,4])
+sev.prev.res = sev.prev.res %>%
+  mutate(est=est*100,lb=lb*100,ub=ub*100)
+sev.prev.res$agecat=factor(sev.prev.res$agecat,levels=c("Birth","3 months","6 months","9 months","12 months","15 months","18 months","21 months","24 months"))
+sev.prev.res$ptest.f=sprintf("%0.0f",sev.prev.res$est)
+
+
+
+
+
+
 
 # plot cohort prevalence
 pdf("U:/Figures/stunting-ptprev-africa.pdf",width=11,height=5,onefile=TRUE)
@@ -137,7 +155,7 @@ prev = dmn %>%
          stunted, sstunted)
 
 
-save(prev, prev.res, prev.cohort, file="U:/Data/Stunting/st_prev.RData")
+save(prev, prev.res, sev.prev.res, prev.cohort, file="U:/Data/Stunting/st_prev.RData")
 
 
 
