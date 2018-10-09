@@ -123,7 +123,7 @@ dp$studycountry <- factor(as.character(dp$studycountry), levels=unique(dp$studyc
 
 
 
-
+dp$age <- dp$age - 1
 
 
 # heat map plot scheme
@@ -135,9 +135,9 @@ hm <- ggplot(dp,aes(x=age,y=studycountry)) +
   scale_x_continuous(expand=c(0,0),
                      breaks = scales::pretty_breaks(n = 8))+
   #coord_equal()+
-  theme_grey(base_size=12)+
+  theme_bw(base_size=12)+
   theme(
-    strip.background = element_blank(),
+    #strip.background = element_blank(),
     legend.title=element_text(color=textcol,size=12),
     legend.margin = margin(grid::unit(0.1,"cm")),
     legend.text=element_text(colour=textcol,size=8),
@@ -150,8 +150,9 @@ hm <- ggplot(dp,aes(x=age,y=studycountry)) +
     plot.title=element_text(colour=textcol,hjust=0,size=12,face="bold"),
     strip.text.x = element_text(size=12),
     strip.text.y = element_text(angle=270,size=12),
-    plot.background=element_blank(),
-    panel.border=element_blank())
+    plot.background=element_blank()#,
+    #panel.border=element_blank()
+    )
 
 
 
