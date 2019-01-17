@@ -52,9 +52,10 @@ vel_lencm$subjid <- as.character(vel_lencm$subjid)
 #------------------------------------
 
 #merge in covariates
+dim(cuminc)
 cuminc <- cuminc %>% subset(., select = -c(tr))
 d <- left_join(cuminc, cov, by=c("studyid", "subjid", "country"))
-head(d)
+dim(d)
 
 
 
