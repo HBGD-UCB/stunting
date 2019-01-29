@@ -30,7 +30,7 @@ library(metafor)
 theme_set(theme_bw())
 
 # load base functions
-source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
+source("U:/Scripts/Stunting/1-outcomes/0_st_basefunctions.R")
 
 load("U:/Data/Stunting/stunting_data.RData")
 
@@ -73,7 +73,7 @@ d %>%
             mean=mean(agedays/30.4167,na.rm=TRUE),
             max=max(agedays/30.4167))
 
-# subset to stunted between birth and 3 months
+# subset to stunted between birth and 24 months
 stunt.24 <- d %>%
   filter(agem<=25) %>%
   # identify last two measurements prior to 24 months
@@ -290,7 +290,7 @@ plot.df$ci.ub[plot.df$cohort=="Pooled"]=plot.df$ci.ub[plot.df$cohort=="Pooled"]*
 plot.df$pooled=as.factor(ifelse(plot.df$cohort=="Pooled",1,0))
 
 # plot recovery
-pdf("U:/Figures/stunting-rec24.pdf",width=8,height=4,onefile=TRUE)
+#pdf("U:/Figures/stunting-rec24.pdf",width=8,height=4,onefile=TRUE)
 ggplot(plot.df,aes(y=y,x=cohort))+
   geom_point(aes(shape=pooled),size=2)+coord_flip()+
   geom_linerange(aes(ymin=ci.lb,ymax=ci.ub),
@@ -299,7 +299,7 @@ ggplot(plot.df,aes(y=y,x=cohort))+
   scale_shape_manual("",values=c(16,15),guide=FALSE)+
   xlab("Cohort")+
   ylab("Percentage (95% CI)")+
-  ggtitle("Percentage of children who became stunted and\nrecovered within 36 months")
-dev.off()
+  ggtitle("Percentage of children who became stunted and\nrecovered within 24 months")
+#dev.off()
 
 

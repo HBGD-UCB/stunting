@@ -273,6 +273,15 @@ vel_lencm <- vel %>% filter(ycat=="lencm") %>% subset(., select=c(studyid, count
   rename(agecat = diffcat)
 
 
+#Get only HAZ change from growth velocity dataset, and format names
+vel_waz <- vel %>% filter(ycat=="waz") %>% subset(., select=c(studyid, country, subjid, y_rate, diffcat)) %>%
+  rename(agecat = diffcat)
+
+#Get only height in cm change from growth velocity dataset, and format names
+vel_wtkg <- vel %>% filter(ycat=="wtkg") %>% subset(., select=c(studyid, country, subjid, y_rate, diffcat)) %>%
+  rename(agecat = diffcat)
+
+
 #--------------------------------------
 # save datasets
 #--------------------------------------
@@ -283,3 +292,4 @@ save(cuminc, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_outcomes.rd
 save(cuminc_nobirth, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_outcomes_nobirth.rdata")
 save(rev, file="U:/ucb-superlearner/Stunting rallies/st_rec_rf_outcomes.RData")
 save(vel_haz, vel_lencm, file="U:/ucb-superlearner/Stunting rallies/st_vel_rf_outcomes.RData")
+save(vel_waz, vel_wtkg, file="U:/ucb-superlearner/Wasting rallies/waz_vel_rf_outcomes.RData")
