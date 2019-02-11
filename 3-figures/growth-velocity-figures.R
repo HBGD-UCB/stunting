@@ -4,6 +4,7 @@
 rm(list=ls())
 library(tidyverse)
 library(metafor)
+library(data.table)
 
 source("U:/Scripts/Stunting/2-analyses/0_st_basefunctions.R")
 
@@ -29,16 +30,22 @@ fit.cont.rma=function(data,age,yi,vi,ni,nlab){
 
 
 d <- readRDS(file="U:/UCB-SuperLearner/Stunting rallies/velocity_longfmt.rds")
-#d <- readRDS(file="U:/UCB-SuperLearner/Stunting rallies/velocity_widefmt.rds")
-
 head(d)
 
+#Merge in sex
+cov<-readRDS("U:/UCB-SuperLearner/Stunting rallies/FINAL_temp_clean_covariates.rds")
+cov <- subset(cov, select = c(studyid,subjid,country,sex))
+setDT(cov)
+
+dim(d)
+d <- left_join(d, cov, by=c("studyid", "subjid", "country"))
+dim(d)
 
 
 table(d$diffcat)
 
 d <- d %>% rename(agecat = diffcat) %>%
-            group_by(studyid, country, agecat, ycat) %>%
+            group_by(studyid, country, agecat, ycat, sex) %>%
             summarize(mean=mean(y_rate, na.rm=T), var=var(y_rate, na.rm=T), n=n()) %>%
             mutate(se=sqrt(var), ci.lb=mean - 1.96 * se, ci.ub=mean + 1.96 * se) %>% 
   mutate(region = case_when(
@@ -122,24 +129,13 @@ d<- d[!(d$studyid=="ki1135781-COHORTS" & d$country=="SOUTH AFRICA"),] #Drop beca
 #Drop yearly
 d <- d %>% filter(measurefreq!="yearly")
 
-#Drop studies without estimates in all 4 age categories
-#d <- d %>% group_by(country_cohort, ycat) %>% mutate(N=n()) %>% filter(N==4) %>% ungroup()
-
-#Create measure-specific datasets
-table(d$ycat)
-
-
-dhaz <- d[d$ycat=="haz",]
-dwaz <- d[d$ycat=="waz",]
-dlencm <- d[d$ycat=="lencm",]
-dwtkg <- d[d$ycat=="wtkg",]
-
-
-#"0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"
 
 
 # age specific pooled results
-RE_pool <- function(df){
+RE_pool <- function(df, ycategory, gender){
+  
+  df <- df %>% filter(ycat==ycategory)
+  df <- df %>% filter(sex==gender)
   
   pooled.vel=lapply(list("0-3 months", "3-6 months",  "6-9 months","9-12 months","12-15 months","15-18 months","18-21 months","21-24 months"),function(x) 
     fit.cont.rma(data=df,yi="mean", vi="var", ni="n",age=x, nlab="children"))
@@ -200,17 +196,24 @@ RE_pool <- function(df){
   plotdf$stratacol[plotdf$pooled==1] <- "pooled"
   plotdf$stratacol[plotdf$strata=="Overall" & plotdf$pooled==1] <- "pooled_unstrat"
   
+  plotdf$sex <- gender
+  plotdf$ycat <- ycategory
+  
 return(plotdf)
 }
 
 
 
-poolhaz <- RE_pool(dhaz)
-poolwaz <- RE_pool(dwaz)
-poollencm <- RE_pool(dlencm)
-poolwtkg <- RE_pool(dwtkg)
+poolhaz_boys <- RE_pool(d, ycategory="haz", gender="Male")
+poolhaz_girls <- RE_pool(d, ycategory="haz", gender="Female")
+poollencm_boys <- RE_pool(d, ycategory="lencm", gender="Male")
+poollencm_girls <- RE_pool(d, ycategory="lencm", gender="Female")
 
-save(poolhaz, poolwaz, poollencm, poolwtkg, file="U:/data/Stunting/pool_vel.RData")
+pooled_vel <- rbind(
+  poolhaz_boys, poolhaz_girls, poollencm_boys, poollencm_girls
+)
+
+save(pooled_vel, file="U:/data/Stunting/pool_vel.RData")
 
 
 
