@@ -32,12 +32,7 @@ d = d %>%
                                      ifelse(agedays>12*30.4167& agedays<=24*30.4167,"24 months",""))))) %>%
   mutate(agecat=factor(agecat,levels=c("6 months","12 months","18 months","24 months")))
 
-# d <- d %>% ungroup() %>% arrange(studyid,country,subjid, agedays) %>% 
-#   group_by(studyid,country,subjid) %>% 
-#   mutate(stunt= as.numeric(haz < -2), numstunt=cumsum(stunt)) %>%
-#   group_by(studyid,country,subjid, agecat) %>% 
-#   mutate(minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0)) %>% slice(1) %>%
-#   ungroup() 
+
 d <- d %>% ungroup() %>% arrange(studyid,country,subjid, agedays) %>%
   group_by(studyid,country,subjid, agecat) %>% 
   mutate(minhaz=min(haz)) %>% 
@@ -52,19 +47,6 @@ stunt_ci_0_6 = d %>% ungroup() %>%
   mutate(agecat="0-6 months", minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0), Nobs=n()) %>% slice(1) %>%
   mutate(N=n()) %>%
   ungroup() 
-
-# #calculate any stunting from 6-24
-# stunt_ci_6_24 = d %>% ungroup() %>% 
-#   arrange(studyid,country,subjid, agedays) %>% 
-#   filter(agecat!="6 months" & !is.na(agecat)) %>%
-#   group_by(studyid,country,subjid) %>%
-#   #mark if children started stunted, in which case they are not included in the at-risk pool
-#   mutate(start_stunt= as.numeric(first(haz) < -2), cumsum_notwasted=cumsum(as.numeric(haz >= -2)), anyrecovery=max(cumsum_notwasted)>0) %>%
-#   filter((anyrecovery & cumsum_notwasted!=0 & start_stunt==1) | start_stunt==0) %>% #drop children never at risk (start stunted and never recovered) and drop obs prior to recovery
-#   mutate(agecat="6-24 months", minhaz=min(haz), ever_stunted=ifelse(minhaz< -2,1,0), Nobs=n()) %>% slice(1) %>%
-#   mutate(N=n()) %>%
-#   ungroup() %>%
-#   select(studyid,subjid, country,tr,agedays,haz, measurefreq, measid, agecat,minhaz, ever_stunted,Nobs, N)
 
 
 stunt_ci_6_24 = d %>% ungroup() %>% 
@@ -170,6 +152,11 @@ prev = dmn %>%
 select(studyid,subjid,country,agecat,
        stunted, sstunted)
 
+# save mean Z scores at each age
+meanHAZ = dmn %>% 
+  filter(agecat=="Birth" | agecat=="6 months" | agecat=="24 months") %>%
+  select(studyid,subjid,country,agecat,
+         haz)
 
 
 #--------------------------------------
@@ -288,6 +275,7 @@ vel_wtkg <- vel %>% filter(ycat=="wtkg") %>% subset(., select=c(studyid, country
 
 
 save(prev, file="U:/ucb-superlearner/Stunting rallies/st_prev_rf_outcomes.RData")
+save(meanHAZ, file="U:/ucb-superlearner/Stunting rallies/st_meanZ_rf_outcomes.RData")
 save(cuminc, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_outcomes.rdata")
 save(cuminc_nobirth, file="U:/ucb-superlearner/Stunting rallies/st_cuminc_rf_outcomes_nobirth.rdata")
 save(rev, file="U:/ucb-superlearner/Stunting rallies/st_rec_rf_outcomes.RData")

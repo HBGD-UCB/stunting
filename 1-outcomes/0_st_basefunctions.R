@@ -163,6 +163,9 @@ rec=function(agem,data){
 
 # inputs:
 rec.age=function(s.agem,r.agem,data){
+  
+  data <- data %>% arrange(studyid, subjid, agedays)
+  
   # subset to stunted between birth and 3 months
   stunt <- data %>%
     filter(agem<=s.agem) 

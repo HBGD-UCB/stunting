@@ -309,7 +309,7 @@ sev.ir$ub <- sev.ir$ub * 1000
 #-subset to monthly
 df <- d %>% filter(measurefreq=="monthly")
 
-df <- calc.prev.agecat(df)
+#df <- calc.prev.agecat(df)
 rev.data <- summary.stunt.rev(df)
 rev.region <- df  %>% group_by(region) %>% do(summary.stunt.rev(.)$rev.res)
 rev.cohort <-

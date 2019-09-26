@@ -1,6 +1,7 @@
 
 
 
+
 #-----------------------------------
 # Stunting analysis
 # Objective 1a
@@ -44,7 +45,8 @@ d = d %>%
                 agedays > 18 * 30.4167 & agedays <= 21 * 30.4167,
                 "21 months",
                 ifelse(agedays >
-                         21 * 30.4167 & agedays <= 24 * 30.4167, "24 months", "")
+                         21 * 30.4167 &
+                         agedays <= 24 * 30.4167, "24 months", "")
               )
             )
           )
@@ -95,32 +97,37 @@ evs = d %>%
         ifelse(
           agecat == "12 months",
           min(haz[agecat == "3 months" |
-                    agecat == "6 months" | agecat == "9 months" | agecat == "12 months"]),
+                    agecat == "6 months" |
+                    agecat == "9 months" | agecat == "12 months"]),
           ifelse(
             agecat == "15 months",
             min(haz[agecat == "3 months" |
                       agecat == "6 months" |
-                      agecat == "9 months" | agecat == "12 months" | agecat == "15 months"]),
+                      agecat == "9 months" |
+                      agecat == "12 months" | agecat == "15 months"]),
             ifelse(
               agecat == "18 months",
               min(haz[agecat == "3 months" |
                         agecat == "6 months" |
                         agecat == "9 months" |
-                        agecat == "12 months" | agecat == "15 months" | agecat == "18 months"]),
+                        agecat == "12 months" |
+                        agecat == "15 months" | agecat == "18 months"]),
               ifelse(
                 agecat == "21 months",
                 min(haz[agecat == "3 months" |
                           agecat == "6 months" |
                           agecat == "9 months" |
                           agecat == "12 months" |
-                          agecat == "15 months" | agecat == "18 months" | agecat == "21 months"]),
+                          agecat == "15 months" |
+                          agecat == "18 months" | agecat == "21 months"]),
                 ifelse(agecat ==
                          "24 months", min(haz[agecat == "3 months" |
                                                 agecat == "6 months" |
                                                 agecat == "9 months" |
                                                 agecat == "12 months" |
                                                 agecat == "15 months" |
-                                                agecat == "18 months" | agecat == "21 months" | agecat == "24 months"]),
+                                                agecat == "18 months" |
+                                                agecat == "21 months" | agecat == "24 months"]),
                        min(haz))
               )
             )
@@ -572,40 +579,47 @@ evs = d %>%
              min(haz[agecat == "3 months"]),
              ifelse(
                agecat == "6 months",
-               min(haz[agecat == "3 months" | agecat == "6 months"]),
+               min(haz[agecat == "3 months" |
+                         agecat == "6 months"]),
                ifelse(
                  agecat == "9 months",
                  min(haz[agecat == "3 months" |
-                           agecat == "6 months" | agecat == "9 months"]),
+                           agecat == "6 months" |
+                           agecat == "9 months"]),
                  ifelse(
                    agecat == "12 months",
                    min(haz[agecat == "3 months" |
-                             agecat == "6 months" | agecat == "9 months" | agecat == "12 months"]),
+                             agecat == "6 months" |
+                             agecat == "9 months" | agecat == "12 months"]),
                    ifelse(
                      agecat == "15 months",
                      min(haz[agecat == "3 months" |
                                agecat == "6 months" |
-                               agecat == "9 months" | agecat == "12 months" | agecat == "15 months"]),
+                               agecat == "9 months" |
+                               agecat == "12 months" | agecat == "15 months"]),
                      ifelse(
                        agecat == "18 months",
                        min(haz[agecat == "3 months" |
                                  agecat == "6 months" |
                                  agecat == "9 months" |
-                                 agecat == "12 months" | agecat == "15 months" | agecat == "18 months"]),
+                                 agecat == "12 months" |
+                                 agecat == "15 months" | agecat == "18 months"]),
                        ifelse(
                          agecat == "21 months",
                          min(haz[agecat == "3 months" |
                                    agecat == "6 months" |
                                    agecat == "9 months" |
                                    agecat == "12 months" |
-                                   agecat == "15 months" | agecat == "18 months" | agecat == "21 months"]),
+                                   agecat == "15 months" |
+                                   agecat == "18 months" | agecat == "21 months"]),
                          ifelse(agecat ==
                                   "24 months", min(haz[agecat == "3 months" |
                                                          agecat == "6 months" |
                                                          agecat == "9 months" |
                                                          agecat == "12 months" |
                                                          agecat == "15 months" |
-                                                         agecat == "18 months" | agecat == "21 months" | agecat == "24 months"]),
+                                                         agecat == "18 months" |
+                                                         agecat == "21 months" | agecat == "24 months"]),
                                 min(haz))
                        )
                      )
@@ -882,7 +896,8 @@ d <-
   arrange(studyid, country, subjid, agedays) %>%
   #mark if children were born stunted and drop
   mutate(start_stunt = as.numeric(first(haz) < -2)) %>%
-  filter(start_stunt == 0 & agedays < 2 * 30.4167) #drop children born wasted
+  filter(start_stunt == 0 &
+           agedays < 2 * 30.4167) #drop children born wasted
 dim(d)
 
 
@@ -899,40 +914,47 @@ evs = d %>%
              min(haz[agecat == "3 months"]),
              ifelse(
                agecat == "6 months",
-               min(haz[agecat == "3 months" | agecat == "6 months"]),
+               min(haz[agecat == "3 months" |
+                         agecat == "6 months"]),
                ifelse(
                  agecat == "9 months",
                  min(haz[agecat == "3 months" |
-                           agecat == "6 months" | agecat == "9 months"]),
+                           agecat == "6 months" |
+                           agecat == "9 months"]),
                  ifelse(
                    agecat == "12 months",
                    min(haz[agecat == "3 months" |
-                             agecat == "6 months" | agecat == "9 months" | agecat == "12 months"]),
+                             agecat == "6 months" |
+                             agecat == "9 months" | agecat == "12 months"]),
                    ifelse(
                      agecat == "15 months",
                      min(haz[agecat == "3 months" |
                                agecat == "6 months" |
-                               agecat == "9 months" | agecat == "12 months" | agecat == "15 months"]),
+                               agecat == "9 months" |
+                               agecat == "12 months" | agecat == "15 months"]),
                      ifelse(
                        agecat == "18 months",
                        min(haz[agecat == "3 months" |
                                  agecat == "6 months" |
                                  agecat == "9 months" |
-                                 agecat == "12 months" | agecat == "15 months" | agecat == "18 months"]),
+                                 agecat == "12 months" |
+                                 agecat == "15 months" | agecat == "18 months"]),
                        ifelse(
                          agecat == "21 months",
                          min(haz[agecat == "3 months" |
                                    agecat == "6 months" |
                                    agecat == "9 months" |
                                    agecat == "12 months" |
-                                   agecat == "15 months" | agecat == "18 months" | agecat == "21 months"]),
+                                   agecat == "15 months" |
+                                   agecat == "18 months" | agecat == "21 months"]),
                          ifelse(agecat ==
                                   "24 months", min(haz[agecat == "3 months" |
                                                          agecat == "6 months" |
                                                          agecat == "9 months" |
                                                          agecat == "12 months" |
                                                          agecat == "15 months" |
-                                                         agecat == "18 months" | agecat == "21 months" | agecat == "24 months"]),
+                                                         agecat == "18 months" |
+                                                         agecat == "21 months" | agecat == "24 months"]),
                                 min(haz))
                        )
                      )
@@ -1271,7 +1293,7 @@ df_nobirth$agecat.f2 <-
 df_nobirth$agecat.f2 <-
   factor(df_nobirth$agecat.f2, levels = unique(df_nobirth$agecat.f2))
 
-df_nobirth2<-df_nobirth
+df_nobirth2 <- df_nobirth
 
 
 p_comb <-
@@ -1369,18 +1391,8 @@ dev.off()
 
 
 
-df_nobirth<-df_nobirth2
+df_nobirth <- df_nobirth2
 
 
 save(df, df_nobirthmeas, df_nobirth, file =
        "U:/Data/Stunting/st_incprop.RData")
-
-
-
-
-
-
-
-
-
-
