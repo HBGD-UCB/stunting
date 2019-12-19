@@ -53,7 +53,7 @@ include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/stun
 
 ### Including PROBIT
 ```{r inc, echo = FALSE}
-include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-prev-overall_region--allage-primary.png"))
+include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-inc-overall_region--allage-primary.png"))
 #include_graphics("figure-copies/fig-stunt-2-inc-overall_region--allage-primary.png")
 ```
 
