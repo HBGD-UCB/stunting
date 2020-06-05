@@ -47,7 +47,5 @@ The primary analyses presented in this manuscript pooled across individual studi
 ### Fixed effects
 <img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3000" />
 
-[ADD CAPTION]
-
 
 [^1]: Hedges, L. V. & Vevea, J. L. Fixed- and random-effects models in meta-analysis. Psychol. Methods 3, 486–504 (1998).

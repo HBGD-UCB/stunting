@@ -25,7 +25,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ### All eligible cohorts
 ```{r mean, echo = FALSE}
 include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/stunting/fig-laz-2-mean-overall_region--allage-primary.png"))
-#include_graphics("figure-copies/fig-laz-2-mean-overall_region--allage-primary.png")
 ```
 
 ### Cohorts that measured monthly from birth to 24 months

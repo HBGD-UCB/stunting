@@ -76,7 +76,5 @@ include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/stun
 #include_graphics("figure-copies/fig-stunt-2-vel-overall--allage-fe.png")
 ``` 
 
-[ADD CAPTION]
-
 
 [^1]: Hedges, L. V. & Vevea, J. L. Fixed- and random-effects models in meta-analysis. Psychol. Methods 3, 486–504 (1998).

@@ -20,7 +20,7 @@ Our analyses of stunting incidence assumed that children whose first measurement
 <img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/age_histogram_first_month.png" width="2400" />
 
 ### Cohort-stratified
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/age_histogram_first_month_cohort.png" width="2400" />
+<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/age_histogram_first_month_cohort.png" width="3300" />
 
 
 
@@ -30,6 +30,6 @@ Our analyses of stunting incidence assumed that children whose first measurement
 <img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/enrollment_age_histogram_over_7d.png" width="2400" />
 
 ### Cohort-stratified
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/enrollment_age_histogram_over_7d_cohort.png" width="2400" />
+<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/enrollment_age_histogram_over_7d_cohort.png" width="3300" />
 
 

@@ -1,31 +1,32 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.12.18)  19 DEC 2019 14:47
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.6.3)  4 JUN 2020 22:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **bookdown-demo.tex
 (./bookdown-demo.tex
-LaTeX2e <2019-10-01> patch level 3
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
-Document Class: book 2019/10/25 v1.4k Standard LaTeX document class
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-05-15> (c:/Users/andre/AppData/Roaming/TinyTeX/texmf
+-dist/tex/latex/base/book.cls
+Document Class: book 2019/12/20 v1.4l Standard LaTeX document class
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo
-File: bk10.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
+File: bk10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 )
-\c@part=\count80
-\c@chapter=\count81
-\c@section=\count82
-\c@subsection=\count83
-\c@subsubsection=\count84
-\c@paragraph=\count85
-\c@subparagraph=\count86
-\c@figure=\count87
-\c@table=\count88
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
+\c@part=\count163
+\c@chapter=\count164
+\c@section=\count165
+\c@subsection=\count166
+\c@subsubsection=\count167
+\c@paragraph=\count168
+\c@subparagraph=\count169
+\c@figure=\count170
+\c@table=\count171
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen134
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/mathpazo.st
 y
-Package: mathpazo 2005/04/12 PSNFSS-v9.2a Palatino w/ Pazo Math (D.Puga, WaS) 
+Package: mathpazo 2020/03/25 PSNFSS-v9.3 Palatino w/ Pazo Math (D.Puga, WaS) 
 \symupright=\mathgroup4
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.s
@@ -35,7 +36,7 @@ Package: amssymb 2013/01/14 v3.01 AMS font symbols
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.
 sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\@emptytoks=\toks14
+\@emptytoks=\toks15
 \symAMSa=\mathgroup5
 \symAMSb=\mathgroup6
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
@@ -44,8 +45,8 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 ))
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.st
 y
-Package: amsmath 2019/11/16 v2.17d AMS math features
-\@mathmargin=\skip43
+Package: amsmath 2020/01/20 v2.17e AMS math features
+\@mathmargin=\skip49
 For additional information on amsmath, use the `?' option.
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.st
@@ -54,402 +55,171 @@ Package: amstext 2000/06/29 v2.01 AMS text
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks15
-\ex@=\dimen103
+\@emptytoks=\toks16
+\ex@=\dimen135
 ))
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen104
+\pmbraise@=\dimen136
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count89
+\inf@bad=\count172
 LaTeX Info: Redefining \frac on input line 227.
-\uproot@=\count90
-\leftroot@=\count91
+\uproot@=\count173
+\leftroot@=\count174
 LaTeX Info: Redefining \overline on input line 389.
-\classnum@=\count92
-\DOTSCASE@=\count93
+\classnum@=\count175
+\DOTSCASE@=\count176
 LaTeX Info: Redefining \ldots on input line 486.
 LaTeX Info: Redefining \dots on input line 489.
 LaTeX Info: Redefining \cdots on input line 610.
-\Mathstrutbox@=\box27
-\strutbox@=\box28
-\big@size=\dimen105
+\Mathstrutbox@=\box45
+\strutbox@=\box46
+\big@size=\dimen137
 LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
-\macc@depth=\count94
-\c@MaxMatrixCols=\count95
-\dotsspace@=\muskip10
-\c@parentequation=\count96
-\dspbrk@lvl=\count97
-\tag@help=\toks16
-\row@=\count98
-\column@=\count99
-\maxfields@=\count100
-\andhelp@=\toks17
-\eqnshift@=\dimen106
-\alignsep@=\dimen107
-\tagshift@=\dimen108
-\tagwidth@=\dimen109
-\totwidth@=\dimen110
-\lineht@=\dimen111
-\@envbody=\toks18
-\multlinegap=\skip44
-\multlinetaggap=\skip45
-\mathdisplay@stack=\toks19
-LaTeX Info: Redefining \[ on input line 2858.
-LaTeX Info: Redefining \] on input line 2859.
+\macc@depth=\count177
+\c@MaxMatrixCols=\count178
+\dotsspace@=\muskip16
+\c@parentequation=\count179
+\dspbrk@lvl=\count180
+\tag@help=\toks17
+\row@=\count181
+\column@=\count182
+\maxfields@=\count183
+\andhelp@=\toks18
+\eqnshift@=\dimen138
+\alignsep@=\dimen139
+\tagshift@=\dimen140
+\tagwidth@=\dimen141
+\totwidth@=\dimen142
+\lineht@=\dimen143
+\@envbody=\toks19
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2859.
+LaTeX Info: Redefining \] on input line 2860.
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifxetex.st
 y
 Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
-Package: iftex 2019/11/07 v1.0c TeX engine tests
+Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifluatex.s
 ty
 Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
-) (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fixltx2e.st
-y
-Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
-Applying: [2015/01/01] Old fixltx2e package on input line 46.
-
-Package fixltx2e Warning: fixltx2e is not required with releases after 2015
-(fixltx2e)                All fixes are now in the LaTeX kernel.
-(fixltx2e)                See the latexrelease package for details.
-
-Already applied: [0000/00/00] Old fixltx2e package on input line 53.
 )
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/xelatex/mathspec/mathspe
-c.sty
-Package: mathspec 2016/12/22 v0.2b LaTeX Package (Mathematics font selection fo
-r XeLaTeX)
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unico
+de-math.sty
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2020-05-15 L3 programming layer (loader) 
 
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.
-sty
-Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count101
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
+d-xdvipdfmx.def
+File: l3backend-xdvipdfmx.def 2020-05-05 L3 backend support: xdvipdfmx
+\g__graphics_track_int=\count184
+\l__pdf_internal_box=\box47
+\g__pdf_backend_object_int=\count185
+\g__pdf_backend_annotation_int=\count186
+))
+Package: unicode-math 2020/01/31 v0.8q Unicode maths in XeLaTeX and LuaLaTeX
+
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unico
+de-math-xetex.sty
+Package: unicode-math-xetex 2020/01/31 v0.8q Unicode maths in XeLaTeX and LuaLa
+TeX
+
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/
+xparse.sty
+Package: xparse 2020-05-15 L3 Experimental document command parser
+
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/
+xparse-generic.tex
+\l__xparse_current_arg_int=\count187
+\g__xparse_grabber_int=\count188
+\l__xparse_m_args_int=\count189
+\l__xparse_v_nesting_int=\count190
+))
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/l3keys2
+e/l3keys2e.sty
+Package: l3keys2e 2020-05-15 LaTeX2e option processing using LaTeX3 keys
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.
 sty
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/
-xparse.sty
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2019-11-07 L3 programming layer (loader) 
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3-cod
-e.tex
-Package: expl3 2019-11-07 L3 programming layer (code)
-\c_max_int=\count102
-\l_tmpa_int=\count103
-\l_tmpb_int=\count104
-\g_tmpa_int=\count105
-\g_tmpb_int=\count106
-\l__seq_internal_a_int=\count107
-\l__seq_internal_b_int=\count108
-\g__kernel_prg_map_int=\count109
-\c__ior_term_noprompt_ior=\count110
-\c_log_iow=\count111
-\l_iow_line_count_int=\count112
-\l__iow_line_target_int=\count113
-\l__iow_one_indent_int=\count114
-\l__iow_indent_int=\count115
-\c_zero_dim=\dimen112
-\c_max_dim=\dimen113
-\l_tmpa_dim=\dimen114
-\l_tmpb_dim=\dimen115
-\g_tmpa_dim=\dimen116
-\g_tmpb_dim=\dimen117
-\c_zero_skip=\skip46
-\c_max_skip=\skip47
-\l_tmpa_skip=\skip48
-\l_tmpb_skip=\skip49
-\g_tmpa_skip=\skip50
-\g_tmpb_skip=\skip51
-\c_zero_muskip=\muskip11
-\c_max_muskip=\muskip12
-\l_tmpa_muskip=\muskip13
-\l_tmpb_muskip=\muskip14
-\g_tmpa_muskip=\muskip15
-\g_tmpb_muskip=\muskip16
-\l_keys_choice_int=\count116
-\l__intarray_loop_int=\count117
-\c__intarray_sp_dim=\dimen118
-\g__intarray_font_int=\count118
-\c__fp_leading_shift_int=\count119
-\c__fp_middle_shift_int=\count120
-\c__fp_trailing_shift_int=\count121
-\c__fp_big_leading_shift_int=\count122
-\c__fp_big_middle_shift_int=\count123
-\c__fp_big_trailing_shift_int=\count124
-\c__fp_Bigg_leading_shift_int=\count125
-\c__fp_Bigg_middle_shift_int=\count126
-\c__fp_Bigg_trailing_shift_int=\count127
-\g__fp_array_int=\count128
-\l__fp_array_loop_int=\count129
-\l__sort_length_int=\count130
-\l__sort_min_int=\count131
-\l__sort_top_int=\count132
-\l__sort_max_int=\count133
-\l__sort_true_max_int=\count134
-\l__sort_block_int=\count135
-\l__sort_begin_int=\count136
-\l__sort_end_int=\count137
-\l__sort_A_int=\count138
-\l__sort_B_int=\count139
-\l__sort_C_int=\count140
-\l__str_internal_int=\count141
-\l__tl_analysis_normal_int=\count142
-\l__tl_analysis_index_int=\count143
-\l__tl_analysis_nesting_int=\count144
-\l__tl_analysis_type_int=\count145
-\l__regex_internal_a_int=\count146
-\l__regex_internal_b_int=\count147
-\l__regex_internal_c_int=\count148
-\l__regex_balance_int=\count149
-\l__regex_group_level_int=\count150
-\l__regex_mode_int=\count151
-\c__regex_cs_in_class_mode_int=\count152
-\c__regex_cs_mode_int=\count153
-\l__regex_catcodes_int=\count154
-\l__regex_default_catcodes_int=\count155
-\c__regex_catcode_L_int=\count156
-\c__regex_catcode_O_int=\count157
-\c__regex_catcode_A_int=\count158
-\c__regex_all_catcodes_int=\count159
-\l__regex_show_lines_int=\count160
-\l__regex_min_state_int=\count161
-\l__regex_max_state_int=\count162
-\l__regex_left_state_int=\count163
-\l__regex_right_state_int=\count164
-\l__regex_capturing_group_int=\count165
-\l__regex_min_pos_int=\count166
-\l__regex_max_pos_int=\count167
-\l__regex_curr_pos_int=\count168
-\l__regex_start_pos_int=\count169
-\l__regex_success_pos_int=\count170
-\l__regex_curr_char_int=\count171
-\l__regex_curr_catcode_int=\count172
-\l__regex_last_char_int=\count173
-\l__regex_case_changed_char_int=\count174
-\l__regex_curr_state_int=\count175
-\l__regex_step_int=\count176
-\l__regex_min_active_int=\count177
-\l__regex_max_active_int=\count178
-\l__regex_replacement_csnames_int=\count179
-\l__regex_match_count_int=\count180
-\l__regex_min_submatch_int=\count181
-\l__regex_submatch_int=\count182
-\l__regex_zeroth_submatch_int=\count183
-\g__regex_trace_regex_int=\count184
-\c_empty_box=\box29
-\l_tmpa_box=\box30
-\l_tmpb_box=\box31
-\g_tmpa_box=\box32
-\g_tmpb_box=\box33
-\l__box_top_dim=\dimen119
-\l__box_bottom_dim=\dimen120
-\l__box_left_dim=\dimen121
-\l__box_right_dim=\dimen122
-\l__box_top_new_dim=\dimen123
-\l__box_bottom_new_dim=\dimen124
-\l__box_left_new_dim=\dimen125
-\l__box_right_new_dim=\dimen126
-\l__box_internal_box=\box34
-\l__coffin_internal_box=\box35
-\l__coffin_internal_dim=\dimen127
-\l__coffin_offset_x_dim=\dimen128
-\l__coffin_offset_y_dim=\dimen129
-\l__coffin_x_dim=\dimen130
-\l__coffin_y_dim=\dimen131
-\l__coffin_x_prime_dim=\dimen132
-\l__coffin_y_prime_dim=\dimen133
-\c_empty_coffin=\box36
-\l__coffin_aligned_coffin=\box37
-\l__coffin_aligned_internal_coffin=\box38
-\l_tmpa_coffin=\box39
-\l_tmpb_coffin=\box40
-\g_tmpa_coffin=\box41
-\g_tmpb_coffin=\box42
-\l__coffin_bounding_shift_dim=\dimen134
-\l__coffin_left_corner_dim=\dimen135
-\l__coffin_right_corner_dim=\dimen136
-\l__coffin_bottom_corner_dim=\dimen137
-\l__coffin_top_corner_dim=\dimen138
-\l__coffin_scaled_total_height_dim=\dimen139
-\l__coffin_scaled_width_dim=\dimen140
-\c__coffin_empty_coffin=\box43
-\l__coffin_display_coffin=\box44
-\l__coffin_display_coord_coffin=\box45
-\l__coffin_display_pole_coffin=\box46
-\l__coffin_display_offset_dim=\dimen141
-\l__coffin_display_x_dim=\dimen142
-\l__coffin_display_y_dim=\dimen143
-\g__char_data_ior=\read1
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/l3depreca
-tion.def
-File: l3deprecation.def 2019-04-06 v L3 Deprecated functions
-))
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
-d-xdvipdfmx.def
-File: l3backend-xdvipdfmx.def 2019-04-06 L3 backend support: xdvipdfmx
-\g__graphics_track_int=\count185
-\l__pdf_internal_box=\box47
-\g__pdf_backend_object_int=\count186
-\g__pdf_backend_annotation_int=\count187
-))
-Package: xparse 2019-10-11 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count188
-\g__xparse_grabber_int=\count189
-\l__xparse_m_args_int=\count190
-\l__xparse_v_nesting_int=\count191
-)
-Package: fontspec 2019/10/19 v2.7d Font selection for XeLaTeX and LuaLaTeX
+Package: fontspec 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTeX
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec-
 xetex.sty
-Package: fontspec-xetex 2019/10/19 v2.7d Font selection for XeLaTeX and LuaLaTe
+Package: fontspec-xetex 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTe
 X
-\l__fontspec_script_int=\count192
-\l__fontspec_language_int=\count193
-\l__fontspec_strnum_int=\count194
-\l__fontspec_tmp_int=\count195
-\l__fontspec_tmpa_int=\count196
-\l__fontspec_tmpb_int=\count197
-\l__fontspec_tmpc_int=\count198
-\l__fontspec_em_int=\count199
-\l__fontspec_emdef_int=\count266
-\l__fontspec_strong_int=\count267
-\l__fontspec_strongdef_int=\count268
+\l__fontspec_script_int=\count191
+\l__fontspec_language_int=\count192
+\l__fontspec_strnum_int=\count193
+\l__fontspec_tmp_int=\count194
+\l__fontspec_tmpa_int=\count195
+\l__fontspec_tmpb_int=\count196
+\l__fontspec_tmpc_int=\count197
+\l__fontspec_em_int=\count198
+\l__fontspec_emdef_int=\count199
+\l__fontspec_strong_int=\count266
+\l__fontspec_strongdef_int=\count267
 \l__fontspec_tmpa_dim=\dimen144
 \l__fontspec_tmpb_dim=\dimen145
 \l__fontspec_tmpc_dim=\dimen146
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/tuenc.def
-File: tuenc.def 2018/08/11 v2.0j Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
-))
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.
-cfg)
-LaTeX Info: Redefining \itshape on input line 4047.
-LaTeX Info: Redefining \slshape on input line 4052.
-LaTeX Info: Redefining \scshape on input line 4057.
-LaTeX Info: Redefining \upshape on input line 4062.
-LaTeX Info: Redefining \em on input line 4092.
-LaTeX Info: Redefining \emph on input line 4117.
-))
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.st
-y
-Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.
-tex
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils
-.tex
-\XKV@toks=\toks20
-\XKV@tempa@toks=\toks21
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.t
-ex))
-\XKV@depth=\count269
-File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
-))
-\c@eu@=\count270
-\c@eu@i=\count271
-\c@mkern=\count272
+Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
 )
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.
+cfg))) (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fix-cm
+.sty
+Package: fix-cm 2015/01/14 v1.1t fixes to LaTeX
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
+))
+\g__um_fam_int=\count268
+\g__um_fonts_used_int=\count269
+\l__um_primecount_int=\count270
+\g__um_primekern_muskip=\muskip17
+
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unico
+de-math-table.tex)))
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.st
 y
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
-Package: textcomp 2018/08/11 v2.0j Standard LaTeX package
-Package textcomp Info: Sub-encoding information:
-(textcomp)               5 = only ISO-Adobe without \textcurrency
-(textcomp)               4 = 5 + \texteuro
-(textcomp)               3 = 4 + \textohm
-(textcomp)               2 = 3 + \textestimated + \textcurrency
-(textcomp)               1 = TS1 - \textcircled - \t
-(textcomp)               0 = TS1 (full)
-(textcomp)             Font families with sub-encoding setting implement
-(textcomp)             only a restricted character set as indicated.
-(textcomp)             Family '?' is the default used for unknown fonts.
-(textcomp)             See the documentation for details.
-Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1enc.def
-File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
-)
-LaTeX Info: Redefining \oldstylenums on input line 334.
-Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
-Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
-Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
-Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
-Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
-Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
-Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
-Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
-Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
-Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
-Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
-Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
-Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
-Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
-Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
-Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
-Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
-Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
-Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
-Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
-Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
-Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
-Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
-Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+)) (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.s
+ty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
-Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
-Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
-Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
-Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
-Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
-Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
-Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
-Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
-Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
-Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
-Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
-Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
-Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
-Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
-Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
-Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
-Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
-Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
-Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
-Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
-Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
-Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
-Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
-Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
-Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
-Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
-Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
-Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
-Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
-Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
-Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
-Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
-Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
-Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
-Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
-Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
-Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
-))
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
+.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: xetex.def on input line 225.
+
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/xetex
+.def
+File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.
 sty
-Package: hyperref 2019/11/10 v7.00c Hypertext links for LaTeX
+Package: hyperref 2020-05-15 v7.00e Hypertext links for LaTeX
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.
 sty
@@ -468,13 +238,18 @@ Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode not found.
 )
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.st
+y
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks21
+)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvsetk
 eys.sty
 Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvd
 efinekeys.sty
-Package: kvdefinekeys 2019/12/15 v1.5 Define keys (HO)
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfesc
 ape.sty
@@ -482,16 +257,8 @@ Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.st
 y
-Package: hycolor 2019/12/15 v1.9 Color options for hyperref/bookmark (HO)
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/xcolor-pat
-ch.sty
-Package: xcolor-patch 2019/12/15 xcolor patch
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/oberdiek/hopatch.s
-ty
-Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
-)))
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro/letltx
 macro.sty
 Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
@@ -505,12 +272,12 @@ s.sty
 Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
 )
 \@linkdim=\dimen147
-\Hy@linkcounter=\count273
-\Hy@pagecounter=\count274
+\Hy@linkcounter=\count271
+\Hy@pagecounter=\count272
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
 f
-File: pd1enc.def 2019/11/10 v7.00c Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2020-05-15 v7.00e Hyperref: PDFDocEncoding definition (HO)
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.
 sty
@@ -520,25 +287,25 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 s.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count275
+\Hy@SavedSpaceFactor=\count273
+Package hyperref Info: Option `unicode' set `true' on input line 4338.
 
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/hyperr
-ef.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2020-05-15 v7.00e Hyperref: PDF Unicode definition (HO)
 )
-Package hyperref Info: Hyper figures OFF on input line 4535.
-Package hyperref Info: Link nesting OFF on input line 4540.
-Package hyperref Info: Hyper index ON on input line 4543.
-Package hyperref Info: Plain pages OFF on input line 4550.
-Package hyperref Info: Backreferencing OFF on input line 4555.
+Package hyperref Info: Hyper figures OFF on input line 4464.
+Package hyperref Info: Link nesting OFF on input line 4469.
+Package hyperref Info: Hyper index ON on input line 4472.
+Package hyperref Info: Plain pages OFF on input line 4479.
+Package hyperref Info: Backreferencing OFF on input line 4484.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4788.
-\c@Hy@tempcnt=\count276
+Package hyperref Info: Bookmarks ON on input line 4717.
+\c@Hy@tempcnt=\count274
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip17
+\Urlmuskip=\muskip18
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5147.
+LaTeX Info: Redefining \url on input line 5076.
 \XeTeXLinkMargin=\dimen148
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.st
@@ -550,46 +317,43 @@ tcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count277
+\Fld@menulength=\count275
 \Field@Width=\dimen149
 \Fld@charsize=\dimen150
-Package hyperref Info: Hyper figures OFF on input line 6418.
-Package hyperref Info: Link nesting OFF on input line 6423.
-Package hyperref Info: Hyper index ON on input line 6426.
-Package hyperref Info: backreferencing OFF on input line 6433.
-Package hyperref Info: Link coloring OFF on input line 6438.
-Package hyperref Info: Link coloring with OCG OFF on input line 6443.
-Package hyperref Info: PDF/A mode OFF on input line 6448.
-LaTeX Info: Redefining \ref on input line 6488.
-LaTeX Info: Redefining \pageref on input line 6492.
+Package hyperref Info: Hyper figures OFF on input line 6347.
+Package hyperref Info: Link nesting OFF on input line 6352.
+Package hyperref Info: Hyper index ON on input line 6355.
+Package hyperref Info: backreferencing OFF on input line 6362.
+Package hyperref Info: Link coloring OFF on input line 6367.
+Package hyperref Info: Link coloring with OCG OFF on input line 6372.
+Package hyperref Info: PDF/A mode OFF on input line 6377.
+LaTeX Info: Redefining \ref on input line 6417.
+LaTeX Info: Redefining \pageref on input line 6421.
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/atbegshi/atbegsh
 i.sty
 Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
 )
-\Hy@abspage=\count278
-\c@Item=\count279
-\c@Hfootnote=\count280
+\Hy@abspage=\count276
+\c@Item=\count277
+\c@Hfootnote=\count278
 )
 Package hyperref Info: Driver (autodetected): hxetex.
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hxetex.de
 f
-File: hxetex.def 2019/11/10 v7.00c Hyperref driver for XeTeX
+File: hxetex.def 2020-05-15 v7.00e Hyperref driver for XeTeX
 
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2019/11/10 v7.00c Hyperref: PDF Unicode definition (HO)
-)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/string
 enc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
 \pdfm@box=\box48
-\c@Hy@AnnotLevel=\count281
-\HyField@AnnotCount=\count282
-\Fld@listcount=\count283
-\c@bookmark@seq@number=\count284
+\c@Hy@AnnotLevel=\count279
+\HyField@AnnotCount=\count280
+\Fld@listcount=\count281
+\c@bookmark@seq@number=\count282
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rer
 unfilecheck.sty
@@ -598,6 +362,7 @@ Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/atveryend/atveryen
 d.sty
 Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/un
 iquecounter.sty
@@ -608,43 +373,28 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip52
 )
-Package hyperref Info: Option `unicode' set `true' on input line 29.
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/se-asc
-ii-print.def
-File: se-ascii-print.def 2019/11/29 v1.12 stringenc: Printable ASCII characters
-
-)
-Package hyperref Info: Option `breaklinks' set `true' on input line 29.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/natbib.sty
-Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip53
-\bibsep=\skip54
-LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count285
-)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.st
 y
-Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
-\LTleft=\skip55
-\LTright=\skip56
-\LTpre=\skip57
-\LTpost=\skip58
-\LTchunksize=\count286
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip53
+\LTright=\skip54
+\LTpre=\skip55
+\LTpost=\skip56
+\LTchunksize=\count283
 \LTcapwidth=\dimen151
 \LT@head=\box49
 \LT@firsthead=\box50
 \LT@foot=\box51
 \LT@lastfoot=\box52
-\LT@cols=\count287
-\LT@rows=\count288
-\c@LT@tables=\count289
-\c@LT@chunks=\count290
+\LT@cols=\count284
+\LT@rows=\count285
+\c@LT@tables=\count286
+\c@LT@chunks=\count287
 \LT@p@ftn=\toks22
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.
 sty
-Package: booktabs 2019/10/08 v1.6180339 publication quality tables
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen152
 \lightrulewidth=\dimen153
 \cmidrulewidth=\dimen154
@@ -655,21 +405,32 @@ Package: booktabs 2019/10/08 v1.6180339 publication quality tables
 \cmidrulesep=\dimen159
 \cmidrulekern=\dimen160
 \defaultaddspace=\dimen161
-\@cmidla=\count291
-\@cmidlb=\count292
+\@cmidla=\count288
+\@cmidlb=\count289
 \@aboverulesep=\dimen162
 \@belowrulesep=\dimen163
-\@thisruleclass=\count293
-\@lastruleclass=\count294
+\@thisruleclass=\count290
+\@lastruleclass=\count291
 \@thisrulewidth=\dimen164
+)
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.
+sty
+Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count292
+)
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/mdwtools/footnote.
+sty
+Package: footnote 1997/01/28 1.13 Save footnotes around boxes
+\fn@notes=\box53
+\fn@width=\dimen165
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.
 sty
-Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.
 sty
-Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
@@ -678,13 +439,9 @@ ics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: xetex.def on input line 105.
-
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/xetex
-.def
-File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
-))
-\Gin@req@height=\dimen165
-\Gin@req@width=\dimen166
+)
+\Gin@req@height=\dimen166
+\Gin@req@width=\dimen167
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/grffile/grffile.st
 y
@@ -692,64 +449,321 @@ Package: grffile 2019/11/11 v2.1 Extended file name support for graphics (legac
 y)
 Package grffile Info: This package is an empty stub for compatibility on input 
 line 40.
-)
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titling/titling.st
-y
-Package: titling 2009/09/04 v2.1d maketitle typesetting
-\thanksmarkwidth=\skip59
-\thanksmargin=\skip60
-\droptitle=\skip61
 ) (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.st
 y
-Package: amsthm 2017/10/31 v2.20.4
+Package: amsthm 2020/05/29 v2.20.6
 \thm@style=\toks23
 \thm@bodyfont=\toks24
 \thm@headfont=\toks25
 \thm@notefont=\toks26
 \thm@headpunct=\toks27
-\thm@preskip=\skip62
-\thm@postskip=\skip63
-\thm@headsep=\skip64
+\thm@preskip=\skip57
+\thm@postskip=\skip58
+\thm@headsep=\skip59
 \dth@everypar=\toks28
+) (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/natbib.st
+y
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip60
+\bibsep=\skip61
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count293
 )
 
 LaTeX Warning: Unused global option(s):
     [9pt].
 
-(./bookdown-demo.aux
-
-LaTeX Warning: Label `fixed-effects' multiply defined.
-
-)
+(./bookdown-demo.aux)
 \openout1 = `bookdown-demo.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 99.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 9
-9.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 99.
-LaTeX Font Info:    ... okay on input line 99.
-\AtBeginShipoutBox=\box53
-Package hyperref Info: Link coloring OFF on input line 99.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
+(Font)                  OT1/ppl/m/n --> TU/lmr/m/n on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/ppl/m/it --> TU/lmr/m/it on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/zplm/b/n --> TU/lmr/bx/n on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> TU/lmss/bx/n on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 86.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/bx/n on input line 86.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(0)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,BoldFont={latinmodern-math.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(0)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 86.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(1)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:s
+cript=math;language=dflt;"<6-8.5>s*[0.9999964596882403]"[latinmodern-math.otf]/
+OT:script=math;language=dflt;+ssty=0;"<-6>s*[0.9999964596882403]"[latinmodern-m
+ath.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 86.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 86.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/ppl/m/n --> TU/latinmodern-math.otf(1)/m/n on input
+ line 86.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 86.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/ppl/b/n --> TU/latinmodern-math.otf(1)/b/n on input
+ line 86.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(2)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf},ScaleAgain=1.0001,FontAdjustment={\f
+ontdimen
+(fontspec)             8\font =6.77pt\relax \fontdimen 9\font =3.94pt\relax
+(fontspec)             \fontdimen 10\font =4.44pt\relax \fontdimen 11\font
+(fontspec)             =6.86pt\relax \fontdimen 12\font =3.45pt\relax
+(fontspec)             \fontdimen 13\font =3.63pt\relax \fontdimen 14\font
+(fontspec)             =3.63pt\relax \fontdimen 15\font =2.89pt\relax
+(fontspec)             \fontdimen 16\font =2.47pt\relax \fontdimen 17\font
+(fontspec)             =2.47pt\relax \fontdimen 18\font =2.5pt\relax
+(fontspec)             \fontdimen 19\font =2.0pt\relax \fontdimen 22\font
+(fontspec)             =2.5pt\relax \fontdimen 20\font =0pt\relax \fontdimen
+(fontspec)             21\font =0pt\relax }].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[1.000096459334209]"[latinmodern-math.otf]/OT:sc
+ript=math;language=dflt;"<6-8.5>s*[1.000096459334209]"[latinmodern-math.otf]/OT
+:script=math;language=dflt;+ssty=0;"<-6>s*[1.000096459334209]"[latinmodern-math
+.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =6.77pt\relax \fontdimen 9\font
+(fontspec)             =3.94pt\relax \fontdimen 10\font =4.44pt\relax
+(fontspec)             \fontdimen 11\font =6.86pt\relax \fontdimen 12\font
+(fontspec)             =3.45pt\relax \fontdimen 13\font =3.63pt\relax
+(fontspec)             \fontdimen 14\font =3.63pt\relax \fontdimen 15\font
+(fontspec)             =2.89pt\relax \fontdimen 16\font =2.47pt\relax
+(fontspec)             \fontdimen 17\font =2.47pt\relax \fontdimen 18\font
+(fontspec)             =2.5pt\relax \fontdimen 19\font =2.0pt\relax \fontdimen
+(fontspec)             22\font =2.5pt\relax \fontdimen 20\font =0pt\relax
+(fontspec)             \fontdimen 21\font =0pt\relax 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[1.000096459334209]"[latinmodern-math.otf]/OT:scrip
+t=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =6.77pt\relax \fontdimen 9\font
+(fontspec)             =3.94pt\relax \fontdimen 10\font =4.44pt\relax
+(fontspec)             \fontdimen 11\font =6.86pt\relax \fontdimen 12\font
+(fontspec)             =3.45pt\relax \fontdimen 13\font =3.63pt\relax
+(fontspec)             \fontdimen 14\font =3.63pt\relax \fontdimen 15\font
+(fontspec)             =2.89pt\relax \fontdimen 16\font =2.47pt\relax
+(fontspec)             \fontdimen 17\font =2.47pt\relax \fontdimen 18\font
+(fontspec)             =2.5pt\relax \fontdimen 19\font =2.0pt\relax \fontdimen
+(fontspec)             22\font =2.5pt\relax \fontdimen 20\font =0pt\relax
+(fontspec)             \fontdimen 21\font =0pt\relax 
+
+LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
+(Font)              `symbols' in the math version `normal' on input line 86.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/zplm/m/n --> TU/latinmodern-math.otf(2)/m/n on inpu
+t line 86.
+LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
+(Font)              `symbols' in the math version `bold' on input line 86.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/zplm/b/n --> TU/latinmodern-math.otf(2)/b/n on inpu
+t line 86.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(3)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf},ScaleAgain=0.9999,FontAdjustment={\f
+ontdimen
+(fontspec)             8\font =0.4pt\relax \fontdimen 9\font =2.0pt\relax
+(fontspec)             \fontdimen 10\font =1.67pt\relax \fontdimen 11\font
+(fontspec)             =1.11pt\relax \fontdimen 12\font =6.0pt\relax
+(fontspec)             \fontdimen 13\font =0pt\relax }].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[0.9998964600422715]"[latinmodern-math.otf]/OT:s
+cript=math;language=dflt;"<6-8.5>s*[0.9998964600422715]"[latinmodern-math.otf]/
+OT:script=math;language=dflt;+ssty=0;"<-6>s*[0.9998964600422715]"[latinmodern-m
+ath.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =0.4pt\relax \fontdimen 9\font
+(fontspec)             =2.0pt\relax \fontdimen 10\font =1.67pt\relax
+(fontspec)             \fontdimen 11\font =1.11pt\relax \fontdimen 12\font
+(fontspec)             =6.0pt\relax \fontdimen 13\font =0pt\relax 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9998964600422715]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =0.4pt\relax \fontdimen 9\font
+(fontspec)             =2.0pt\relax \fontdimen 10\font =1.67pt\relax
+(fontspec)             \fontdimen 11\font =1.11pt\relax \fontdimen 12\font
+(fontspec)             =6.0pt\relax \fontdimen 13\font =0pt\relax 
+
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `normal' on input line 8
+6.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/zplm/m/n --> TU/latinmodern-math.otf(3)/m/n on inpu
+t line 86.
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `bold' on input line 86.
+
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/zplm/m/n --> TU/latinmodern-math.otf(3)/b/n on inpu
+t line 86.
+\AtBeginShipoutBox=\box54
+Package hyperref Info: Link coloring OFF on input line 86.
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
 ty
@@ -763,58 +777,79 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count295
+\c@section@level=\count294
 )
-LaTeX Info: Redefining \ref on input line 99.
-LaTeX Info: Redefining \pageref on input line 99.
-LaTeX Info: Redefining \nameref on input line 99.
+LaTeX Info: Redefining \ref on input line 86.
+LaTeX Info: Redefining \pageref on input line 86.
+LaTeX Info: Redefining \nameref on input line 86.
 (./bookdown-demo.out) (./bookdown-demo.out)
 \@outlinefile=\write3
 \openout3 = `bookdown-demo.out'.
 
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 12.0pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 9.0pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 88.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
+88.
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
+File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
+)
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 12.0011pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 9.00082pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 7.00064pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 11.99872pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 8.99904pt on input line 88.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 6.99925pt on input line 88.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
+88.
+(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
+File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
+)
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 12.50409pt on input line 88.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 88.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 88.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 12.50409pt on input line 88.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 88.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 88.
 [1
 
 
 ] [2
 
 ] (./bookdown-demo.toc
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 4
-.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
-File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
-)
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-4.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
-File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-4.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
-File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-4.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
-File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-4.
-(c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
-File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
-)
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 4.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 10.00092pt on input line 4.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 5.00046pt on input line 4.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 9.99893pt on input line 4.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 4.99947pt on input line 4.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
 (Font)              scaled to size 10.42007pt on input line 4.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 4.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 4.
+(Font)              scaled to size 5.21004pt on input line 4.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 10.42007pt on input line 4.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 4.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 4.
+(Font)              scaled to size 5.21004pt on input line 4.
 [3])
 \tf@toc=\write4
 \openout4 = `bookdown-demo.toc'.
@@ -832,7 +867,7 @@ res/shared/laz_QA.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/laz_QA.png>
 
-Overfull \hbox (233.18617pt too wide) in paragraph at lines 129--130
+Overfull \hbox (233.18617pt too wide) in paragraph at lines 107--108
 [][]  
  []
 
@@ -845,14 +880,16 @@ res/shared/laz_QA_cohort.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/laz_QA_cohort.png>
 
-Overfull \hbox (342.51088pt too wide) in paragraph at lines 131--132
+Overfull \hbox (342.51088pt too wide) in paragraph at lines 109--110
 [][]  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[8] [9] [10]
+[8] [9] [10
+
+]
 Chapter 3.
 File: C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figu
 res/stunting/fig-stunt-3-prev-overall_region--allage-primary.png Graphic file (
@@ -860,23 +897,21 @@ type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-3-prev-overall_region--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 148--149
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 121--122
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[11
-
-]
+[11]
 File: C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figu
 res/stunting/fig-stunt-3-inc-overall_region--allage-primary.png Graphic file (t
 ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-3-inc-overall_region--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 153--154
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 126--127
 []  
  []
 
@@ -892,7 +927,7 @@ res/shared/laz_secular_trend.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/laz_secular_trend.png>
 
-Overfull \hbox (233.18617pt too wide) in paragraph at lines 165--166
+Overfull \hbox (233.18617pt too wide) in paragraph at lines 135--136
 [][]  
  []
 
@@ -906,7 +941,7 @@ res/shared/age_histogram_first_month.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/age_histogram_first_month.png>
 
-Overfull \hbox (233.18617pt too wide) in paragraph at lines 185--186
+Overfull \hbox (233.18617pt too wide) in paragraph at lines 150--151
 []  
  []
 
@@ -921,7 +956,7 @@ res/shared/age_histogram_first_month_cohort.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/age_histogram_first_month_cohort.png>
 
-Overfull \hbox (233.18617pt too wide) in paragraph at lines 189--190
+Overfull \hbox (450.00604pt too wide) in paragraph at lines 155--156
 []  
  []
 
@@ -934,7 +969,7 @@ res/shared/enrollment_age_histogram_over_7d.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/enrollment_age_histogram_over_7d.png>
 
-Overfull \hbox (233.18617pt too wide) in paragraph at lines 196--197
+Overfull \hbox (233.18617pt too wide) in paragraph at lines 163--164
 []  
  []
 
@@ -947,7 +982,7 @@ res/shared/enrollment_age_histogram_over_7d_cohort.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 hared/enrollment_age_histogram_over_7d_cohort.png>
 
-Overfull \hbox (233.18617pt too wide) in paragraph at lines 200--201
+Overfull \hbox (450.00604pt too wide) in paragraph at lines 168--169
 []  
  []
 
@@ -958,6 +993,16 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 ]
 Chapter 6.
+File: C:/Users/andre/Documents/HBGDki/stunting//ki-longitudinal-manuscripts/fig
+ures/stunting/fig-laz-2-density_dhs-overall_region--allage-primary.png Graphic 
+file (type bmp)
+<C:/Users/andre/Documents/HBGDki/stunting//ki-longitudinal-manuscripts/figures/
+stunting/fig-laz-2-density_dhs-overall_region--allage-primary.png>
+
+Overfull \hbox (233.18617pt too wide) in paragraph at lines 177--178
+[][]  
+ []
+
 [23]
 Overfull \hbox (44.72343pt too wide) has occurred while \output is active
 \TU/lmr/m/n/10 24 \TU/lmr/m/sl/10 CHAPTER 6.  COMPARISON TO DHS SURVEYS FROM MA
@@ -974,7 +1019,7 @@ e bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-quant-cohort-africa-allage-primary.png>
 
-Overfull \hbox (425.01216pt too wide) in paragraph at lines 226--227
+Overfull \hbox (425.01216pt too wide) in paragraph at lines 192--193
 []  
  []
 
@@ -994,7 +1039,7 @@ pe bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-quant-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (425.01216pt too wide) in paragraph at lines 230--231
+Overfull \hbox (425.01216pt too wide) in paragraph at lines 197--198
 []  
  []
 
@@ -1011,7 +1056,7 @@ bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-quant-cohort-asia-allage-primary.png>
 
-Overfull \hbox (425.01216pt too wide) in paragraph at lines 234--235
+Overfull \hbox (425.01216pt too wide) in paragraph at lines 202--203
 []  
  []
 
@@ -1028,7 +1073,7 @@ pe bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-cohort-africa-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 240--241
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 210--211
 []  
  []
 
@@ -1038,7 +1083,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 244--245
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 215--216
 []  
  []
 
@@ -1052,7 +1097,7 @@ res/stunting/fig-stunt-2-prev-cohort-asia-allage-primary.png Graphic file (type
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-cohort-asia-allage-primary.png>
 
-Overfull \hbox (739.06602pt too wide) in paragraph at lines 248--249
+Overfull \hbox (739.06602pt too wide) in paragraph at lines 220--221
 []  
  []
 
@@ -1066,7 +1111,7 @@ e bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-cohort-africa-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 254--255
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 228--229
 []  
  []
 
@@ -1080,7 +1125,7 @@ pe bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 258--259
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 233--234
 []  
  []
 
@@ -1094,7 +1139,7 @@ bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-cohort-asia-allage-primary.png>
 
-Overfull \hbox (739.06602pt too wide) in paragraph at lines 262--263
+Overfull \hbox (739.06602pt too wide) in paragraph at lines 238--239
 []  
  []
 
@@ -1111,12 +1156,12 @@ File: figure-copies/fig-length-2-length_vel-cohort-africa-allage-primary.png Gr
 aphic file (type bmp)
 <figure-copies/fig-length-2-length_vel-cohort-africa-allage-primary.png>
 
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 269--271
+Overfull \hbox (205.01086pt too wide) in paragraph at lines 246--248
 [] 
  []
 
 
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 269--271
+Overfull \hbox (205.01086pt too wide) in paragraph at lines 246--248
 []  
  []
 
@@ -1136,7 +1181,7 @@ file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-length-2-length_vel-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 274--275
+Overfull \hbox (205.01086pt too wide) in paragraph at lines 252--253
 []  
  []
 
@@ -1153,7 +1198,7 @@ e (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-length-2-length_vel-cohort-asia-allage-primary.png>
 
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 278--279
+Overfull \hbox (205.01086pt too wide) in paragraph at lines 257--258
 []  
  []
 
@@ -1170,7 +1215,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-laz_vel-cohort-africa-allage-primary.png>
 
-Overfull \hbox (645.0156pt too wide) in paragraph at lines 284--285
+Overfull \hbox (645.0156pt too wide) in paragraph at lines 265--266
 []  
  []
 
@@ -1187,7 +1232,7 @@ type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-laz_vel-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (645.0156pt too wide) in paragraph at lines 288--289
+Overfull \hbox (645.0156pt too wide) in paragraph at lines 270--271
 []  
  []
 
@@ -1204,7 +1249,7 @@ e bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-laz_vel-cohort-asia-allage-primary.png>
 
-Overfull \hbox (645.0156pt too wide) in paragraph at lines 292--293
+Overfull \hbox (645.0156pt too wide) in paragraph at lines 275--276
 []  
  []
 
@@ -1224,7 +1269,7 @@ pe bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-mean-overall_region--allage-primary.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 314--315
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 290--291
 []  
  []
 
@@ -1238,7 +1283,7 @@ c file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-mean-overall_region--allage-primary_no_probit.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 318--319
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 295--296
 []  
  []
 
@@ -1258,7 +1303,7 @@ type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-overall_region--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 324--325
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 303--304
 []  
  []
 
@@ -1272,7 +1317,7 @@ hic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-overall_region--allage-primary_no_probit.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 328--329
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 308--309
 []  
  []
 
@@ -1292,7 +1337,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-overall_region--allage-primary.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 334--335
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 316--317
 []  
  []
 
@@ -1306,7 +1351,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-overall_region--allage-primary.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 338--339
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 321--322
 []  
  []
 
@@ -1335,7 +1380,7 @@ pe bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-mean-overall_region--allage-primary.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 362--363
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 338--339
 []  
  []
 
@@ -1349,7 +1394,7 @@ pe bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-laz-2-mean-overall_region--allage-month24.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 367--368
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 343--344
 []  
  []
 
@@ -1363,7 +1408,7 @@ type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-overall_region--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 374--375
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 351--352
 []  
  []
 
@@ -1377,7 +1422,7 @@ type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-overall_region--allage-month24.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 379--380
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 356--357
 []  
  []
 
@@ -1391,7 +1436,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-overall_region--allage-primary.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 386--387
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 364--365
 []  
  []
 
@@ -1405,7 +1450,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-overall_region--allage-month24.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 391--392
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 369--370
 []  
  []
 
@@ -1422,12 +1467,12 @@ File: figure-copies/fig-stunt-2-vel-overall--allage-primary.png Graphic file (t
 ype bmp)
 <figure-copies/fig-stunt-2-vel-overall--allage-primary.png>
 
-Overfull \hbox (342.53288pt too wide) in paragraph at lines 397--399
+Overfull \hbox (342.53288pt too wide) in paragraph at lines 377--379
 [] 
  []
 
 
-Overfull \hbox (342.53288pt too wide) in paragraph at lines 397--399
+Overfull \hbox (342.53288pt too wide) in paragraph at lines 377--379
 []  
  []
 
@@ -1447,7 +1492,7 @@ res/stunting/fig-stunt-2-vel-overall--allage-month24.png Graphic file (type bmp
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-vel-overall--allage-month24.png>
 
-Overfull \hbox (342.53288pt too wide) in paragraph at lines 403--404
+Overfull \hbox (342.53288pt too wide) in paragraph at lines 383--384
 []  
  []
 
@@ -1461,21 +1506,33 @@ Overfull \vbox (36.56328pt too high) has occurred while \output is active []
 
 ]
 Chapter 10.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 388.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 6.0pt on input line 388.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 8.00073pt on input line 388.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 6.00055pt on input line 388.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 7.99915pt on input line 388.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 5.99936pt on input line 388.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 412.
+(Font)              scaled to size 8.33606pt on input line 388.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 412.
+(Font)              scaled to size 6.25204pt on input line 388.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 412.
+(Font)              scaled to size 8.33606pt on input line 388.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 412.
+(Font)              scaled to size 6.25204pt on input line 388.
 File: C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figu
 res/stunting/fig-stunt-2-prev-overall_region--allage-primary.png Graphic file (
 type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-overall_region--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 421--422
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 396--397
 []  
  []
 
@@ -1489,7 +1546,7 @@ bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-prev-overall_region--allage-fe.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 425--426
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 401--402
 []  
  []
 
@@ -1503,7 +1560,7 @@ ype bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-overall_region--allage-primary.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 433--434
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 411--412
 []  
  []
 
@@ -1517,7 +1574,7 @@ mp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-inc-overall_region--allage-fe.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 437--438
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 416--417
 []  
  []
 
@@ -1530,7 +1587,7 @@ res/stunting/fig-stunt-2-flow-overall--allage-re.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-flow-overall--allage-re.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 446--447
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 426--427
 []  
  []
 
@@ -1543,7 +1600,7 @@ res/stunting/fig-stunt-2-flow-overall--allage-fe.png Graphic file (type bmp)
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-flow-overall--allage-fe.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 450--451
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 431--432
 []  
  []
 
@@ -1557,7 +1614,7 @@ res/stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic file (type bmp
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-vel-overall--allage-primary.png>
 
-Overfull \hbox (342.53288pt too wide) in paragraph at lines 458--459
+Overfull \hbox (342.53288pt too wide) in paragraph at lines 441--442
 []  
  []
 
@@ -1577,10 +1634,12 @@ res/stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic file (type bmp
 <C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/s
 tunting/fig-stunt-2-vel-overall--allage-primary.png>
 
-Overfull \hbox (342.53288pt too wide) in paragraph at lines 462--463
+Overfull \hbox (342.53288pt too wide) in paragraph at lines 446--447
 []  
  []
 
+No file bookdown-demo.bbl.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 450.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1588,26 +1647,21 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Overfull \vbox (22.63527pt too high) has occurred while \output is active []
 
 [81]
-No file bookdown-demo.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 469.
-[82]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 469.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 450.
 (./bookdown-demo.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 469.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 469.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 450.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 450.
 Package rerunfilecheck Info: File `bookdown-demo.out' has not changed.
-(rerunfilecheck)             Checksum: 1CAEE48689B3C4FC816A9704A022E5FA;2486.
-
-LaTeX Warning: There were multiply-defined labels.
-
+(rerunfilecheck)             Checksum: 1741C01A7CD2AC705B7F303BF549CA53;6378.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 450.
  ) 
 Here is how much of TeX's memory you used:
- 23705 strings out of 494458
- 492081 string characters out of 6172051
- 533353 words of memory out of 5000000
- 27782 multiletter control sequences out of 15000+600000
- 544316 words of font info for 76 fonts, out of 8000000 for 9000
+ 17576 strings out of 481274
+ 359220 string characters out of 5923427
+ 722265 words of memory out of 5000000
+ 34816 multiletter control sequences out of 15000+600000
+ 543745 words of font info for 93 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 52i,8n,45p,810b,429s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,8n,118p,907b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on bookdown-demo.pdf (82 pages).
+Output written on bookdown-demo.pdf (81 pages).

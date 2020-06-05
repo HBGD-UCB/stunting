@@ -1,7 +1,7 @@
 --- 
 title: "Supplement to Longitudinal analysis of early childhood stunting in low-resource settings"
 author: "Jade Benjamin-Chung et al."
-date: "2019-12-19"
+date: "2020-06-04"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
