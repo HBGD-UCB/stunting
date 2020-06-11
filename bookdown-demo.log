@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.6.3)  4 JUN 2020 22:03
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.6.7)  11 JUN 2020 07:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **bookdown-demo.tex
 (./bookdown-demo.tex
 LaTeX2e <2020-02-02> patch level 5
-L3 programming layer <2020-05-15> (c:/Users/andre/AppData/Roaming/TinyTeX/texmf
+L3 programming layer <2020-06-03> (c:/Users/andre/AppData/Roaming/TinyTeX/texmf
 -dist/tex/latex/base/book.cls
 Document Class: book 2019/12/20 v1.4l Standard LaTeX document class
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/bk10.clo
@@ -116,11 +116,11 @@ Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/unicode-math/unico
 de-math.sty
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2020-05-15 L3 programming layer (loader) 
+Package: expl3 2020-06-03 L3 programming layer (loader) 
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
 d-xdvipdfmx.def
-File: l3backend-xdvipdfmx.def 2020-05-05 L3 backend support: xdvipdfmx
+File: l3backend-xdvipdfmx.def 2020-06-03 L3 backend support: xdvipdfmx
 \g__graphics_track_int=\count184
 \l__pdf_internal_box=\box47
 \g__pdf_backend_object_int=\count185
@@ -227,7 +227,7 @@ Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
 )
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdftexcmds/pdftexc
 mds.sty
-Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+Package: pdftexcmds 2020-06-04 v0.32 Utility functions of pdfTeX for LuaTeX (HO
 )
 
 (c:/Users/andre/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwar
@@ -1656,10 +1656,10 @@ Package rerunfilecheck Info: File `bookdown-demo.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 450.
  ) 
 Here is how much of TeX's memory you used:
- 17576 strings out of 481274
- 359220 string characters out of 5923427
- 722265 words of memory out of 5000000
- 34816 multiletter control sequences out of 15000+600000
+ 17581 strings out of 481276
+ 359323 string characters out of 5923431
+ 722338 words of memory out of 5000000
+ 34819 multiletter control sequences out of 15000+600000
  543745 words of font info for 93 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  53i,8n,118p,907b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
