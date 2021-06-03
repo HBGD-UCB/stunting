@@ -16,17 +16,17 @@ To check for outliers in length measurements, we plotted the distribution of raw
 library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 # setwd("../../")
-# source("0-config.R")
+source(paste0(here::here(), "/0-config.R"))
 ```
 
 ```{r qa, echo = FALSE}
-include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/shared/laz_QA.png"))
+include_graphics(paste0(fig_dir, "/shared/laz_QA.png"))
 #include_graphics("figure-copies/laz_QA.png")
 ```
 
 
 ```{r qa-cohort, echo = FALSE}
-include_graphics(paste0(here::here(), "/ki-longitudinal-manuscripts/figures/shared/laz_QA_cohort.png"))
+include_graphics(paste0(fig_dir, "/shared/laz_QA_cohort.png"))
 #include_graphics("figure-copies/laz_QA_cohort.png")
 ```
 
