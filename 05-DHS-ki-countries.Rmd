@@ -20,8 +20,9 @@ source(paste0(here::here(), "/0-config.R"))
 
 ```
 
+#####NEED TO UPDATE FIGURE-NOT FOUND
 
 ```{r mean, echo = FALSE}
-include_graphics(here::here("/ki-longitudinal-manuscripts/figures/stunting/fig-laz-2-density_dhs-overall_region--allage-primary.png"))
+#include_graphics(here::here("/ki-longitudinal-manuscripts/figures/stunting/fig-laz-2-density_dhs-overall_region--allage-primary.png"))
 ```
 

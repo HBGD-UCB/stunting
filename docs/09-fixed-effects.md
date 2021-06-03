@@ -8,10 +8,12 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Age-specific prevalence
 
 ### Random effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="4200" />
+
+\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-primary} 
 
 ### Fixed effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-prev-overall_region--allage-fe.png" width="4200" />
+
+\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-fe} 
 
 [ADD CAPTION]
 
@@ -19,10 +21,12 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Age-specific incidence
 
 ### Random effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="4800" />
+
+\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-primary} 
 
 ### Fixed effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-inc-overall_region--allage-fe.png" width="4800" />
+
+\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-fe} 
 
 [ADD CAPTION]
 
@@ -30,10 +34,12 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Changes in stunting status by age
 
 ### Random effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-flow-overall--allage-re.png" width="3000" />
+
+\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-flow-overall--allage-re} 
 
 ### Fixed effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-flow-overall--allage-fe.png" width="3000" />
+
+\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-flow-overall--allage-fe} 
 
 [ADD CAPTION] 
 
@@ -42,10 +48,12 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Linear growth velocity
 
 ### Random effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3000" />
+
+\includegraphics[width=50in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-vel-overall--allage-primary} 
 
 ### Fixed effects
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3000" />
+
+\includegraphics[width=50in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-vel-overall--allage-primary} 
 
 
 [^1]: Hedges, L. V. & Vevea, J. L. Fixed- and random-effects models in meta-analysis. Psychol. Methods 3, 486–504 (1998).

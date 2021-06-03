@@ -20,42 +20,50 @@ In this sensitivity analysis, the mean length-for-age Z-score was higher in Lati
 ## Mean length-for-age Z-score by age
 
 ### All eligible cohorts
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-laz-2-mean-overall_region--allage-primary.png" width="3000" />
+
+\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-laz-2-mean-overall_region--allage-primary} 
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-laz-2-mean-overall_region--allage-month24.png" width="3000" />
+
+\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-laz-2-mean-overall_region--allage-month24} 
 
 <!-- ##################################################################################### -->
 ## Age-specific severe stunting prevalence
 
 ### All eligible cohorts
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="4200" />
+
+\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-primary} 
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-prev-overall_region--allage-month24.png" width="4200" />
+
+\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-month24} 
 
 <!-- ##################################################################################### -->
 ## Age-specific severe stunting incidence
 
 ### All eligible cohorts
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="4800" />
+
+\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-primary} 
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-inc-overall_region--allage-month24.png" width="4200" />
+
+\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-month24} 
 
 <!-- ##################################################################################### -->
 ## Linear growth velocity
 
 ### All eligible cohorts
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3000" /><img src="figure-copies/fig-stunt-2-vel-overall--allage-primary.png" width="3000" />
+
+\includegraphics[width=50in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-vel-overall--allage-primary} 
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/stunting/fig-stunt-2-vel-overall--allage-month24.png" width="3000" />
+
+\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-vel-overall--allage-month24} 
 

@@ -15,6 +15,7 @@ This study included cohorts that measured child growth from 1969 to 2014. To ass
 
 
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/laz_secular_trend.png" width="2400" />
+
+\includegraphics[width=33.33in]{/data/KI/ki-manuscript-output/figures//shared/laz_secular_trend} 
 
 

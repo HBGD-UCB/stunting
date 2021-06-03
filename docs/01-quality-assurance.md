@@ -14,8 +14,10 @@ To check for outliers in length measurements, we plotted the distribution of raw
 
 
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/laz_QA.png" width="2400" />
+
+\includegraphics[width=33.33in]{/data/KI/ki-manuscript-output/figures//shared/laz_QA} 
 
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/laz_QA_cohort.png" width="7500" />
+
+\includegraphics[width=104.17in]{/data/KI/ki-manuscript-output/figures//shared/laz_QA_cohort} 
 

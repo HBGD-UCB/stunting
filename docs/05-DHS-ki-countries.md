@@ -15,6 +15,7 @@ In the manuscript, we compared the mean length-for-age Z-score by age and region
 
 
 
+#####NEED TO UPDATE FIGURE-NOT FOUND
 
-<img src="C:/Users/andre/Documents/HBGDki/stunting//ki-longitudinal-manuscripts/figures/stunting/fig-laz-2-density_dhs-overall_region--allage-primary.png" width="2400" />
+
 

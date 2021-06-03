@@ -17,19 +17,23 @@ Our analyses of stunting incidence assumed that children whose first measurement
 ## Histogram of first measurement within age 0-30 days
 
 ### All cohorts
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/age_histogram_first_month.png" width="2400" />
+
+\includegraphics[width=33.33in]{/data/KI/ki-manuscript-output/figures//shared/age_histogram_first_month} 
 
 ### Cohort-stratified
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/age_histogram_first_month_cohort.png" width="3300" />
+
+\includegraphics[width=45.83in]{/data/KI/ki-manuscript-output/figures//shared/age_histogram_first_month_cohort} 
 
 
 
 ## Histogram of age at enrollment
 
 ### All cohorts
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/enrollment_age_histogram_over_7d.png" width="2400" />
+
+\includegraphics[width=33.33in]{/data/KI/ki-manuscript-output/figures//shared/enrollment_age_histogram_over_7d} 
 
 ### Cohort-stratified
-<img src="C:/Users/andre/Documents/HBGDki/stunting/ki-longitudinal-manuscripts/figures/shared/enrollment_age_histogram_over_7d_cohort.png" width="3300" />
+
+\includegraphics[width=45.83in]{/data/KI/ki-manuscript-output/figures//shared/enrollment_age_histogram_over_7d_cohort} 
 
 

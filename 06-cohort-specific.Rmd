@@ -1,5 +1,12 @@
 # Cohort-specific results {#cohort}
 
+---
+output:
+  pdf_document:
+    keep_tex: yes
+fontfamily: mathpazo
+fontsize: 9pt
+---
 
 \raggedright
 
@@ -84,7 +91,6 @@ include_graphics(paste0(fig_dir, "/stunting/fig-stunt-2-inc-cohort-asia-allage-p
 ### Africa
 ```{r lvel-africa, echo = FALSE}
 include_graphics(paste0(fig_dir, "/stunting/fig-length-2-length_vel-cohort-africa-allage-primary.png"))
-include_graphics("figure-copies/fig-length-2-length_vel-cohort-africa-allage-primary.png")
 ```
 
 ### Latin America
