@@ -17,23 +17,19 @@ Our analyses of stunting incidence assumed that children whose first measurement
 ## Histogram of first measurement within age 0-30 days
 
 ### All cohorts
-
-\includegraphics[width=33.33in]{/data/KI/ki-manuscript-output/figures//shared/age_histogram_first_month} 
+<img src="figures//shared/age_histogram_first_month.png" width="1200" />
 
 ### Cohort-stratified
-
-\includegraphics[width=45.83in]{/data/KI/ki-manuscript-output/figures//shared/age_histogram_first_month_cohort} 
+<img src="figures//shared/age_histogram_first_month_cohort.png" width="1650" />
 
 
 
 ## Histogram of age at enrollment
 
 ### All cohorts
-
-\includegraphics[width=33.33in]{/data/KI/ki-manuscript-output/figures//shared/enrollment_age_histogram_over_7d} 
+<img src="figures//shared/enrollment_age_histogram_over_7d.png" width="1200" />
 
 ### Cohort-stratified
-
-\includegraphics[width=45.83in]{/data/KI/ki-manuscript-output/figures//shared/enrollment_age_histogram_over_7d_cohort} 
+<img src="figures//shared/enrollment_age_histogram_over_7d_cohort.png" width="1650" />
 
 

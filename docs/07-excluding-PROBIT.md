@@ -18,35 +18,29 @@ Only one cohort from Europe met the inclusion criteria for this study -- the PRO
 ## Mean length-for-age Z-score by age
 
 ### Including PROBIT
-
-\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-laz-2-mean-overall_region--allage-primary} 
+<img src="figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png" width="1500" />
 
 ### Excluding PROBIT
-
-\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-laz-2-mean-overall_region--allage-primary_no_probit} 
+<img src="figures//stunting/fig-laz-2-mean-overall_region--allage-primary_no_probit.png" width="1500" />
 
 
 <!-- ##################################################################################### -->
 ## Age-specific prevalence
 
 ### Including PROBIT
-
-\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="2100" />
 
 ### Excluding PROBIT
-
-\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-primary_no_probit} 
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary_no_probit.png" width="2100" />
 
 <!-- ##################################################################################### -->
 ## Age-specific incidence
 
 ### Including PROBIT
-
-\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="2400" />
 
 ### Excluding PROBIT
-
-\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="2400" />
 
 
 
