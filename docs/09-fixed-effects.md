@@ -8,12 +8,10 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Age-specific prevalence
 
 ### Random effects
-
-\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="2100" />
 
 ### Fixed effects
-
-\includegraphics[width=58.33in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-prev-overall_region--allage-fe} 
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png" width="2100" />
 
 [ADD CAPTION]
 
@@ -21,12 +19,10 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Age-specific incidence
 
 ### Random effects
-
-\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="2400" />
 
 ### Fixed effects
-
-\includegraphics[width=66.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-inc-overall_region--allage-fe} 
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png" width="2400" />
 
 [ADD CAPTION]
 
@@ -34,12 +30,10 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Changes in stunting status by age
 
 ### Random effects
-
-\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-flow-overall--allage-re} 
+<img src="figures//stunting/fig-stunt-2-flow-overall--allage-re.png" width="1500" />
 
 ### Fixed effects
-
-\includegraphics[width=41.67in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-flow-overall--allage-fe} 
+<img src="figures//stunting/fig-stunt-2-flow-overall--allage-fe.png" width="1500" />
 
 [ADD CAPTION] 
 
@@ -48,12 +42,10 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Linear growth velocity
 
 ### Random effects
-
-\includegraphics[width=50in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-vel-overall--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
 
 ### Fixed effects
-
-\includegraphics[width=50in]{/data/KI/ki-manuscript-output/figures//stunting/fig-stunt-2-vel-overall--allage-primary} 
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
 
 
 [^1]: Hedges, L. V. & Vevea, J. L. Fixed- and random-effects models in meta-analysis. Psychol. Methods 3, 486–504 (1998).
