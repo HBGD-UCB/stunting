@@ -36,7 +36,7 @@ include_graphics(paste0(fig_dir, "/stunting/fig-laz-2-mean-overall_region--allag
 ```
 
 <!-- ##################################################################################### -->
-## Age-specific severe stunting prevalence
+## Age-specific stunting prevalence
 
 ### All eligible cohorts
 
@@ -53,7 +53,7 @@ include_graphics(paste0(fig_dir, "/stunting/fig-stunt-2-prev-overall_region--all
 ```
 
 <!-- ##################################################################################### -->
-## Age-specific severe stunting incidence
+## Age-specific stunting incidence
 
 ### All eligible cohorts
 

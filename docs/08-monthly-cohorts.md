@@ -20,42 +20,42 @@ In this sensitivity analysis, the mean length-for-age Z-score was higher in Lati
 ## Mean length-for-age Z-score by age
 
 ### All eligible cohorts
-<img src="figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png" width="1500" />
+<img src="figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png" width="3000" />
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png" width="1500" />
+<img src="figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png" width="3000" />
 
 <!-- ##################################################################################### -->
-## Age-specific severe stunting prevalence
+## Age-specific stunting prevalence
 
 ### All eligible cohorts
 
-<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="4200" />
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png" width="2100" />
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png" width="4200" />
 
 <!-- ##################################################################################### -->
-## Age-specific severe stunting incidence
+## Age-specific stunting incidence
 
 ### All eligible cohorts
 
-<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="2400" />
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="4800" />
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-month24.png" width="2100" />
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-month24.png" width="4200" />
 
 <!-- ##################################################################################### -->
 ## Linear growth velocity
 
 ### All eligible cohorts
 
-<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3600" />
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="figures//stunting/fig-stunt-2-vel-overall--allage-month24.png" width="1500" />
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-month24.png" width="3000" />
 

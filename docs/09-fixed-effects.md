@@ -8,44 +8,41 @@ The primary analyses presented in this manuscript pooled across individual studi
 ## Age-specific prevalence
 
 ### Random effects
-<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png" width="4200" />
 
 ### Fixed effects
-<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png" width="2100" />
+<img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png" width="4200" />
 
-[ADD CAPTION]
 
 <!-- ##################################################################################### -->
 ## Age-specific incidence
 
 ### Random effects
-<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="2400" />
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png" width="4800" />
 
 ### Fixed effects
-<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png" width="2400" />
+<img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png" width="4800" />
 
-[ADD CAPTION]
 
 <!-- ##################################################################################### -->
 ## Changes in stunting status by age
 
 ### Random effects
-<img src="figures//stunting/fig-stunt-2-flow-overall--allage-re.png" width="1500" />
+<img src="figures//stunting/fig-stunt-2-flow-overall--allage-re.png" width="3000" />
 
 ### Fixed effects
-<img src="figures//stunting/fig-stunt-2-flow-overall--allage-fe.png" width="1500" />
+<img src="figures//stunting/fig-stunt-2-flow-overall--allage-fe.png" width="3000" />
 
-[ADD CAPTION] 
 
 
 <!-- ##################################################################################### -->
 ## Linear growth velocity
 
 ### Random effects
-<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3600" />
 
 ### Fixed effects
-<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="3600" />
 
 
 [^1]: Hedges, L. V. & Vevea, J. L. Fixed- and random-effects models in meta-analysis. Psychol. Methods 3, 486–504 (1998).
