@@ -14,8 +14,8 @@ To check for outliers in length measurements, we plotted the distribution of raw
 
 
 
-<img src="figures//shared/laz_QA.png" width="1200" />
+<img src="figures//shared/laz_QA.png" width="2400" />
 
 
-<img src="figures//shared/laz_QA_cohort.png" width="3750" />
+<img src="figures//shared/laz_QA_cohort.png" width="7500" />
 

@@ -16,8 +16,8 @@ Below, we display plots for the age-specific prevalence and cumulative incidence
 
 
 ## Age-specific severe stunting prevalence
-<img src="figures//stunting/fig-stunt-3-prev-overall_region--allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-stunt-3-prev-overall_region--allage-primary.png" width="4200" />
 
 
 ## Age-specific severe stunting incidence
-<img src="figures//stunting/fig-stunt-3-inc-overall_region--allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-stunt-3-inc-overall_region--allage-primary.png" width="4200" />
