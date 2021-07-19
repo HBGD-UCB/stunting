@@ -90,18 +90,18 @@ include_graphics(paste0(fig_dir, "/stunting/fig-stunt-2-inc-cohort-asia-allage-p
 
 ### Africa
 ```{r lvel-africa, echo = FALSE}
-include_graphics(paste0(fig_dir, "/stunting/fig-length-2-length_vel-cohort-africa-allage-primary.png"))
+include_graphics(paste0(fig_dir, "/stunting/fig-stunt-2-vel-cohort-africa-allage-primary.png"))
 ```
 
 ### Latin America
 ```{r lvel-la, echo = FALSE}
-include_graphics(paste0(fig_dir, "/stunting/fig-length-2-length_vel-cohort-latamer-allage-primary.png"))
+include_graphics(paste0(fig_dir, "/stunting/fig-stunt-2-vel-cohort-latamer-allage-primary.png"))
 #include_graphics("figure-copies/fig-length-2-length_vel-cohort-latamer-allage-primary.png")
 ```
 
 ### South Asia
 ```{r lvel-sa, echo = FALSE}
-include_graphics(paste0(fig_dir, "/stunting/fig-length-2-length_vel-cohort-asia-allage-primary.png"))
+include_graphics(paste0(fig_dir, "/stunting/fig-stunt-2-vel-cohort-asia-allage-primary.png"))
 #include_graphics("figure-copies/fig-length-2-length_vel-cohort-asia-allage-primary.png")
 ```
 
