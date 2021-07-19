@@ -11,7 +11,6 @@ cohort-stratified
 histogram-of-age-at-enrollment
 all-cohorts-1
 cohort-stratified-1
-DHS
 cohort
 mean-length-for-age-z-score-by-age
 africa

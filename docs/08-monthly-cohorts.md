@@ -57,5 +57,5 @@ In this sensitivity analysis, the mean length-for-age Z-score was higher in Lati
 
 ### Cohorts that measured monthly from birth to 24 months
 
-<img src="figures//stunting/fig-stunt-2-vel-overall--allage-month24.png" width="1500" />
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-month24.png" width="1800" />
 

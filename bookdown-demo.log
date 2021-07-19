@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.7.13)  13 JUL 2021 10:43
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.7.13)  19 JUL 2021 16:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -932,21 +932,26 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 ]
 Chapter 6.
-[23]
-Overfull \hbox (44.72343pt too wide) has occurred while \output is active
-\TU/lmr/m/n/10 24 \TU/lmr/m/sl/10 CHAPTER 6.  COMPARISON TO DHS SURVEYS FROM MA
-TCHING COUNTRIES
- []
-
-[24
-
-]
-Chapter 7.
 File: figures//stunting/fig-laz-2-quant-cohort-africa-allage-primary.png Graphi
 c file (type bmp)
 <figures//stunting/fig-laz-2-quant-cohort-africa-allage-primary.png>
 
-Overfull \hbox (425.01216pt too wide) in paragraph at lines 196--197
+Overfull \hbox (755.05263pt too wide) in paragraph at lines 187--188
+[]  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[23]
+Overfull \vbox (17.63527pt too high) has occurred while \output is active []
+
+[24]
+File: figures//stunting/fig-laz-2-quant-cohort-latamer-allage-primary.png Graph
+ic file (type bmp)
+<figures//stunting/fig-laz-2-quant-cohort-latamer-allage-primary.png>
+
+Overfull \hbox (755.05263pt too wide) in paragraph at lines 192--193
 []  
  []
 
@@ -954,14 +959,14 @@ Overfull \hbox (425.01216pt too wide) in paragraph at lines 196--197
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [25]
-Overfull \vbox (17.61765pt too high) has occurred while \output is active []
+Overfull \vbox (17.63527pt too high) has occurred while \output is active []
 
 [26]
-File: figures//stunting/fig-laz-2-quant-cohort-latamer-allage-primary.png Graph
-ic file (type bmp)
-<figures//stunting/fig-laz-2-quant-cohort-latamer-allage-primary.png>
+File: figures//stunting/fig-laz-2-quant-cohort-asia-allage-primary.png Graphic 
+file (type bmp)
+<figures//stunting/fig-laz-2-quant-cohort-asia-allage-primary.png>
 
-Overfull \hbox (425.01216pt too wide) in paragraph at lines 201--202
+Overfull \hbox (1030.06578pt too wide) in paragraph at lines 197--198
 []  
  []
 
@@ -969,29 +974,14 @@ Overfull \hbox (425.01216pt too wide) in paragraph at lines 201--202
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [27]
-Overfull \vbox (17.61765pt too high) has occurred while \output is active []
+Overfull \vbox (17.63527pt too high) has occurred while \output is active []
 
 [28]
-File: figures//stunting/fig-laz-2-quant-cohort-asia-allage-primary.png Graphic 
-file (type bmp)
-<figures//stunting/fig-laz-2-quant-cohort-asia-allage-primary.png>
-
-Overfull \hbox (425.01216pt too wide) in paragraph at lines 206--207
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[29]
-Overfull \vbox (17.61765pt too high) has occurred while \output is active []
-
-[30]
 File: figures//stunting/fig-stunt-2-prev-cohort-africa-allage-primary.png Graph
 ic file (type bmp)
 <figures//stunting/fig-stunt-2-prev-cohort-africa-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 214--215
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 205--206
 []  
  []
 
@@ -999,34 +989,34 @@ File: figures//stunting/fig-stunt-2-prev-cohort-latamer-allage-primary.png Grap
 hic file (type bmp)
 <figures//stunting/fig-stunt-2-prev-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 219--220
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 210--211
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[31]
+[29]
 File: figures//stunting/fig-stunt-2-prev-cohort-asia-allage-primary.png Graphic
  file (type bmp)
 <figures//stunting/fig-stunt-2-prev-cohort-asia-allage-primary.png>
 
-Overfull \hbox (739.06602pt too wide) in paragraph at lines 224--225
+Overfull \hbox (883.60815pt too wide) in paragraph at lines 215--216
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[32]
+[30]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[33]
+[31]
 File: figures//stunting/fig-stunt-2-inc-cohort-africa-allage-primary.png Graphi
 c file (type bmp)
 <figures//stunting/fig-stunt-2-inc-cohort-africa-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 232--233
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 223--224
 []  
  []
 
@@ -1034,19 +1024,42 @@ File: figures//stunting/fig-stunt-2-inc-cohort-latamer-allage-primary.png Graph
 ic file (type bmp)
 <figures//stunting/fig-stunt-2-inc-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (377.71068pt too wide) in paragraph at lines 237--238
+Overfull \hbox (377.71068pt too wide) in paragraph at lines 228--229
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[34]
+[32]
 File: figures//stunting/fig-stunt-2-inc-cohort-asia-allage-primary.png Graphic 
 file (type bmp)
 <figures//stunting/fig-stunt-2-inc-cohort-asia-allage-primary.png>
 
-Overfull \hbox (739.06602pt too wide) in paragraph at lines 242--243
+Overfull \hbox (739.06602pt too wide) in paragraph at lines 233--234
+[]  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[33]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[34]
+File: figures//stunting/fig-stunt-2-vel-cohort-africa-allage-primary.png Graphi
+c file (type bmp)
+<figures//stunting/fig-stunt-2-vel-cohort-africa-allage-primary.png>
+
+Overfull \hbox (522.27933pt too wide) in paragraph at lines 241--242
+[]  
+ []
+
+File: figures//stunting/fig-stunt-2-vel-cohort-latamer-allage-primary.png Graph
+ic file (type bmp)
+<figures//stunting/fig-stunt-2-vel-cohort-latamer-allage-primary.png>
+
+Overfull \hbox (522.27933pt too wide) in paragraph at lines 246--247
 []  
  []
 
@@ -1054,29 +1067,29 @@ Overfull \hbox (739.06602pt too wide) in paragraph at lines 242--243
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [35]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+File: figures//stunting/fig-stunt-2-vel-cohort-asia-allage-primary.png Graphic 
+file (type bmp)
+<figures//stunting/fig-stunt-2-vel-cohort-asia-allage-primary.png>
 
-[36]
-File: figures//stunting/fig-length-2-length_vel-cohort-africa-allage-primary.pn
-g Graphic file (type bmp)
-<figures//stunting/fig-length-2-length_vel-cohort-africa-allage-primary.png>
-
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 250--251
+Overfull \hbox (388.3743pt too wide) in paragraph at lines 251--252
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+[36]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 [37]
-Overfull \vbox (17.61984pt too high) has occurred while \output is active []
+Overfull \vbox (17.63972pt too high) has occurred while \output is active []
 
 [38]
-File: figures//stunting/fig-length-2-length_vel-cohort-latamer-allage-primary.p
-ng Graphic file (type bmp)
-<figures//stunting/fig-length-2-length_vel-cohort-latamer-allage-primary.png>
+File: figures//stunting/fig-laz-2-laz_vel-cohort-africa-allage-primary.png Grap
+hic file (type bmp)
+<figures//stunting/fig-laz-2-laz_vel-cohort-africa-allage-primary.png>
 
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 255--256
+Overfull \hbox (645.0156pt too wide) in paragraph at lines 259--260
 []  
  []
 
@@ -1084,14 +1097,14 @@ Overfull \hbox (205.01086pt too wide) in paragraph at lines 255--256
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [39]
-Overfull \vbox (17.61984pt too high) has occurred while \output is active []
+Overfull \vbox (17.61765pt too high) has occurred while \output is active []
 
 [40]
-File: figures//stunting/fig-length-2-length_vel-cohort-asia-allage-primary.png 
-Graphic file (type bmp)
-<figures//stunting/fig-length-2-length_vel-cohort-asia-allage-primary.png>
+File: figures//stunting/fig-laz-2-laz_vel-cohort-latamer-allage-primary.png Gra
+phic file (type bmp)
+<figures//stunting/fig-laz-2-laz_vel-cohort-latamer-allage-primary.png>
 
-Overfull \hbox (205.01086pt too wide) in paragraph at lines 260--261
+Overfull \hbox (645.0156pt too wide) in paragraph at lines 264--265
 []  
  []
 
@@ -1099,14 +1112,14 @@ Overfull \hbox (205.01086pt too wide) in paragraph at lines 260--261
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [41]
-Overfull \vbox (17.61984pt too high) has occurred while \output is active []
+Overfull \vbox (17.61765pt too high) has occurred while \output is active []
 
 [42]
-File: figures//stunting/fig-laz-2-laz_vel-cohort-africa-allage-primary.png Grap
-hic file (type bmp)
-<figures//stunting/fig-laz-2-laz_vel-cohort-africa-allage-primary.png>
+File: figures//stunting/fig-laz-2-laz_vel-cohort-asia-allage-primary.png Graphi
+c file (type bmp)
+<figures//stunting/fig-laz-2-laz_vel-cohort-asia-allage-primary.png>
 
-Overfull \hbox (645.0156pt too wide) in paragraph at lines 268--269
+Overfull \hbox (645.0156pt too wide) in paragraph at lines 269--270
 []  
  []
 
@@ -1117,49 +1130,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Overfull \vbox (17.61765pt too high) has occurred while \output is active []
 
 [44]
-File: figures//stunting/fig-laz-2-laz_vel-cohort-latamer-allage-primary.png Gra
-phic file (type bmp)
-<figures//stunting/fig-laz-2-laz_vel-cohort-latamer-allage-primary.png>
-
-Overfull \hbox (645.0156pt too wide) in paragraph at lines 273--274
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[45]
-Overfull \vbox (17.61765pt too high) has occurred while \output is active []
-
-[46]
-File: figures//stunting/fig-laz-2-laz_vel-cohort-asia-allage-primary.png Graphi
-c file (type bmp)
-<figures//stunting/fig-laz-2-laz_vel-cohort-asia-allage-primary.png>
-
-Overfull \hbox (645.0156pt too wide) in paragraph at lines 278--279
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[47]
-Overfull \vbox (17.61765pt too high) has occurred while \output is active []
-
-[48]
-Chapter 8.
+Chapter 7.
 File: figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png Graph
 ic file (type bmp)
 <figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 293--294
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 284--285
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[49
+[45
 
 ]
 File: figures//stunting/fig-laz-2-mean-overall_region--allage-primary_no_probit
@@ -1167,7 +1150,7 @@ File: figures//stunting/fig-laz-2-mean-overall_region--allage-primary_no_probit
 <figures//stunting/fig-laz-2-mean-overall_region--allage-primary_no_probit.png>
 
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 298--299
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 289--290
 []  
  []
 
@@ -1176,29 +1159,29 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Overfull \hbox (2.48453pt too wide) has occurred while \output is active
-\TU/lmr/m/n/10 50 \TU/lmr/m/sl/10 CHAPTER 8.  PRIMARY ANALYSES EXCLUDING THE PR
+\TU/lmr/m/n/10 46 \TU/lmr/m/sl/10 CHAPTER 7.  PRIMARY ANALYSES EXCLUDING THE PR
 OBIT STUDY
  []
 
-[50]
+[46]
 File: figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png Gra
 phic file (type bmp)
 <figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 306--307
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 297--298
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[51]
+[47]
 File: figures//stunting/fig-stunt-2-prev-overall_region--allage-primary_no_prob
 it.png Graphic file (type bmp)
 <figures//stunting/fig-stunt-2-prev-overall_region--allage-primary_no_probit.pn
 g>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 311--312
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 302--303
 []  
  []
 
@@ -1207,16 +1190,55 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Overfull \hbox (2.48453pt too wide) has occurred while \output is active
-\TU/lmr/m/n/10 52 \TU/lmr/m/sl/10 CHAPTER 8.  PRIMARY ANALYSES EXCLUDING THE PR
+\TU/lmr/m/n/10 48 \TU/lmr/m/sl/10 CHAPTER 7.  PRIMARY ANALYSES EXCLUDING THE PR
 OBIT STUDY
  []
 
-[52]
+[48]
 File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
 hic file (type bmp)
 <figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 319--320
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 310--311
+[]  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[49]
+File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
+hic file (type bmp)
+<figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
+
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 315--316
+[]  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (2.48453pt too wide) has occurred while \output is active
+\TU/lmr/m/n/10 50 \TU/lmr/m/sl/10 CHAPTER 7.  PRIMARY ANALYSES EXCLUDING THE PR
+OBIT STUDY
+ []
+
+[50] [51]
+Overfull \hbox (2.48453pt too wide) has occurred while \output is active
+\TU/lmr/m/n/10 52 \TU/lmr/m/sl/10 CHAPTER 7.  PRIMARY ANALYSES EXCLUDING THE PR
+OBIT STUDY
+ []
+
+[52
+
+]
+Chapter 8.
+File: figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png Graph
+ic file (type bmp)
+<figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png>
+
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 332--333
 []  
  []
 
@@ -1224,38 +1246,47 @@ Overfull \hbox (811.37238pt too wide) in paragraph at lines 319--320
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [53]
-File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
-hic file (type bmp)
-<figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
+File: figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png Graph
+ic file (type bmp)
+<figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 324--325
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 337--338
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+[54]
+File: figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png Gra
+phic file (type bmp)
+<figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png>
 
-Overfull \hbox (2.48453pt too wide) has occurred while \output is active
-\TU/lmr/m/n/10 54 \TU/lmr/m/sl/10 CHAPTER 8.  PRIMARY ANALYSES EXCLUDING THE PR
-OBIT STUDY
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 345--346
+[]  
  []
 
-[54] [55]
-Overfull \hbox (2.48453pt too wide) has occurred while \output is active
-\TU/lmr/m/n/10 56 \TU/lmr/m/sl/10 CHAPTER 8.  PRIMARY ANALYSES EXCLUDING THE PR
-OBIT STUDY
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[55]
+File: figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png Gra
+phic file (type bmp)
+<figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png>
+
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 350--351
+[]  
  []
 
-[56
 
-]
-Chapter 9.
-File: figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png Graph
-ic file (type bmp)
-<figures//stunting/fig-laz-2-mean-overall_region--allage-primary.png>
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 341--342
+[56]
+File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
+hic file (type bmp)
+<figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
+
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 358--359
 []  
  []
 
@@ -1263,11 +1294,11 @@ Overfull \hbox (377.73274pt too wide) in paragraph at lines 341--342
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [57]
-File: figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png Graph
-ic file (type bmp)
-<figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png>
+File: figures//stunting/fig-stunt-2-inc-overall_region--allage-month24.png Grap
+hic file (type bmp)
+<figures//stunting/fig-stunt-2-inc-overall_region--allage-month24.png>
 
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 346--347
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 363--364
 []  
  []
 
@@ -1275,11 +1306,11 @@ Overfull \hbox (377.73274pt too wide) in paragraph at lines 346--347
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [58]
-File: figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png Gra
-phic file (type bmp)
-<figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png>
+File: figures//stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic fil
+e (type bmp)
+<figures//stunting/fig-stunt-2-vel-overall--allage-primary.png>
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 354--355
+Overfull \hbox (522.27933pt too wide) in paragraph at lines 371--372
 []  
  []
 
@@ -1287,47 +1318,46 @@ Overfull \hbox (666.82588pt too wide) in paragraph at lines 354--355
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [59]
-File: figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png Gra
-phic file (type bmp)
-<figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png>
-
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 359--360
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[60]
-File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
-hic file (type bmp)
-<figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
-
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 367--368
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[61]
-File: figures//stunting/fig-stunt-2-inc-overall_region--allage-month24.png Grap
-hic file (type bmp)
-<figures//stunting/fig-stunt-2-inc-overall_region--allage-month24.png>
-
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 372--373
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[62]
-File: figures//stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic fil
+File: figures//stunting/fig-stunt-2-vel-overall--allage-month24.png Graphic fil
 e (type bmp)
-<figures//stunting/fig-stunt-2-vel-overall--allage-primary.png>
+<figures//stunting/fig-stunt-2-vel-overall--allage-month24.png>
 
-Overfull \hbox (522.27933pt too wide) in paragraph at lines 380--381
+Overfull \hbox (522.27933pt too wide) in paragraph at lines 376--377
+[]  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[60] [61] [62
+
+]
+Chapter 9.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 381.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 6.0pt on input line 381.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 8.00073pt on input line 381.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 6.00055pt on input line 381.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 7.99915pt on input line 381.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 5.99936pt on input line 381.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 8.33606pt on input line 381.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 6.25204pt on input line 381.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 8.33606pt on input line 381.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 6.25204pt on input line 381.
+File: figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png Gra
+phic file (type bmp)
+<figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png>
+
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 389--390
 []  
  []
 
@@ -1335,11 +1365,11 @@ Overfull \hbox (522.27933pt too wide) in paragraph at lines 380--381
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [63]
-File: figures//stunting/fig-stunt-2-vel-overall--allage-month24.png Graphic fil
-e (type bmp)
-<figures//stunting/fig-stunt-2-vel-overall--allage-month24.png>
+File: figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png Graphic 
+file (type bmp)
+<figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png>
 
-Overfull \hbox (342.53288pt too wide) in paragraph at lines 385--386
+Overfull \hbox (666.82588pt too wide) in paragraph at lines 394--395
 []  
  []
 
@@ -1347,52 +1377,47 @@ Overfull \hbox (342.53288pt too wide) in paragraph at lines 385--386
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [64]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
+hic file (type bmp)
+<figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
 
-[65]
-Overfull \vbox (31.56328pt too high) has occurred while \output is active []
-
-[66]
-Chapter 10.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 8.0pt on input line 390.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 6.0pt on input line 390.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 8.00073pt on input line 390.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 6.00055pt on input line 390.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 7.99915pt on input line 390.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 5.99936pt on input line 390.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 390.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 390.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 390.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 390.
-File: figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png Gra
-phic file (type bmp)
-<figures//stunting/fig-stunt-2-prev-overall_region--allage-primary.png>
-
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 398--399
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 402--403
 []  
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[67
+[65]
+File: figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png Graphic f
+ile (type bmp)
+<figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png>
 
-]
-File: figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png Graphic 
-file (type bmp)
-<figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png>
+Overfull \hbox (811.37238pt too wide) in paragraph at lines 407--408
+[]  
+ []
 
-Overfull \hbox (666.82588pt too wide) in paragraph at lines 403--404
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[66]
+File: figures//stunting/fig-stunt-2-flow-overall--allage-re.png Graphic file (t
+ype bmp)
+<figures//stunting/fig-stunt-2-flow-overall--allage-re.png>
+
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 415--416
+[]  
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[67]
+File: figures//stunting/fig-stunt-2-flow-overall--allage-fe.png Graphic file (t
+ype bmp)
+<figures//stunting/fig-stunt-2-flow-overall--allage-fe.png>
+
+Overfull \hbox (377.73274pt too wide) in paragraph at lines 420--421
 []  
  []
 
@@ -1400,11 +1425,11 @@ Overfull \hbox (666.82588pt too wide) in paragraph at lines 403--404
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [68]
-File: figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png Grap
-hic file (type bmp)
-<figures//stunting/fig-stunt-2-inc-overall_region--allage-primary.png>
+File: figures//stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic fil
+e (type bmp)
+<figures//stunting/fig-stunt-2-vel-overall--allage-primary.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 411--412
+Overfull \hbox (522.27933pt too wide) in paragraph at lines 428--429
 []  
  []
 
@@ -1412,59 +1437,11 @@ Overfull \hbox (811.37238pt too wide) in paragraph at lines 411--412
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [69]
-File: figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png Graphic f
-ile (type bmp)
-<figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png>
+File: figures//stunting/fig-stunt-2-vel-overall--allage-fe.png Graphic file (ty
+pe bmp)
+<figures//stunting/fig-stunt-2-vel-overall--allage-fe.png>
 
-Overfull \hbox (811.37238pt too wide) in paragraph at lines 416--417
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[70]
-File: figures//stunting/fig-stunt-2-flow-overall--allage-re.png Graphic file (t
-ype bmp)
-<figures//stunting/fig-stunt-2-flow-overall--allage-re.png>
-
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 424--425
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[71]
-File: figures//stunting/fig-stunt-2-flow-overall--allage-fe.png Graphic file (t
-ype bmp)
-<figures//stunting/fig-stunt-2-flow-overall--allage-fe.png>
-
-Overfull \hbox (377.73274pt too wide) in paragraph at lines 429--430
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[72]
-File: figures//stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic fil
-e (type bmp)
-<figures//stunting/fig-stunt-2-vel-overall--allage-primary.png>
-
-Overfull \hbox (522.27933pt too wide) in paragraph at lines 437--438
-[]  
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[73]
-File: figures//stunting/fig-stunt-2-vel-overall--allage-primary.png Graphic fil
-e (type bmp)
-<figures//stunting/fig-stunt-2-vel-overall--allage-primary.png>
-
-Overfull \hbox (522.27933pt too wide) in paragraph at lines 442--443
+Overfull \hbox (522.27933pt too wide) in paragraph at lines 433--434
 []  
  []
 
@@ -1472,14 +1449,14 @@ No file bookdown-demo.bbl.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[74] [75] (./bookdown-demo.aux) ) 
+[70] [71] (./bookdown-demo.aux) ) 
 Here is how much of TeX's memory you used:
- 18462 strings out of 476919
- 346341 string characters out of 5821840
- 803901 words of memory out of 5000000
- 38140 multiletter control sequences out of 15000+600000
+ 18471 strings out of 476919
+ 346670 string characters out of 5821840
+ 803802 words of memory out of 5000000
+ 38148 multiletter control sequences out of 15000+600000
  414837 words of font info for 96 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 98i,8n,122p,657b,411s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 98i,8n,122p,651b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on bookdown-demo.pdf (75 pages).
+Output written on bookdown-demo.pdf (71 pages).
