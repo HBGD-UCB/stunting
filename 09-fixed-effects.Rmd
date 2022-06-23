@@ -2,6 +2,8 @@
 
 The primary analyses presented in this manuscript pooled across individual studies using random effects. Inferences about estimates from fixed effects models are restricted to only the included studies.[^1] The random effects approach was more conservative in the presence of study heterogeneity, as evidenced by larger confidence intervals around each point estimates. Overall, the inference from results produced by each method was similar. 
 
+The pooled estimates using random effects vs. fixed effects differed in some cases, indicating the presence of heterogeneity in underlying cohort-specific estimates. For example, stunting incidence at ages peaked at ages 0-3 months in Latin America using random effects models, but in fixed effects models, incidence was similar at ages 0-12 months. However, overall, our scientific inferences from results produced by each method were similar.
+
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
