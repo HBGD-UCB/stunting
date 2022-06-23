@@ -18,13 +18,13 @@ Here, we present cohort-specific estimates of length-for-age Z-score by age, age
 ## Mean length-for-age Z-score by age
 
 ### Africa
-<img src="figures//stunting/fig-laz-2-quant-cohort-africa-allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-laz-2-quant-cohort-africa-allage-primary.png" width="1500" />
 
 ### Latin America
-<img src="figures//stunting/fig-laz-2-quant-cohort-latamer-allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-laz-2-quant-cohort-latamer-allage-primary.png" width="1500" />
 
 ### South Asia
-<img src="figures//stunting/fig-laz-2-quant-cohort-asia-allage-primary.png" width="2100" />
+<img src="figures//stunting/fig-laz-2-quant-cohort-asia-allage-primary.png" width="1500" />
 
 
 <!-- ##################################################################################### -->

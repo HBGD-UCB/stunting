@@ -13,7 +13,6 @@ The primary analyses presented in this manuscript pooled across individual studi
 ### Fixed effects
 <img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-fe.png" width="2100" />
 
-[ADD CAPTION]
 
 <!-- ##################################################################################### -->
 ## Age-specific incidence
@@ -24,7 +23,6 @@ The primary analyses presented in this manuscript pooled across individual studi
 ### Fixed effects
 <img src="figures//stunting/fig-stunt-2-inc-overall_region--allage-fe.png" width="2400" />
 
-[ADD CAPTION]
 
 <!-- ##################################################################################### -->
 ## Changes in stunting status by age
@@ -35,7 +33,6 @@ The primary analyses presented in this manuscript pooled across individual studi
 ### Fixed effects
 <img src="figures//stunting/fig-stunt-2-flow-overall--allage-fe.png" width="1500" />
 
-[ADD CAPTION] 
 
 
 <!-- ##################################################################################### -->
@@ -45,7 +42,7 @@ The primary analyses presented in this manuscript pooled across individual studi
 <img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
 
 ### Fixed effects
-<img src="figures//stunting/fig-stunt-2-vel-overall--allage-primary.png" width="1800" />
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-fe.png" width="1800" />
 
 
 [^1]: Hedges, L. V. & Vevea, J. L. Fixed- and random-effects models in meta-analysis. Psychol. Methods 3, 486–504 (1998).

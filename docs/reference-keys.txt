@@ -11,7 +11,6 @@ cohort-stratified
 histogram-of-age-at-enrollment
 all-cohorts-1
 cohort-stratified-1
-DHS
 cohort
 mean-length-for-age-z-score-by-age
 africa
@@ -47,10 +46,10 @@ monthly
 mean-length-for-age-z-score-by-age-2
 all-eligible-cohorts
 cohorts-that-measured-monthly-from-birth-to-24-months
-age-specific-severe-stunting-prevalence-1
+age-specific-stunting-prevalence
 all-eligible-cohorts-1
 cohorts-that-measured-monthly-from-birth-to-24-months-1
-age-specific-severe-stunting-incidence-1
+age-specific-stunting-incidence
 all-eligible-cohorts-2
 cohorts-that-measured-monthly-from-birth-to-24-months-2
 linear-growth-velocity

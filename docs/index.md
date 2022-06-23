@@ -1,7 +1,11 @@
 --- 
 title: "Supplement to Early childhood linear growth failure in low-and middle-income countries"
 author: "Jade Benjamin-Chung et al."
+<<<<<<< HEAD
 date: "2021-07-07"
+=======
+date: "2021-07-19"
+>>>>>>> 5b8e52349e0eb67c6f6f8f86a2fb0ac1a3781d63
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
