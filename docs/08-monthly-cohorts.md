@@ -27,7 +27,7 @@ In this sensitivity analysis, the mean length-for-age Z-score was higher in Lati
 <img src="figures//stunting/fig-laz-2-mean-overall_region--allage-month24.png" width="3000" />
 
 <!-- ##################################################################################### -->
-## Age-specific severe stunting prevalence
+## Age-specific stunting prevalence
 
 ### All eligible cohorts
 
@@ -38,7 +38,7 @@ In this sensitivity analysis, the mean length-for-age Z-score was higher in Lati
 <img src="figures//stunting/fig-stunt-2-prev-overall_region--allage-month24.png" width="4200" />
 
 <!-- ##################################################################################### -->
-## Age-specific severe stunting incidence
+## Age-specific stunting incidence
 
 ### All eligible cohorts
 
@@ -57,5 +57,9 @@ In this sensitivity analysis, the mean length-for-age Z-score was higher in Lati
 
 ### Cohorts that measured monthly from birth to 24 months
 
+<<<<<<< HEAD
 <img src="figures//stunting/fig-stunt-2-vel-overall--allage-month24.png" width="3600" />
+=======
+<img src="figures//stunting/fig-stunt-2-vel-overall--allage-month24.png" width="1800" />
+>>>>>>> 3299f11dba085dd6346a99dda4e811909708f3e1
 
